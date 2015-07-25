@@ -4,7 +4,7 @@ class DataBaseSchema extends PDO
 {
  private $ini;
 
- public function __construct($schema=null, $file='database.ini')
+ public function __construct($schema=null, $file='connect.ini')
  {
   if (!$settings=parse_ini_file($file,TRUE)) throw new exception('Unable to open '.$file.'!');
 
@@ -58,7 +58,7 @@ class DataBaseTable extends DataBaseSchema
  protected $indices;
  protected $results;
 
- public function __construct($table,$schema=null,$file='database.ini')
+ public function __construct($table,$schema=null,$file='connect.ini')
  {
   $settings=parent::__construct($schema,$file);
   $this->table=$settings['schema']['tableprefix'].$table;

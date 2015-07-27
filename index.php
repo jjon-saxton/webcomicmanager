@@ -28,9 +28,81 @@ else
  require dirname(__FILE__)."/appcore/user.inc.php";
 }
 
+require dirname(__FILE__)."/appmodules/ucp.mod.php";
+echo ucp_module($GLOBALS['CURUSR'],'box');
+
 switch (@$section)
 {
  case 'app':
+ switch ($action)
+ {
+  case 'install':
+  break;
+  case 'login':
+  if (@$_POST['do'] == "register")
+  {
+   header("Location: ./?section=app&action=register&name={$_POST['name']}");
+  }
+  if (isset($_POST['password']) && isset($_POST['name']))
+  {
+   if ($GLOBALS['CURUSR']->login($_POST['name'],$_POST['password']))
+   {
+    $_SESSION['data']=serialize($GLOBALS['CURUSR']);
+    header("Location: ./");
+   }
+   else
+   {
+    echo "Unauthorized!"; //TODO replace with actual 401 error
+   }
+  }
+  break;
+  case 'register':
+  if (!empty($_REQUEST['name']))
+  {
+   $supplied_name=$_REQUEST['name'];
+  }
+  else
+  {
+   $supplied_name=null;
+  }
+  if (!empty($_POST['do']))
+  {
+   $data=$_POST; //Put post into a array we can work with
+   $data['level']=7;
+   $data['password']=crypt($data['password'],"MC");
+   $nu=new MCUser();
+   if ($nu=$nu->nu($data))
+   {
+    header("Location: ./?section=app&action=login&name={$_POST['name']}");
+   }
+   else
+   {
+    echo "No user created!"; //TODO replace with actual error
+   }
+  }
+  else
+  {
+   echo <<<HTML
+<form action="./?section=app&action=register" method=post>
+<h2 class="title form">Register a New Account</h2>
+<ul class="nobullet noindent">
+<li>User Name: <input type=text required=required name="name" value="{$supplied_name}"></li>
+<li>You E-Mail Address: <input type=email required=required name="email"></li>
+<li>Password: <input type=password required=required name="pass1"></li>
+<li>Confirm Password: <input type=password required=required name="pass2"></li>
+<li><button name=do value="register">Register</button></li>
+</ul>
+</form>
+HTML;
+  }
+  break;
+  case 'logout':
+  if ($GLOBALS['CURUSR']->logout())
+  {
+   $_SESSION['data']=serialize($GLOBALS['CURUSR']);
+   header("Location: ./");
+  } 
+ }
  break;
  case 'profile':
  break;

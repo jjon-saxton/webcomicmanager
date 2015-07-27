@@ -67,11 +67,12 @@ class MCSession
 class MCUser
 {
  private $usr;
+ private $table;
 
  public function __construct($name='guest')
  {
+  $this->table=new DataBaseTable('users');
   $info=$this->su($name);
-  var_dump($info);
   $this->usr=$info;
  }
 
@@ -85,14 +86,26 @@ class MCUser
   return $this->mu($key,$val);
  }
 
- public function su($name)
+ public function nu(array $data)
  {
-  $datatab=new DataBaseTable('users');
+  if ($nu=$this->table->putData($data))
+  {
+   return $nu;
+  }
+  else
+  {
+   return false;
+  }
+ }
+
+ private function su($name)
+ {
+  $datatab=$this->table;
   $user=$datatab->getData("name:'{$name}'");
   return $user->fetch(PDO::FETCH_ASSOC);
  }
 
- public function mu($setting,$value)
+ private function mu($setting,$value)
  {
   //TODO change user info in database
  }

@@ -86,6 +86,16 @@ class MCUser
   return $this->mu($key,$val);
  }
 
+ public function __sleep()
+ {
+  return array('usr');
+ }
+
+ public function __wakeup()
+ {
+  $this->table=new DataBaseTable('users');
+ }
+
  public function nu(array $data)
  {
   if ($nu=$this->table->putData($data))

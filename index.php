@@ -69,7 +69,14 @@ switch (@$section)
   {
    $data=$_POST; //Put post into a array we can work with
    $data['level']=7;
-   $data['password']=crypt($data['password'],"MC");
+   if (!empty($data['pass2']) && ($data['pass2'] == $data['pass1']))
+   {
+    $data['password']=crypt($data['pass2'],"MC");
+   }
+   else
+   {
+    trigger_error("No Password supplied, or passwords do not match",E_USER_ERROR);
+   }
    $nu=new MCUser();
    if ($nu=$nu->nu($data))
    {

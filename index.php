@@ -67,7 +67,7 @@ switch (@$section)
   }
   if (!empty($_POST['do']))
   {
-   $data=$_POST; //Put post into a array we can work with
+   $data=$_POST; //Put post data into an array we can work with
    $data['level']=7;
    if (!empty($data['pass2']) && ($data['pass2'] == $data['pass1']))
    {
@@ -112,6 +112,12 @@ HTML;
  }
  break;
  case 'profile':
+ break;
+ case 'library':
+ break;
+ case 'projects':
+ break;
+ case 'admincp':
  break;
  default: //path is actually an item path
  if (!@$_GET['page'])

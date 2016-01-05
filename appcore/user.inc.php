@@ -10,7 +10,6 @@ if (@$_SESSION['data'])
 else
 {
  $GLOBALS['CURUSR']=new MCSession();
- $_SESSION['data']=serialize($GLOBALS['CURUSR']) ;
 }
 
 class MCSession

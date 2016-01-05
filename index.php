@@ -15,21 +15,24 @@ else //we are going direct from the query string!
  $path="/".ltrim(@$_GET['path'],"/");
 }
 
-if (!file_exists(dirname(__FILE__)."/appcore/dataconnect/connect.ini"))
-{
- header("Location: ./app/dataconnect/install");
-}
-elseif (@$action == "install")
+if (@$action == "install")
 {
  define("USR","installer");
+}
+elseif (!file_exists(dirname(__FILE__)."/appcore/dataconnect/connect.ini"))
+{
+ header("Location: ./?section=app&action=install");
 }
 else
 {
  require dirname(__FILE__)."/appcore/user.inc.php";
 }
 
-require dirname(__FILE__)."/appmodules/ucp.mod.php";
-echo ucp_module($GLOBALS['CURUSR'],'box');
+if ($action != 'install')
+{
+ require dirname(__FILE__)."/appmodules/ucp.mod.php";
+ echo ucp_module($GLOBALS['CURUSR'],'box');
+}
 
 switch (@$section)
 {
@@ -139,5 +142,3 @@ function load_page($page,$path)
 {
  var_dump($page);
 }
-
-

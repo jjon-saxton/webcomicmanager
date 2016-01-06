@@ -40,6 +40,8 @@ switch (@$section)
  switch ($action)
  {
   case 'install':
+  include dirname(__FILE__)."/appcore/install.inc.php";
+  build_installer($_GET['step']);
   break;
   case 'login':
   if (@$_POST['do'] == "register")

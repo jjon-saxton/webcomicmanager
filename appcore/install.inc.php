@@ -12,6 +12,9 @@ function build_installer($step)
             </div><?php
             break;
         case 1:
+            $types=pdo_drivers();
+            @$host=getenv("IP");
+            @$uname=getenv("C9_USER");
             ?><form action="./?section=app&action=install&step=2" method="post"><div class="form">
                 <h2>Set-up DataConnect</h2>
                 <p>This page is designed to help you set-up DataConnect to connect to the database software on your server. Please fill out the form below. Fields marked with and astrix '<span class="required">*</span>' are required.</p>
@@ -20,10 +23,10 @@ function build_installer($step)
                         <th colspan=2>Server</th>
                     </tr>
                     <tr>
-                        <td align=right>Server Type<span class="required">*</span>:</td><td align=left><input type="text" required="required" name="database[driver]"/></td>
+                        <td align=right>Server Type<span class="required">*</span>:</td><td align=left><select required="required" name="database[driver]"/><?php foreach ($types as $driver) { ?><option><?php print $driver ?></option> <?php } ?></select></td>
                     </tr>
                     <tr>
-                        <td align=right>Hostname/Address<span class="required">*</span>:</td><td align=left><input type="text" required="required" name="database[host]"/></td>
+                        <td align=right>Hostname/Address<span class="required">*</span>:</td><td align=left><input type="text" required="required" name="database[host]" value="<?php print $host ?>"/></td>
                     </tr>
                     <tr>
                         <td align="right">Port:</td><td align="left"><input type="number" name="database[port]"></td>
@@ -35,13 +38,13 @@ function build_installer($step)
                         <td align="right">Database Name<span class="required">*</span>:</td><td align="left"><input type="text" required="required" name="schema[name]"/></td>
                     </tr>
                     <tr>
-                        <td align="right">User<span class="required">*</span>:</td><td align="left"><input type="text" required=required name="schema[username]"/></td>
+                        <td align="right">User<span class="required">*</span>:</td><td align="left"><input type="text" required=required name="schema[username]" value="<?php print $uname ?>"/></td>
                     </tr>
                     <tr>
                         <td align="right">Password:</td><td align="left"><input type="password" name="schema[password]"/></td>
                     </tr>
                     <tr>
-                        <td align="right">Table Prefix:</td><td align="left"><input type="text" name="schema[tableprefix]"/>_</td>
+                        <td align="right">Table Prefix:</td><td align="left"><input type="text" name="schema[tableprefix]"/></td>
                     </tr>
                     <tr>
                         <td align="right"><button onclick="history.back()">Previous</button></td><td align="left"><button type="submit">Continue</button></td>
@@ -49,17 +52,77 @@ function build_installer($step)
             </div></form><?php
             break;
         case 2:
-            if(empty($_POST['driver']))
+            if(!empty($_POST['database']))
             {
                 if (is_writable(dirname(__FILE__)."/dataconnect/"))
                 {
-                    if (write_ini_file($_POST,dirname(__FILE__)."/dataconnect/database.ini"))
+                    if (write_ini_file($_POST,dirname(__FILE__)."/dataconnect/connect.ini"))
                     {
                         header("Location:./?section=app&action=install&step=2");
                     }
                 }
             }
+            else
+            { ?><div class="message">
+                <h2>Create Database Tables</h2>
+                <p>With DataConnect set up you are now ready to create the tables that the WebComiX Manager requires in order to function. This may take a few moments.</p>
+                <div align=center><button onclick="history.back()">Previous</button> <button onclick="window.location='./?section=app&action=install&step=3'">Continue</button></div>
+            </div><?php }
+            break;
+        case 3:
+            if (set_tables())
+            { ?><form action="?=section=app&action=install&step=4" method="post"><div class="form">
+                <h2>Populate Tables</h2>
+                <p>Now that the database tables have been created we are ready to populate them with their default data, however, we need to know what some of that data should be. Fill out the form below to help us.</p>
+            </div></form>
+            <?php }
     }
+}
+
+function set_tables()
+{
+    //#Table definition for 'settings' table
+    $def['settings'][0]="`key` VARCHAR(30) NOT NULL PRIMARY KEY";
+    $def['settings'][1]="`value` VARCHAR(20)";
+    
+    //#Table definition for 'logs' table
+    $def['logs'][0]="`num` INT(11) PRIMARY KEY AUTO_INCREMENT";
+    $def['logs'][1]="`time` DATETIME";
+    $def['logs'][2]="`code` INT(11)";
+    $def['logs'][3]="`action` VARCHAR(20)";
+    $def['logs'][4]="`message` TEXT";
+    
+    //#Table definition for 'users' table
+    $def['users'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
+    $def['users'][1]="`registered` DATETIME";
+    $def['users'][2]="`name` VARCHAR(160)";
+    $def['users'][3]="`first` TEXT";
+    $def['users'][4]="`last` TEXT";
+    $def['users'][5]="`birtdate` DATE";
+    $def['users'][6]="`email TEXT";
+    $def['users'][7]="`level` INT(1)";
+    $def['users'][8]="`level_time` INT(4)";
+    $def['users'][9]="`level_date DATETIME";
+    $def['users'][10]="`passes` TEXT";
+    $def['users'][11]="`library` TEXT";
+    
+    //#Table definition for 'comments' table
+    $def['comments'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
+    $def['comments'][1]="`subject VARCHAR(160) NOT NULL";
+    $def['comments'][2]="`ctype` VARCHAR(60)";
+    $def['comments'][3]="`cid` INT(255)";
+    $def['comments'][4]="`aid` INT(255)";
+    $def['comments'][5]="`leid` INT(255)";
+    $def['comments'][6]="`enotes` TEXT";
+    $def['comments'][7]="`comment` TEXT";
+    
+    //#Table definition for 'projects' table
+    
+}
+
+function put_defaults($admin,$guest,$settings)
+{
+    //TODO place the three arrays into their proper tables and fill any app default
 }
 
 function write_ini_file($array,$file=null)

@@ -85,6 +85,10 @@ function set_tables()
     $def['settings'][0]="`key` VARCHAR(30) NOT NULL PRIMARY KEY";
     $def['settings'][1]="`value` VARCHAR(20)";
     
+    //#Table definition for 'genres' table
+    $def['genres'][0]="`num` INT(4) NOT NULL PRIMARY KEY AUTO_INCREMENT";
+    $def['genres'][1]="`name` VARCHAR(160)";
+    
     //#Table definition for 'logs' table
     $def['logs'][0]="`num` INT(11) PRIMARY KEY AUTO_INCREMENT";
     $def['logs'][1]="`time` DATETIME";
@@ -117,7 +121,37 @@ function set_tables()
     $def['comments'][7]="`comment` TEXT";
     
     //#Table definition for 'projects' table
+    $def['projects'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
+    $def['projects'][1]="`title` VARCHAR(160)";
+    $def['projects'][2]="`aid INT(255)";
+    $def['projects'][3]="`created` DATETIME";
+    $def['projects'][4]="`modified` DATETIME";
+    $def['projects'][5]="`genre_id` INT(3)";
+    $def['projects'][6]="`editors` TEXT";
+    $def['projects'][7]="`children` TEXT";
+    $def['projects'][8]="`tags` TEXT";
+    $def['projects'][9]="`description` TEXT";
+    $def['projects'][10]="`notes` TEXT";
     
+    //#Table definition for 'volumes' table
+    $def['volumes'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
+    $def['volumes'][1]="`created` DATETIME";
+    $def['volumes'][2]="`modified` DATETIME";
+    $def['volumes'][3]="`title` VARCHAR(160)";
+    $def['volumes'][4]="`pid` INT(255)";
+    $def['volumes'][5]="`children` TEXT";
+    $def['volumes'][6]="`notes` TEXT";
+    
+    //#Table definition for 'issues' table
+    $def['issues'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
+    $def['issues'][1]="`created` DATETIME";
+    $def['issues'][2]="`modified` DATETIME";
+    $def['issues'][3]="`price` INT(5)";
+    $def['issues'][4]="`title` VARCHAR(160)";
+    $def['issues'][5]="`pid` INT(255)";
+    $def['issues'][6]="`script` TEXT";
+    $def['issues'][7]="`pdf` TEXT";
+    $def['issues'][8]="`notes` TEXT";
 }
 
 function put_defaults($admin,$guest,$settings)

@@ -152,6 +152,28 @@ function set_tables()
     $def['issues'][6]="`script` TEXT";
     $def['issues'][7]="`pdf` TEXT";
     $def['issues'][8]="`notes` TEXT";
+    
+    $okay=0;
+    $tottables=0;
+    $db=new DataBaseSchema();
+    foreach ($def as $tablename=>$cols)
+    {
+        if ($table=$db->addTable($tablename,$cols))
+        {
+        $okay++;
+        }
+        $tottables++;
+    }
+  
+    if ($okay == $tottables)
+    {
+        return true;
+    }
+    else
+    {
+        trigger_error("Only ".$okay." of ".$tottables." were created! Please empty the database and try again!",E_USER_WARNING);
+        return false;
+    }
 }
 
 function put_defaults($admin,$guest,$settings)

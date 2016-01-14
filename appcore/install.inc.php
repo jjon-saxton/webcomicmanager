@@ -103,16 +103,16 @@ function set_tables()
     $def['users'][3]="`first` TEXT";
     $def['users'][4]="`last` TEXT";
     $def['users'][5]="`birtdate` DATE";
-    $def['users'][6]="`email TEXT";
+    $def['users'][6]="`email` TEXT";
     $def['users'][7]="`level` INT(1)";
     $def['users'][8]="`level_time` INT(4)";
-    $def['users'][9]="`level_date DATETIME";
+    $def['users'][9]="`level_date` DATETIME";
     $def['users'][10]="`passes` TEXT";
     $def['users'][11]="`library` TEXT";
     
     //#Table definition for 'comments' table
     $def['comments'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
-    $def['comments'][1]="`subject VARCHAR(160) NOT NULL";
+    $def['comments'][1]="`subject` VARCHAR(160) NOT NULL";
     $def['comments'][2]="`ctype` VARCHAR(60)";
     $def['comments'][3]="`cid` INT(255)";
     $def['comments'][4]="`aid` INT(255)";
@@ -123,7 +123,7 @@ function set_tables()
     //#Table definition for 'projects' table
     $def['projects'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
     $def['projects'][1]="`title` VARCHAR(160)";
-    $def['projects'][2]="`aid INT(255)";
+    $def['projects'][2]="`aid` INT(255)";
     $def['projects'][3]="`created` DATETIME";
     $def['projects'][4]="`modified` DATETIME";
     $def['projects'][5]="`genre_id` INT(3)";
@@ -153,9 +153,18 @@ function set_tables()
     $def['issues'][7]="`pdf` TEXT";
     $def['issues'][8]="`notes` TEXT";
     
+    //#Make sure the database's list of tables is empty, if it is not then there may have been a failed install attempt.
+    
+    $db=new DataBaseSchema(null,dirname(__FILE__)."/dataconnect/connect.ini");
+    if (!empty($db->listTables()))
+    {
+       trigger_error("Cannot continue install! It appears you have already attempted to install this software on the selected database. Please empty this database or select a different one before continuing",E_USER_ERROR);
+       return false;
+    }
+    
+    //#Write tables according to above definitions.
     $okay=0;
     $tottables=0;
-    $db=new DataBaseSchema(null,dirname(__FILE__)."/dataconnect/connect.ini");
     foreach ($def as $tablename=>$cols)
     {
         if ($table=$db->addTable($tablename,$cols))

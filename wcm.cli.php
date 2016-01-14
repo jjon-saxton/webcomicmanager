@@ -6,6 +6,7 @@ require dirname(__FILE__)."/appcore/dataconnect/database.inc.php";
 fwrite(STDOUT,"Welcome to the Web Comic Manager!\n\nHere you will be able to perform basic functions and data manipulation as if you were logged in as an administrator. Please note: this program may present a security risk. In highly secure production environments it is a good idea to remove this file.\n");
 fwrite(STDOUT,"What would you like to do?\n");
 fwrite(STDOUT,"1) Look up, view, or edit a user\n");
+fwrite(STDOUT,"0) Erase ALL data!\n");
 $select=fgets(STDIN);
 switch ($select)
 {
@@ -58,6 +59,36 @@ switch ($select)
   }
  }
  break;
+ case 0:
+  fwrite(STDOUT,"Are you sure you want to Erase ALL data!? This action CANNOT be undone! [Y]es, [N]o ");
+  $confirm=trim(strtolower(fgets(STDIN)),"\n");
+  if ($confirm == "y" || $confirm == "yes")
+  {
+   //TODO get a list of tables and drop them!
+   $db=new DataBaseSchema();
+   $tables=$db->listTables();
+   fwrite (STDOUT,"Once again you are about to empty the entire database erasing all data with it. This action is primarily for development servers or in case of database corruption. To continue please type 'yes'! ");
+   $final_confirm=trim(fgets(STDIN),"\n");
+   if ($final_confirm == "yes")
+   {
+    foreach ($tables as $table)
+    {
+     $db->dropTable($table[0]);
+    }
+    fwrite(STDOUT,"Please verify that the database is now empty using the tools that came with your server software.\n");
+    exit();
+   }
+   else
+   {
+    fwrite(STDOUT,"You typed '".$final_confirm."' this is not 'yes'. We will now exit without touching the database\n");
+    exit();
+   }
+  }
+  else
+  {
+   exit();
+  }
+  break;
  default:
  fwrite(STDOUT,"I'm sorry Jim, I can't let you do that!\n");
 }

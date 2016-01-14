@@ -45,6 +45,12 @@ class DataBaseSchema extends PDO
    throw new Exception("'".$table."' Table Not Created! ".$err[2]);
   }
  }
+ 
+ public function listTables()
+ {
+  $query=$this->query("SHOW TABLES");
+  return $query->fetchAll();
+ }
 
  public function dropTable($table)
  {

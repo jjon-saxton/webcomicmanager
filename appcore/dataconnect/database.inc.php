@@ -29,13 +29,20 @@ class DataBaseSchema extends PDO
   }
   $cols_stmt=implode(', ',$cols);
   $cols_stmt=rtrim($cols_stmt,', ');
-  if ($this->query("CREATE TABLE `".$this->ini['schema']['tableprefix'].$table."` (".$cols_stmt.") ENGINE = MyISAM"))
+  
+  if (!empty($this->ini['schema']['tableprefix']))
+  {
+   $table=$this->ini['schema']['tableprefix'].$table;
+  }
+  
+  if ($this->query("CREATE TABLE `".$table."` (".$cols_stmt.") ENGINE = MyISAM"))
   {
    return new DataBaseTable($table,null,$this->ini['name']);
   }
   else
   {
-   throw new Exception("New Table Not Created!");
+   $err=$this->errorInfo();
+   throw new Exception("'".$table."' Table Not Created! ".$err[2]);
   }
  }
 

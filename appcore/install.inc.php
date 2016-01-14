@@ -155,7 +155,7 @@ function set_tables()
     
     $okay=0;
     $tottables=0;
-    $db=new DataBaseSchema();
+    $db=new DataBaseSchema(null,dirname(__FILE__)."/dataconnect/connect.ini");
     foreach ($def as $tablename=>$cols)
     {
         if ($table=$db->addTable($tablename,$cols))

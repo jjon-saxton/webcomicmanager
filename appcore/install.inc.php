@@ -74,6 +74,32 @@ function build_installer($step)
             { ?><form action="?=section=app&action=install&step=4" method="post"><div class="form">
                 <h2>Populate Tables</h2>
                 <p>Now that the database tables have been created we are ready to populate them with their default data, however, we need to know what some of that data should be. Fill out the form below to help us.</p>
+                <table width=100% border=0 cellspacing=1 cellpadding=1>
+                    <tr>
+                        <th colspan=2>Application Settings</th>
+                    </tr>
+                    <tr>
+                        <td align="right">Base URI</td><td align="left"><input type="text" name="settings[base_uri]" title="The root location this application is run from including domain/ip address and root application folder"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Server Root</td><td align="left"><input type="text" name="settings[base_dir]" title="The actual folder the application is stored in on the server. Setting this prevents the application from guessing where it is, but could pose a security risk."/></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Projects Folder</td><td align="left"><input type="text" name="settings[project_dir]" title="Root folder where files (PDF, Graphics, etc.) are stored for user projects relative to the server root."/></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Allow Guest Views</td><td align="left"><span title="Can users view ad-supported content without registering?"><input type="radio" name="settings[guest_views]" value="y" id="guest_y"><label for="guest_y">Yes</label><input type="radio" name="settings[guest_views]" value="n" id="guest_n"><label for="guest_n">No</label></span></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Open Registration</td><td align="left"><span title="Can users register themselves, or can they only be registered by admins i.e. by invitation?"><input type="radio" name="settings[open_registration]" value="y" id="or_y"><label for="or_y">Yes</label><input type="radio" name="settings[open_registration]" value="n" id="or_n"><label for="or_n">No</label></span></td>
+                    </tr>
+                    <tr>
+                        <th colspan=2>Default User Settings</th>
+                    </tr>
+                    <tr>
+                        <th colspan=2>Register Your User</th>
+                    </tr>
+                </table>
             </div></form>
             <?php }
     }

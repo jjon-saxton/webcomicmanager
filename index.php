@@ -26,6 +26,13 @@ elseif (!file_exists(dirname(__FILE__)."/appcore/dataconnect/connect.ini"))
 else
 {
  require dirname(__FILE__)."/appcore/user.inc.php";
+ $settings=new DataBaseTable('settings');
+ $query=$settings->getData();
+ $rows=$query->fetchAll(PDO::FETCH_ASSOC);
+ foreach ($rows as $item)
+ {
+  $GLOBALS['config']["{$item['key']}"]=$item['value'];
+ }
 }
 
 if ($action != 'install')

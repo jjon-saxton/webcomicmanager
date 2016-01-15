@@ -34,7 +34,7 @@ class MCSession
   if ($password == $new_usr->password)
   {
    $this->usr=$new_usr;
-   return $new_usr->id;
+   return $new_usr->num;
   }
   else
   {
@@ -114,7 +114,7 @@ class MCUser
   return $user->fetch(PDO::FETCH_ASSOC);
  }
 
- private function mu($setting,$value)
+ private function mu($col,$value)
  {
   //TODO change user info in database
  }

@@ -3,7 +3,7 @@
 function ucp_module($cusr,$type)
 {
  $html="<div id=\"UCP\" class=\"{$type}\"><ul class=\"{$type} nobullet\">\n";
- if ($cusr->level <= 7)
+ if ($cusr->level < 5)
  {
   $html.=<<<HTML
 <li>Welcome <a href="./?section=profile&item={$cusr->name}&action=view" title="view/edit profile">{$cusr->name}</a>!</li>
@@ -24,11 +24,19 @@ HTML;
  }
  else
  {
+  if ($GLOBALS['config']['open_registration'] == 'y')
+  {
+   $registration=" or <button name=\"do\" type=submit value=\"register\">Register a New Account</button>";
+  }
+  else
+  {
+   $registration=null;
+  }
   $html.=<<<HTML
 <form action="?section=app&action=login" method=post>
 <li><input type=text placeholder=username: name="name"></li>
 <li><input type=password placeholder=password: name="password"></li>
-<li><button name="do" type=submit value="login">Login</button> or <button name="do" type=submit value="register">Register a New Account</button></li>
+<li><button name="do" type=submit value="login">Login</button>{$registration}</li>
 </form>
 </ul></div>
 HTML;

@@ -79,29 +79,65 @@ function build_installer($step)
                         <th colspan=2>Application Settings</th>
                     </tr>
                     <tr>
-                        <td align="right">Base URI</td><td align="left"><input type="text" name="settings[base_uri]" title="The root location this application is run from including domain/ip address and root application folder"></td>
+                        <td align="right">Base URI:</td><td align="left"><input type="text" name="settings[base_uri]" title="The root location this application is run from including domain/ip address and root application folder"></td>
                     </tr>
                     <tr>
-                        <td align="right">Server Root</td><td align="left"><input type="text" name="settings[base_dir]" title="The actual folder the application is stored in on the server. Setting this prevents the application from guessing where it is, but could pose a security risk."/></td>
+                        <td align="right">Server Root:</td><td align="left"><input type="text" name="settings[base_dir]" title="The actual folder the application is stored in on the server. Setting this prevents the application from guessing where it is, but could pose a security risk."/></td>
                     </tr>
                     <tr>
-                        <td align="right">Projects Folder</td><td align="left"><input type="text" name="settings[project_dir]" title="Root folder where files (PDF, Graphics, etc.) are stored for user projects relative to the server root."/></td>
+                        <td align="right">Projects Folder:</td><td align="left"><input type="text" name="settings[project_dir]" title="Root folder where files (PDF, Graphics, etc.) are stored for user projects relative to the server root."/></td>
                     </tr>
                     <tr>
-                        <td align="right">Allow Guest Views</td><td align="left"><span title="Can users view ad-supported content without registering?"><input type="radio" name="settings[guest_views]" value="y" id="guest_y"><label for="guest_y">Yes</label><input type="radio" name="settings[guest_views]" value="n" id="guest_n"><label for="guest_n">No</label></span></td>
+                        <td align="right">Allow Guest Views:</td><td align="left"><span title="Can users view ad-supported content without registering?"><input type="radio" name="settings[guest_views]" value="y" id="guest_y"><label for="guest_y">Yes</label><input type="radio" name="settings[guest_views]" value="n" id="guest_n"><label for="guest_n">No</label></span></td>
                     </tr>
                     <tr>
-                        <td align="right">Open Registration</td><td align="left"><span title="Can users register themselves, or can they only be registered by admins i.e. by invitation?"><input type="radio" name="settings[open_registration]" value="y" id="or_y"><label for="or_y">Yes</label><input type="radio" name="settings[open_registration]" value="n" id="or_n"><label for="or_n">No</label></span></td>
+                        <td align="right">Open Registration:</td><td align="left"><span title="Can users register themselves, or can they only be registered by admins i.e. by invitation?"><input type="radio" name="settings[open_registration]" value="y" id="or_y"><label for="or_y">Yes</label><input type="radio" name="settings[open_registration]" value="n" id="or_n"><label for="or_n">No</label></span></td>
                     </tr>
                     <tr>
                         <th colspan=2>Default User Settings</th>
                     </tr>
                     <tr>
+                        <td align="right">Name:</td><td align="left"><input type="hidden" name="guest[name]" value="guest"><input type="text" name="null[name]" disabled=disabled value="[user specified]"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Level:</td><td align="lect"><input type="hidden" name="guest[level]" value=5><input type="text" name="null[level]" disabled=disabled value="Free User"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Date Format:</td><td align="left"><input type="text" name="guest[date_format]"></td>
+                    </tr>
+                    <tr>
+                        <td align="right"># of Rows on an index page:</td><td align="left"><input type="number" name="guest[rows_per_page]" size=3 maxlength=2></td>
+                    </tr>
+                    <tr>
+                        <td align="right"># Total items on an index page:</td><td align="left"><input type="number" name="guest[items_per_page]" size=4 maxlength=3></td>
+                    </tr>
+                    <tr>
                         <th colspan=2>Register Your User</th>
+                    </tr>
+                    <tr>
+                        <td align="right">User Name:</td><td align="left"><input type="text" name="admin[name]"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Password:</td><td align="left"><input type="password" name="admin[pass1]"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Confirm Password:</td><td align="left"><input type="password" name="admin[pass2]"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">E-Mail:</td><td align="left"><input type="email" name="admin[email]"></td>
+                    </tr>
+                    <tr>
+                        <td colspan=2 align="center"><button type="submint">Save Settings</button></td>
                     </tr>
                 </table>
             </div></form>
             <?php }
+            break;
+        case 4:
+               if (put_defaults($_POST['admin'],$_POST['guest'],$_POST['settings'])) 
+               { ?>
+                   
+               <?php }
     }
 }
 
@@ -128,13 +164,17 @@ function set_tables()
     $def['users'][2]="`name` VARCHAR(160)";
     $def['users'][3]="`first` TEXT";
     $def['users'][4]="`last` TEXT";
-    $def['users'][5]="`birtdate` DATE";
+    $def['users'][5]="`birthdate` DATE";
     $def['users'][6]="`email` TEXT";
     $def['users'][7]="`level` INT(1)";
     $def['users'][8]="`level_time` INT(4)";
     $def['users'][9]="`level_date` DATETIME";
-    $def['users'][10]="`passes` TEXT";
-    $def['users'][11]="`library` TEXT";
+    $def['users'][10]="`date_format` VARCHAR(50)";
+    $def['users'][11]="`rows_per_page` INT(2)";
+    $def['users'][12]="`items_per_page` INT(3)";
+    $def['users'][13]="`password` TEXT";
+    $def['users'][14]="`passes` TEXT";
+    $def['users'][15]="`library` TEXT";
     
     //#Table definition for 'comments' table
     $def['comments'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";

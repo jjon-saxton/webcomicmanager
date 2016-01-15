@@ -135,8 +135,11 @@ function build_installer($step)
             break;
         case 4:
                if (put_defaults($_POST['admin'],$_POST['guest'],$_POST['settings'])) 
-               { ?>
-                   
+               { ?><div class="message">
+                   <h2>Set-up Complete!</h2>
+                   <p>Your server environment is now set up an ready to run this application!</p>
+                   <div align="center"><button onclick="window.location='./?section=app&action=login'">Login</button> <button onclick="window.location='./'">Go to Main Index</button></div>
+               </div>
                <?php }
     }
 }
@@ -254,6 +257,48 @@ function set_tables()
 function put_defaults($admin,$guest,$settings)
 {
     //TODO place the three arrays into their proper tables and fill any app default
+    $settings_tbl=new DataBaseTable('settings');
+    $user_tbl=new DataBaseTable('users');
+    
+    if ($admin['pass1'] == $admin['pass2'])
+    {
+        $okay=0;
+        $totrows=0;
+        foreach ($settings as $setting)
+        {
+            if ($row=$settings_tbl->putData($setting))
+            {
+                $okay++;
+            }
+            $totrows++;
+        }
+        
+        if ($guest=$user_tlb->putData($value))
+        {
+            $okay++;
+        }
+        $totrows++;
+            
+        foreach ($guest as $key=>$value)
+        {
+            if ($value != 'name')
+            {
+                $admin[$key]=$value;
+            }
+        }
+        $admin['password']=crypt($admin['pass2']);
+        $admin['level']=1;
+        if ($admin=$user->putData($admin))
+        {
+            $okay++;
+        }
+        $totrows++;
+        
+        if ($okay == $totrows)
+        {
+            return true;
+        }
+    }
 }
 
 function write_ini_file($array,$file=null)

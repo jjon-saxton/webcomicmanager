@@ -71,7 +71,7 @@ function build_installer($step)
             break;
         case 3:
             if (set_tables())
-            { ?><form action="?=section=app&action=install&step=4" method="post"><div class="form">
+            { ?><form action="?section=app&action=install&step=4" method="post"><div class="form">
                 <h2>Populate Tables</h2>
                 <p>Now that the database tables have been created we are ready to populate them with their default data, however, we need to know what some of that data should be. Fill out the form below to help us.</p>
                 <table width=100% border=0 cellspacing=1 cellpadding=1>
@@ -256,7 +256,6 @@ function set_tables()
 
 function put_defaults($admin,$guest,$settings)
 {
-    //TODO place the three arrays into their proper tables and fill any app default
     $settings_tbl=new DataBaseTable('settings');
     $user_tbl=new DataBaseTable('users');
     
@@ -264,7 +263,7 @@ function put_defaults($admin,$guest,$settings)
     {
         $okay=0;
         $totrows=0;
-        foreach ($settings as $setting)
+        foreach ($settings as $setting['key']=>$setting['value'])
         {
             if ($row=$settings_tbl->putData($setting))
             {
@@ -272,23 +271,26 @@ function put_defaults($admin,$guest,$settings)
             }
             $totrows++;
         }
+            
+        foreach ($guest as $key=>$value)
+        {
+            if ($key != 'name')
+            {
+                $admin[$key]=$value;
+                $root[$key]=$value;
+            }
+        }
         
-        if ($guest=$user_tlb->putData($value))
+        if ($guest=$user_tbl->putData($guest))
         {
             $okay++;
         }
         $totrows++;
-            
-        foreach ($guest as $key=>$value)
-        {
-            if ($value != 'name')
-            {
-                $admin[$key]=$value;
-            }
-        }
         $admin['password']=crypt($admin['pass2']);
         $admin['level']=1;
-        if ($admin=$user->putData($admin))
+        $root['name']="root";
+        $root['level']=1;
+        if ($root=$user_tbl->putData($root) && $admin=$user_tbl->putData($admin))
         {
             $okay++;
         }

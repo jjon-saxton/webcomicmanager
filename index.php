@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <?php
 require dirname(__FILE__)."/appcore/dataconnect/database.inc.php";
 
@@ -143,11 +145,18 @@ HTML;
 }
 
 function load_index($path)
-{
- var_dump(basename($path));
-}
+{?>
+<head>
+ <title>Tower21 WebComiX: <?php echo($path) ?></title>
+</head>
+<body>
+ <?php var_dump(basename($path)); ?>
+</body>
+<?php }
 
 function load_page($page,$path)
 {
  var_dump($page);
 }
+?>
+</html>

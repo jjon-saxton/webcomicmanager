@@ -116,6 +116,9 @@ class MCUser
 
  private function mu($col,$value)
  {
-  //TODO change user info in database
+  $data[$col]=$value;
+  $data['num']=$this->usr['num'];
+  
+  return $this->table->updateData($data);
  }
 }

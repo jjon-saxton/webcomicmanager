@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <?php
 require dirname(__FILE__)."/appcore/dataconnect/database.inc.php";
@@ -160,3 +160,4 @@ function load_page($page,$path)
 }
 ?>
 </html>
+<?php

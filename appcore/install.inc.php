@@ -132,6 +132,10 @@ function build_installer($step)
                 </table>
             </div></form>
             <?php }
+            else
+            {
+                echo ("Failed!");
+            }
             break;
         case 4:
                if (put_defaults($_POST['admin'],$_POST['guest'],$_POST['settings'])) 

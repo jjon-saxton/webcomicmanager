@@ -5,51 +5,60 @@ function build_installer($step)
     switch ($step)
     {
         case 0:
-            ?><div class="message">
+            return <<<HTML
+<div class="message">
                 <h2>Welcome to Tower21 WebComiX Manager</h2>
                 <p>The following pages are designed to assist you in setting up your server to run this application. The application will assist you and your users in managing WebComiX and related projects.</p>
-                <div align=center><button onclick="window.location='http://www.tower21studios.com'">Cancel</button> <button onclick="window.location='./?section=app&action=install&step=1'">Get Started</button></div>
-            </div><?php
+                <div align=center><button onclick="window.location='http://www.tower21studios.com'">Cancel</button> <button onclick="window.location='./app.php?action=install&step=1'">Get Started</button></div>
+</div>
+HTML;
             break;
         case 1:
             $types=pdo_drivers();
             @$host=getenv("IP");
             @$uname=getenv("C9_USER");
-            ?><form action="./?section=app&action=install&step=2" method="post"><div class="form">
-                <h2>Set-up DataConnect</h2>
-                <p>This page is designed to help you set-up DataConnect to connect to the database software on your server. Please fill out the form below. Fields marked with and astrix '<span class="required">*</span>' are required.</p>
-                <table width="100%" border=0 cellspacing=1 cellpadding=1>
-                    <tr>
-                        <th colspan=2>Server</th>
-                    </tr>
-                    <tr>
-                        <td align=right>Server Type<span class="required">*</span>:</td><td align=left><select required="required" name="database[driver]"/><?php foreach ($types as $driver) { ?><option><?php print $driver ?></option> <?php } ?></select></td>
-                    </tr>
-                    <tr>
-                        <td align=right>Hostname/Address<span class="required">*</span>:</td><td align=left><input type="text" required="required" name="database[host]" value="<?php print $host ?>"/></td>
-                    </tr>
-                    <tr>
-                        <td align="right">Port:</td><td align="left"><input type="number" name="database[port]"></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">Schema</th>
-                    </tr>
-                    <tr>
-                        <td align="right">Database Name<span class="required">*</span>:</td><td align="left"><input type="text" required="required" name="schema[name]"/></td>
-                    </tr>
-                    <tr>
-                        <td align="right">User<span class="required">*</span>:</td><td align="left"><input type="text" required=required name="schema[username]" value="<?php print $uname ?>"/></td>
-                    </tr>
-                    <tr>
-                        <td align="right">Password:</td><td align="left"><input type="password" name="schema[password]"/></td>
-                    </tr>
-                    <tr>
-                        <td align="right">Table Prefix:</td><td align="left"><input type="text" name="schema[tableprefix]"/></td>
-                    </tr>
-                    <tr>
-                        <td align="right"><button onclick="history.back()">Previous</button></td><td align="left"><button type="submit">Continue</button></td>
-                    </tr>
-            </div></form><?php
+            $drivers=null;
+            foreach ($types as $driver)
+            {
+              $drivers.="<option>{$driver}</option>\n";
+            }
+            return <<<HTML
+<form action="./app.php?action=install&step=2" method="post"><div class="form">
+<h2>Set-up DataConnect</h2>
+<p>This page is designed to help you set-up DataConnect to connect to the database software on your server. Please fill out the form below. Fields marked with and astrix '<span class="required">*</span>' are required.</p>
+<table width="100%" border=0 cellspacing=1 cellpadding=1>
+<tr>
+<th colspan=2>Server</th>
+</tr>
+<tr>
+<td align=right>Server Type<span class="required">*</span>:</td><td align=left><select required="required" name="database[driver]">{$drivers}</select></td>
+</tr>
+<tr>
+<td align=right>Hostname/Address<span class="required">*</span>:</td><td align=left><input type="text" required="required" name="database[host]" value="{$host}"/></td>
+</tr>
+<tr>
+<td align="right">Port:</td><td align="left"><input type="number" name="database[port]"></td>
+</tr>
+<tr>
+<th colspan="2">Schema</th>
+</tr>
+<tr>
+<td align="right">Database Name<span class="required">*</span>:</td><td align="left"><input type="text" required="required" name="schema[name]"/></td>
+</tr>
+<tr>
+<td align="right">User<span class="required">*</span>:</td><td align="left"><input type="text" required=required name="schema[username]" value="{$uname}"/></td>
+</tr>
+<tr>
+<td align="right">Password:</td><td align="left"><input type="password" name="schema[password]"/></td>
+</tr>
+<tr>
+<td align="right">Table Prefix:</td><td align="left"><input type="text" name="schema[tableprefix]"/></td>
+</tr>
+<tr>
+<td align="right"><button onclick="history.back()">Previous</button></td><td align="left"><button type="submit">Continue</button></td>
+</tr>
+</div></form>
+HTML;
             break;
         case 2:
             if(!empty($_POST['database']))
@@ -58,16 +67,18 @@ function build_installer($step)
                 {
                     if (write_ini_file($_POST,dirname(__FILE__)."/dataconnect/connect.ini"))
                     {
-                        header("Location:./?section=app&action=install&step=2");
+                        header("Location:./app.php?action=install&step=3");
                     }
                 }
             }
             else
-            { ?><div class="message">
-                <h2>Create Database Tables</h2>
-                <p>With DataConnect set up you are now ready to create the tables that the WebComiX Manager requires in order to function. This may take a few moments.</p>
-                <div align=center><button onclick="history.back()">Previous</button> <button onclick="window.location='./?section=app&action=install&step=3'">Continue</button></div>
-            </div><?php }
+            return <<<HTML
+<div class="message">
+<h2>Create Database Tables</h2>
+<p>With DataConnect set up you are now ready to create the tables that the WebComiX Manager requires in order to function. This may take a few moments.</p>
+<div align=center><button onclick="history.back()">Previous</button> <button onclick="window.location='./app.php?action=install&step=3'">Continue</button></div>
+</div>
+HTML;
             break;
         case 3:
             if (set_tables())
@@ -231,7 +242,7 @@ function set_tables()
     $db=new DataBaseSchema(null,dirname(__FILE__)."/dataconnect/connect.ini");
     if (!empty($db->listTables()))
     {
-       trigger_error("Cannot continue install! It appears you have already attempted to install this software on the selected database. Please empty this database or select a different one before continuing",E_USER_ERROR);
+       trigger_error("Cannot continue install; database not empty! Perhaps you have another intallation or another project on the server. Please empty this database or select a different one before continuing",E_USER_ERROR);
        return false;
     }
     

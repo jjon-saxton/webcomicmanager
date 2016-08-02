@@ -150,12 +150,15 @@ HTML;
             break;
         case 4:
                if (put_defaults($_POST['admin'],$_POST['guest'],$_POST['settings'])) 
-               { ?><div class="message">
-                   <h2>Set-up Complete!</h2>
-                   <p>Your server environment is now set up an ready to run this application!</p>
-                   <div align="center"><button onclick="window.location='./?section=app&action=login'">Login</button> <button onclick="window.location='./'">Go to Main Index</button></div>
-               </div>
-               <?php }
+               {
+               return <<<HTML
+<div class="message">
+<h2>Set-up Complete!</h2>
+<p>Your server environment is now set up an ready to run this application!</p>
+<div align="center"><button onclick="window.location='./?section=app&action=login'">Login</button> <button onclick="window.location='./'">Go to Main Index</button></div>
+</div>
+HTML;
+               }
     }
 }
 

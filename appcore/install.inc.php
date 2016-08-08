@@ -67,7 +67,7 @@ HTML;
                 {
                     if (write_ini_file($_POST,dirname(__FILE__)."/dataconnect/connect.ini"))
                     {
-                        header("Location:./app.php?action=install&step=3");
+                        header("Location:./app.php?action=install&step=2");
                     }
                 }
             }

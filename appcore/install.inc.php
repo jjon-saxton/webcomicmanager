@@ -172,19 +172,29 @@ function set_tables()
     $def['settings'][0]="`key` VARCHAR(30) NOT NULL PRIMARY KEY";
     $def['settings'][1]="`value` VARCHAR(20)";
     
+    //#Table definition for 'types' table (information table ONLY!!)
+    $def['types'][0]="`ttid` INT(4) NOT NULL PRIMARY KEY AUTO_INCREMENT";
+    $def['types'][1]="`name` VARCHAR(160) NOT NULL";
+    $def['types'][2]="`description` TEXT";
+    
     //#Table definition for 'genres' table
-    $def['genres'][0]="`num` INT(4) NOT NULL PRIMARY KEY AUTO_INCREMENT";
+    $def['genres'][0]="`gid` INT(4) NOT NULL PRIMARY KEY AUTO_INCREMENT";
     $def['genres'][1]="`name` VARCHAR(160)";
     
+    //#Table definitionfor 'genre associations (gassoc)' table
+    $def['gassoc'][0]="`row` INT(4) NOT NULL PRIMARY KEY AUTO_INCREMENT";
+    $def['gassoc'][1]="`gid` INT(4) NOT NULL";
+    $def['gassoc'][2]="`cid` INT(4) NOT NULL";
+    
     //#Table definition for 'logs' table
-    $def['logs'][0]="`num` INT(11) PRIMARY KEY AUTO_INCREMENT";
+    $def['logs'][0]="`mid` INT(11) PRIMARY KEY AUTO_INCREMENT";
     $def['logs'][1]="`time` DATETIME";
     $def['logs'][2]="`code` INT(11)";
     $def['logs'][3]="`action` VARCHAR(20)";
     $def['logs'][4]="`message` TEXT";
     
     //#Table definition for 'users' table
-    $def['users'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
+    $def['users'][0]="`uid` INT(255) PRIMARY KEY AUTO_INCREMENT";
     $def['users'][1]="`registered` DATETIME";
     $def['users'][2]="`name` VARCHAR(160)";
     $def['users'][3]="`first` TEXT";
@@ -202,47 +212,38 @@ function set_tables()
     $def['users'][15]="`library` TEXT";
     
     //#Table definition for 'comments' table
-    $def['comments'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
+    $def['comments'][0]="`ccid` INT(255) PRIMARY KEY AUTO_INCREMENT";
     $def['comments'][1]="`subject` VARCHAR(160) NOT NULL";
-    $def['comments'][2]="`ctype` VARCHAR(60)";
-    $def['comments'][3]="`cid` INT(255)";
-    $def['comments'][4]="`aid` INT(255)";
-    $def['comments'][5]="`leid` INT(255)";
-    $def['comments'][6]="`enotes` TEXT";
-    $def['comments'][7]="`comment` TEXT";
+    $def['comments'][2]="`created` DATETIME";
+    $def['comments'][3]="`modified` DATETIME";
+    $def['comments'][4]="`cid` INT(255)";
+    $def['comments'][5]="`aid` INT(255)";
+    $def['comments'][6]="`eid` INT(255)";
+    $def['comments'][7]="`hidden` INT(1)";
+    $def['comments'][8]="`enotes` TEXT";
+    $def['comments'][9]="`comment` TEXT";
     
-    //#Table definition for 'projects' table
-    $def['projects'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
-    $def['projects'][1]="`title` VARCHAR(160)";
-    $def['projects'][2]="`aid` INT(255)";
-    $def['projects'][3]="`created` DATETIME";
-    $def['projects'][4]="`modified` DATETIME";
-    $def['projects'][5]="`genre_id` INT(3)";
-    $def['projects'][6]="`editors` TEXT";
-    $def['projects'][7]="`children` TEXT";
-    $def['projects'][8]="`tags` TEXT";
-    $def['projects'][9]="`description` TEXT";
-    $def['projects'][10]="`notes` TEXT";
+    //#Table definition for 'tags' table
+    $def['tags'][0]="`tid` INT(4) NOT NULL PRIMARY KEY AUTO_INCREMENT";
+    $def['tags'][1]="`name` VARCHAR(160) NOT NULL";
     
-    //#Table definition for 'volumes' table
-    $def['volumes'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
-    $def['volumes'][1]="`created` DATETIME";
-    $def['volumes'][2]="`modified` DATETIME";
-    $def['volumes'][3]="`title` VARCHAR(160)";
-    $def['volumes'][4]="`pid` INT(255)";
-    $def['volumes'][5]="`children` TEXT";
-    $def['volumes'][6]="`notes` TEXT";
+    //#Table definition for 'tag associations (tassoc)' table
+    $def['tassoc'][0]="`row` INT(20) NOT NULL PRIMARY KEY AUTO_INCREMENT";
+    $def['tassoc'][1]="`tid` INT(4) NOT NULL";
+    $def['tassoc'][2]="`cid` INT(255) NOT NULL";
     
     //#Table definition for 'issues' table
-    $def['issues'][0]="`num` INT(255) PRIMARY KEY AUTO_INCREMENT";
-    $def['issues'][1]="`created` DATETIME";
-    $def['issues'][2]="`modified` DATETIME";
-    $def['issues'][3]="`price` INT(5)";
-    $def['issues'][4]="`title` VARCHAR(160)";
-    $def['issues'][5]="`pid` INT(255)";
-    $def['issues'][6]="`script` TEXT";
-    $def['issues'][7]="`pdf` TEXT";
-    $def['issues'][8]="`notes` TEXT";
+    $def['content'][0]="`cid` INT(255) PRIMARY KEY AUTO_INCREMENT";
+    $def['content'][2]="`pid` INT(255)";
+    $def['content'][3]="`ttid` INT(4) NOT NULL";
+    $def['content'][4]="`created` DATETIME";
+    $def['content'][5]="`modified` DATETIME";
+    $def['content'][6]="`price` INT(5)";
+    $def['content'][7]="`title` VARCHAR(160)";
+    $def['content'][8]="`tags` TEXT";
+    $def['content'][9]="`script` TEXT";
+    $def['content'][10]="`pdf` TEXT";
+    $def['content'][11]="`notes` TEXT";
     
     //#Make sure the database's list of tables is empty, if it is not then there may have been a failed install attempt.
     
@@ -279,7 +280,19 @@ function set_tables()
 function put_defaults($admin,$guest,$settings)
 {
     $settings_tbl=new DataBaseTable('settings');
+    $type_tbl=new DataBaseTable('types');
     $user_tbl=new DataBaseTable('users');
+    
+    //TODO add descriptions
+    $sys_types[0]=array('name'=>"Book");
+    $sys_types[1]=array('name'=>'Volume');
+    $sys_types[2]=array('name'=>'Episode/Act');
+    $sys_types[3]=array('name'=>'Issue');
+    
+    foreach ($sys_types as $types)
+    {
+     $type_rows[]=$type_tbl->putData($types);
+    }
     
     if ($admin['pass1'] == $admin['pass2'])
     {

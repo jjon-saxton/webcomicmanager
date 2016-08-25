@@ -248,7 +248,7 @@ function set_tables()
     //#Make sure the database's list of tables is empty, if it is not then there may have been a failed install attempt.
     
     $db=new DataBaseSchema(null,dirname(__FILE__)."/dataconnect/connect.ini");
-    if (!empty($db->listTables()))
+    if (!empty($db->showTables()))
     {
        trigger_error("Cannot continue install; database not empty! Perhaps you have another intallation or another project on the server. Please empty this database or select a different one before continuing",E_USER_ERROR);
        return false;
@@ -279,9 +279,9 @@ function set_tables()
 
 function put_defaults($admin,$guest,$settings)
 {
-    $settings_tbl=new DataBaseTable('settings');
-    $type_tbl=new DataBaseTable('types');
-    $user_tbl=new DataBaseTable('users');
+    $settings_tbl=new DataBaseTable('settings',true,dirname(__FILE__).'/dataconnect/connect.ini');
+    $type_tbl=new DataBaseTable('types',true,dirname(__FILE__).'/dataconnect/connect.ini');
+    $user_tbl=new DataBaseTable('users',true,dirname(__FILE__).'/dataconnect/connect.ini');
     
     //TODO add descriptions
     $sys_types[0]=array('name'=>"Book");

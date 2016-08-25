@@ -1,0 +1,3 @@
+[submodule "appcore/dataconnect"]
+	path = appcore/dataconnect
+	url = https://github.com/jjon-saxton/dataconnect.git

@@ -84,7 +84,7 @@ HTML;
             if (set_tables())
             {
               $wcmroot=dirname($_SERVER['SCRIPT_FILENAME']);
-              $wcmuri=$_SERVER['REQUEST_URI'];
+              $wcmuri=$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']);
               return <<<HTML
 <form action="./app.php?action=install&step=4" method="post"><div class="form">
 <h2>Populate Tables</h2>
@@ -94,13 +94,13 @@ HTML;
   <th colspan=2>Application Settings</th>
  </tr>
  <tr>
-  <td align="right">Base URI:</td><td align="left"><input type="text" name="settings[base_uri]" title="The root location this application is run from including domain/ip address and root application folder" value="{$wcmroot}></td>
+  <td align="right">Base URI:</td><td align="left"><input type="text" name="settings[base_uri]" title="The root location this application is run from including domain/ip address and root application folder" value="{$wcmuri}"></td>
  </tr>
  <tr>
-  <td align="right">Server Root:</td><td align="left"><input type="text" name="settings[base_dir]" title="The actual folder the application is stored in on the server. Setting this prevents the application from guessing where it is, but could pose a security risk." value="{$wcmroot}/></td>
+  <td align="right">Server Root:</td><td align="left"><input type="text" name="settings[base_dir]" title="The actual folder the application is stored in on the server. Setting this prevents the application from guessing where it is, but could pose a security risk." value="{$wcmroot}"/></td>
  </tr>
  <tr>
-  <td align="right">Projects Folder:</td><td align="left"><input type="text" name="settings[project_dir]" title="Root folder where files (PDF, Graphics, etc.) are stored for user projects relative to the server root."/></td>
+  <td align="right">Projects Folder:</td><td align="left"><input type="text" name="settings[project_dir]" title="Root folder where files (PDF, Graphics, etc.) are stored for user projects relative to the server root." value="{$wcmroot}/projects"/></td>
  </tr>
  <tr>
   <td align="right">Allow Guest Views:</td><td align="left"><span title="Can users view ad-supported content without registering?"><input type="radio" name="settings[guest_views]" value="y" id="guest_y"><label for="guest_y">Yes</label><input type="radio" name="settings[guest_views]" value="n" id="guest_n"><label for="guest_n">No</label></span></td>

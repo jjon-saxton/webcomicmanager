@@ -83,7 +83,8 @@ HTML;
         case 3:
             if (set_tables())
             {
-            
+              $wcmroot=dirname($_SERVER['SCRIPT_FILENAME']);
+              $wcmuri=$_SERVER['REQUEST_URI'];
               return <<<HTML
 <form action="./app.php?action=install&step=4" method="post"><div class="form">
 <h2>Populate Tables</h2>
@@ -93,10 +94,10 @@ HTML;
   <th colspan=2>Application Settings</th>
  </tr>
  <tr>
-  <td align="right">Base URI:</td><td align="left"><input type="text" name="settings[base_uri]" title="The root location this application is run from including domain/ip address and root application folder"></td>
+  <td align="right">Base URI:</td><td align="left"><input type="text" name="settings[base_uri]" title="The root location this application is run from including domain/ip address and root application folder" value="{$wcmroot}></td>
  </tr>
  <tr>
-  <td align="right">Server Root:</td><td align="left"><input type="text" name="settings[base_dir]" title="The actual folder the application is stored in on the server. Setting this prevents the application from guessing where it is, but could pose a security risk."/></td>
+  <td align="right">Server Root:</td><td align="left"><input type="text" name="settings[base_dir]" title="The actual folder the application is stored in on the server. Setting this prevents the application from guessing where it is, but could pose a security risk." value="{$wcmroot}/></td>
  </tr>
  <tr>
   <td align="right">Projects Folder:</td><td align="left"><input type="text" name="settings[project_dir]" title="Root folder where files (PDF, Graphics, etc.) are stored for user projects relative to the server root."/></td>
@@ -117,13 +118,13 @@ HTML;
   <td align="right">Level:</td><td align="lect"><input type="hidden" name="guest[level]" value=5><input type="text" name="null[level]" disabled=disabled value="Free User"></td>
  </tr>
  <tr>
-  <td align="right">Date Format:</td><td align="left"><input type="text" name="guest[date_format]"></td>
+  <td align="right">Date Format:</td><td align="left"><input type="text" name="guest[date_format]" value="m/d/Y"></td>
  </tr>
  <tr>
-  <td align="right"># of Rows on an index page:</td><td align="left"><input type="number" name="guest[rows_per_page]" size=3 maxlength=2></td>
+  <td align="right"># of Rows on an index page:</td><td align="left"><input type="number" name="guest[rows_per_page]" size=3 maxlength=2 value="6"></td>
  </tr>
  <tr>
-  <td align="right"># Total items on an index page:</td><td align="left"><input type="number" name="guest[items_per_page]" size=4 maxlength=3></td>
+  <td align="right"># Total items on an index page:</td><td align="left"><input type="number" name="guest[items_per_page]" size=4 maxlength=3 value="24"></td>
  </tr>
  <tr>
   <th colspan=2>Register Your User</th>

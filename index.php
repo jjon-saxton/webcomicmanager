@@ -25,8 +25,9 @@ elseif (!file_exists(dirname(__FILE__)."/appcore/dataconnect/connect.ini"))
 }
 else
 {
+ define("DATACONF",dirname(__FILE__)."/appcore/dataconnect/connect.ini");
  require dirname(__FILE__)."/appcore/user.inc.php";
- $settings=new DataBaseTable('settings');
+ $settings=new DataBaseTable('settings',true,DATACONF);
  $query=$settings->getData();
  $rows=$query->fetchAll(PDO::FETCH_ASSOC);
  foreach ($rows as $item)

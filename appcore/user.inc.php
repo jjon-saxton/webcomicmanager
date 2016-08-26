@@ -70,7 +70,7 @@ class MCUser
 
  public function __construct($name='guest')
  {
-  $this->table=new DataBaseTable('users');
+  $this->table=new DataBaseTable('users',true,DATACONF);
   $info=$this->su($name);
   $this->usr=$info;
  }

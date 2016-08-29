@@ -110,7 +110,7 @@ class MCUser
  private function su($name)
  {
   $datatab=$this->table;
-  $user=$datatab->getData("name:'{$name}'");
+  $user=$datatab->getData("name:`{$name}`");
   return $user->fetch(PDO::FETCH_ASSOC);
  }
 

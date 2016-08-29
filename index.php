@@ -54,12 +54,18 @@ else
 }
 
 function load_index($path)
-{?>
+{
+ if (empty($path) || $path == "/")
+ {
+  require_once dirname(__FILE__)."/appmodules/series.mod.php";
+  $body=list_projects();
+ }
+?>
 <head>
  <title>Tower21 WebComiX: <?php echo($path) ?></title>
 </head>
 <body>
- <?php var_dump(basename($path)); ?>
+ <?php echo($body); ?>
 </body>
 <?php }
 

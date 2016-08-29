@@ -33,7 +33,7 @@ HTML;
    $registration=null;
   }
   $html.=<<<HTML
-<form action="?section=app&action=login" method=post>
+<form action="./app.php?action=login" method=post>
 <li><input type=text placeholder=username: name="name"></li>
 <li><input type=password placeholder=password: name="password"></li>
 <li><button name="do" type=submit value="login">Login</button>{$registration}</li>

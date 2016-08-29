@@ -171,7 +171,7 @@ function set_tables()
 {
     //#Table definition for 'settings' table
     $def['settings'][0]="`key` VARCHAR(30) NOT NULL PRIMARY KEY";
-    $def['settings'][1]="`value` VARCHAR(20)";
+    $def['settings'][1]="`value` VARCHAR(220)";
     
     //#Table definition for 'types' table (information table ONLY!!)
     $def['types'][0]="`ttid` INT(4) NOT NULL PRIMARY KEY AUTO_INCREMENT";

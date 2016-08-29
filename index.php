@@ -25,15 +25,9 @@ elseif (!file_exists(dirname(__FILE__)."/appcore/dataconnect/connect.ini"))
 }
 else
 {
- define("DATACONF",dirname(__FILE__)."/appcore/dataconnect/connect.ini");
- require dirname(__FILE__)."/appcore/user.inc.php";
- $settings=new DataBaseTable('settings',true,DATACONF);
- $query=$settings->getData();
- $rows=$query->fetchAll(PDO::FETCH_ASSOC);
- foreach ($rows as $item)
- {
-  $GLOBALS['config']["{$item['key']}"]=$item['value'];
- }
+ require_once dirname(__FILE__)."/appcore/common.inc.php";
+ $conf=new WCMSettings();
+ $GLOBALS['CONF']=$conf->get();
 }
 
 if ($action != 'install')

@@ -5,11 +5,11 @@ session_start();
 
 if (@$_SESSION['data'])
 {
- $GLOBALS['CURUSR']=unserialize($_SESSION['data']);
+ $session=unserialize($_SESSION['data']);
 }
 else
 {
- $GLOBALS['CURUSR']=new MCSession();
+ $session=new MCSession();
 }
 
 class MCSession
@@ -34,7 +34,7 @@ class MCSession
   if ($password == $new_usr->password)
   {
    $this->usr=$new_usr;
-   return $new_usr->num;
+   return $new_usr->uid;
   }
   else
   {
@@ -92,7 +92,7 @@ class MCUser
 
  public function __wakeup()
  {
-  $this->table=new DataBaseTable('users');
+  $this->table=new DataBaseTable('users',true,DATACONF);
  }
 
  public function nu(array $data)

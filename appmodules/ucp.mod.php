@@ -6,19 +6,19 @@ function ucp_module($cusr,$type)
  if ($cusr->level < 5)
  {
   $html.=<<<HTML
-<li>Welcome <a href="./?section=profile&item={$cusr->name}&action=view" title="view/edit profile">{$cusr->name}</a>!</li>
-<li><a href="./?section=library">Manage Library</a></li>
+<li>Welcome <a href="./profile.php?name={$cusr->name}&action=view" title="view/edit profile">{$cusr->name}</a>!</li>
+<li><a href="./dash.php?section=library">Manage Library</a></li>
 HTML;
   if ($cusr->level ==1)
   {
-   $html.="<li><a href=\"./?section=admincp\">Manage Site</li>\n";
+   $html.="<li><a href=\"./dash.php?section=admincp\">Manage Site</li>\n";
   }
   if ($cusr->level <=2)
   {
-   $html.="<li><a href=\"./section=projects\">Manage Projects</li>\n";
+   $html.="<li><a href=\"./dash.php?section=projects\">Manage Projects</li>\n";
   }
   $html.=<<<HTML
-<li><a href="?section=app&action=logout">Logout</a></li>
+<li><a href="./app.php?action=logout">Logout</a></li>
 </ul></div>
 HTML;
  }

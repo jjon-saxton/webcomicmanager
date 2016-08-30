@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__FILE__)."/dataconnect/database.inc.php";
 
 function build_installer($step)
 {

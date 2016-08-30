@@ -1,11 +1,9 @@
 <?php
 define("DATACONF",dirname(__FILE__)."/dataconnect/connect.ini");
+require_once dirname(__FILE__)."/dataconnect/database.inc.php";
 require dirname(__FILE__)."/user.inc.php";
-$settings=new DataBaseTable('settings',true,DATACONF);
-$query=$settings->getData();
-$rows=$query->fetchAll(PDO::FETCH_ASSOC);
 
-class WCMSettings
+class MCSettings
 {
  private $temp=array();
  private $table;

@@ -1,6 +1,4 @@
 <?php
-require dirname(__FILE__)."/appcore/dataconnect/database.inc.php";
-
 if (!empty($_SERVER['PATH_INFO'])) //Are we forwarding from 'pretty' urls?
 {
  @list($section,$item,$action)=explode("/",ltrim($_SERVER['PATH_INFO'],"/")); //q holds a path, we need to split it!
@@ -26,14 +24,14 @@ elseif (!file_exists(dirname(__FILE__)."/appcore/dataconnect/connect.ini"))
 else
 {
  require_once dirname(__FILE__)."/appcore/common.inc.php";
- $conf=new WCMSettings();
+ $conf=new MCSettings();
  $GLOBALS['CONF']=$conf->get();
 }
 
 if ($action != 'install')
 {
  require dirname(__FILE__)."/appmodules/ucp.mod.php";
- echo ucp_module($GLOBALS['CURUSR'],'box');
+ echo ucp_module($session,'box');
 } ?>
 <!doctype html>
 <html>

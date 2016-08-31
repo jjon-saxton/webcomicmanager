@@ -22,9 +22,17 @@ else
  switch ($_GET['section'])
  {
   case 'put':
-  switch ($type)
+  case 'update':
+  case 'drop':
+  require_once dirname(__FILE__)."/appmodules/asset_man.mod.php";
+  $title="Asset Manager";
+  if (empty($_POST['save']))
   {
-    //TODO change put form based on $type
+    $body=build_manager_form($_GET['section'],$_GET['type']);
+  }
+  else
+  {
+    $body=save_asset($_POST);
   }
   break;
   case 'projects':
@@ -45,7 +53,7 @@ else
   
   if ($c <= 0)
   {
-    $body.="<div class=\"alert alert-warning\">You have '{$c}' projects! Would you like to <a href=\"./dash.php?section=put&type=project\">add one</a>?</div>\n";
+    $body.="<div class=\"alert alert-warning\">You have no projects! Would you like to <a href=\"./dash.php?section=put&type=project\">add one</a>?</div>\n";
   }
   else
   {

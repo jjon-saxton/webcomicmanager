@@ -57,3 +57,9 @@ HTML;
   
   return $html;
 }
+
+function save_asset($data)
+{
+  //TODO save information in $data to database
+  return true;
+}

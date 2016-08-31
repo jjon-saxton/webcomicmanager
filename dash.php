@@ -32,7 +32,10 @@ else
   }
   else
   {
-    $body=save_asset($_POST);
+    if (save_asset($_POST))
+    {
+      header("Location: http://{$conf->base_uri}/dash.php?section=projects");
+    }
   }
   break;
   case 'projects':

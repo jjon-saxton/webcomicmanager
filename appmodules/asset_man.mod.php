@@ -2,7 +2,6 @@
 
 function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
 {
-  $html="<h1>Asset Manager: {$action} {$ctype}</h1>\n";
   if ($action != 'drop')
   {
     $types=new DataBaseTable('types',true,DATACONF);
@@ -33,6 +32,8 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
      $values['data']=null;
      $values['file']=null;
     }
+  
+    $html="<h1>Asset Manager: {$action} {$ctype}</h1>\n";
     
     $ttids=$types->getData("ctype:`{$ctype}`");
     $ttid_opts="<select class=\"form-control\" id=\"ttid\" name=\"ttid\">\n";

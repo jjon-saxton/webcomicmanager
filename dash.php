@@ -71,7 +71,7 @@ HTML;
   }
   else
   {
-    $body.="<div id=\"List\" class=\"panel-group\">\n{$projects}\n</div>\n";
+    $body.="<div id=\"List\" class=\"panel-group\">\n{$projects}\n</div>\n<span class=\"alert alert-info\">You have {$c} project(s). <a href=\"?section=put&type=project\">Add another</a>?</span>\n";
   }
  }
 }

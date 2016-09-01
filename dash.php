@@ -28,7 +28,7 @@ else
   $title="Asset Manager";
   if (empty($_POST['save']))
   {
-    $body=build_manager_form($session,$_GET['section'],$_GET['type']);
+    $body=build_manager_form($session,$_GET['section'],$_GET['type'],$_GET['cid']);
   }
   else
   {
@@ -47,9 +47,20 @@ else
   $c=0;
   if ($q instanceof PDOStatement)
   {
+   $projects=null;
    while ($row=$q->fetch(PDO::FETCH_ASSOC))
    {
-    //TODO generate table rows
+    $projects.=<<<HTML
+<div class="panel panel-default">
+  <div class="panel-heading">{$row['title']}</div>
+  <div class="panel-body">{$row['data']}</div>
+  <div class="panel-footer">
+    <a href="?section=update&cid={$row['cid']}" class="btn btn-info">Edit</a>
+    <a href="?section=put&pid={$row['cid']}" class="btn btn-success">Add Child</a>
+    <a href="?section=drop&cid={$row['cid']}" class="btn btn-error">Remove</a>
+  </div>
+</div>
+HTML;
     $c++;
    }
   }
@@ -60,7 +71,7 @@ else
   }
   else
   {
-    //TODO set $body two table with above rows
+    $body.="<div id=\"List\" class=\"panel-group\">\n{$projects}\n</div>\n";
   }
  }
 }

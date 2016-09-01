@@ -52,6 +52,7 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
     
     switch ($ctype)
     {
+      //TODO other ctypes
       case 'project':
       default:
       $type_extras=<<<HTML

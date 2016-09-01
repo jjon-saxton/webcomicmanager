@@ -28,7 +28,7 @@ else
   $title="Asset Manager";
   if (empty($_POST['save']))
   {
-    $body=build_manager_form($_GET['section'],$_GET['type']);
+    $body=build_manager_form($session,$_GET['section'],$_GET['type']);
   }
   else
   {

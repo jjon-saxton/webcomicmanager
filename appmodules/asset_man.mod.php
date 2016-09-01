@@ -1,6 +1,6 @@
 <?php
 
-function build_manager_form($action,$ctype=null,$cid=null)
+function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
 {
   $html="<h1>Asset Manager: {$action} {$ctype}</h1>\n";
   if ($action != 'drop')
@@ -26,9 +26,10 @@ function build_manager_form($action,$ctype=null,$cid=null)
      $values['created']=date("Y-m-d H:i:s");
      $values['modified']=null;
      $values['title']="New ".ucwords($ctype);
+     $values['uid']=$session->uid;
      $values['tags']=null;
      $values['ttid']=null;
-     $values['price']=null;
+     $values['price']=0;
      $values['data']=null;
      $values['file']=null;
     }
@@ -56,6 +57,7 @@ function build_manager_form($action,$ctype=null,$cid=null)
       $type_extras=<<<HTML
 <div class="form-group">
 <label for="description">Description</label>
+<input type="hidden" name="pid" value="0">
 <textarea id="description" name="data" rows="5" cols="15">
 {$values['data']}
 </textarea>
@@ -67,9 +69,14 @@ HTML;
 <form method="post" enctype="multipart/form-data">
 <div class="form-group">
 <label for="title">Title</label>
+<input type="hidden" name="uid" value="{$values['uid']}">
 <input type="hidden" name="created" value="{$values['created']}">
 <input type="hidden" name="modified" value="{$values['modified']}">
 <input type="text" class="form-control" maxlength="160" id="title" name="title" value="{$values['title']}">
+</div>
+<div class="form-group">
+<label for="price">Price</label>
+<input type="number" size="3" maxlength="5" class="form-control" id="price" name="price" value="{$values['price']}">
 </div>
 <div class="form-group">
 <label for="tags">Tags</label>
@@ -94,6 +101,29 @@ HTML;
 
 function save_asset($data)
 {
-  //TODO save information in $data to database
-  return true;
+  $con=new DataBaseTable('content',true,DATACONF);
+  //TODO process tags to tag associations
+  //file uploads should be handled elsewhere...
+  if (!empty($data['modified']))
+  {
+   if ($cid=$con->updateData($data))
+   {
+     return $cid;
+   }
+   else
+   {
+     return false;
+   }
+  }
+  else
+  {
+    if ($cid=$con->putData($data))
+    {
+      return $cid;
+    }
+    else
+    {
+      return false;
+    }
+  }
 }

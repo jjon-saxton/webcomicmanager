@@ -1,18 +1,11 @@
 <?php
 
-function build_manager_form($action,$ctype,$cid=null)
+function build_manager_form($action,$ctype=null,$cid=null)
 {
   $html="<h1>Asset Manager: {$action} {$ctype}</h1>\n";
   if ($action != 'drop')
   {
     $types=new DataBaseTable('types',true,DATACONF);
-    $ttids=$types->getData("ctype:`{$ctype}`");
-    $ttid_opts="<select class=\"form-control\" name=\"ttid\">\n";
-    while ($type=$ttids->fetch(PDO::FETCH_ASSOC))
-    {
-      $ttid_opts.="<option value=\"{$type['ttid']}\">{$type['name']}</option>\n";
-    }
-    $ttid_opts.="</select>\n";
     
     if ($action == 'update' && $cid != NULL)
     {
@@ -20,17 +13,58 @@ function build_manager_form($action,$ctype,$cid=null)
       $q=$con->getData("cid:`{$cid}`");
       $values=$q->fetch(PDO::FETCH_ASSOC);
       $values['modified']=date("Y-m-d H:i:s");
+      if (empty($ctype))
+      {
+        $cttid=$types->getData("ttid:`= {$values['ttid']}`");
+        $cttid=$cttid->fetch(PDO::FETCH_ASSOC);
+        $ctype=$cttid['ctype'];
+      }
     }
     else
     {
+     $ttid_opts.="</select>\n";
      $values['created']=date("Y-m-d H:i:s");
      $values['modified']=null;
      $values['title']="New ".ucwords($ctype);
      $values['tags']=null;
+     $values['ttid']=null;
+     $values['price']=null;
+     $values['data']=null;
+     $values['file']=null;
+    }
+    
+    $ttids=$types->getData("ctype:`{$ctype}`");
+    $ttid_opts="<select class=\"form-control\" id=\"ttid\" name=\"ttid\">\n";
+    while ($type=$ttids->fetch(PDO::FETCH_ASSOC))
+    {
+      if ($type['ttid'] == $values['ttid'])
+      {
+        $tval=" selected=\"selected\"";
+      }
+      else
+      {
+        $tval=null;
+      }
+      $ttid_opts.="<option{$tval} value=\"{$type['ttid']}\">{$type['name']}</option>\n";
+    }
+    $ttid_opts.="</select>\n";
+    
+    switch ($ctype)
+    {
+      case 'project':
+      default:
+      $type_extras=<<<HTML
+<div class="form-group">
+<label for="description">Description</label>
+<textarea id="description" name="data" rows="5" cols="15">
+{$values['data']}
+</textarea>
+</div>
+HTML;
     }
     
     $html.=<<<HTML
-<form method="post">
+<form method="post" enctype="multipart/form-data">
 <div class="form-group">
 <label for="title">Title</label>
 <input type="hidden" name="created" value="{$values['created']}">

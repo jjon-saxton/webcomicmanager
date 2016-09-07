@@ -79,29 +79,23 @@ else
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="defaultNavbar1">
       <ul class="nav navbar-nav">
-        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tower21 Studios Limited<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="studios.html">Our Studios</a></li>
-            <li><a href="start.html">Contact Us</a></li>
-          </ul>
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php if($session->level < 5){ print "Welcome ". $session->name; }
+        else { print "Login"; } ?><span class="caret"></span></a>
+          <?php
+          require_once dirname(__FILE__)."/appmodules/ucp.mod.php";
+          echo ucp_module($session);
+          ?>
         </li>
-        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Services<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="design.html">Web &amp; Graphics Design</a></li>
-            <li><a href="WebComiX.html">WebComiX Publication</a></li>
-            <li><a href="illustration.html">Art &amp; Illustration</a></li>
-            <li><a href="film.html">Film &amp; Video Editing</a></li>
-          </ul>
+        <li class="dropdown"><a href="./app.php?section=randomizer" role="button" aria-expanded="false">Discover</a>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="http://blog.tower21studios.com">Blog</a></li>
-        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Social Media/Feeds<span class="caret"></span></a>
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tower21 Studios Limited<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
+            <li><a href="http://www.towe21studios.com">Main Site</a></li>
+            <li><a href="http://blog.tower21studios.com">Our Blog</a></li>
             <li><a href="https://twitter.com/Tower21Studios">Twitter</a></li>
             <li><a href="https://www.facebook.com/Tower21Studios">Facebook</a></li>
-            <li class="divider"></li>
-            <li><a href="http://blog.tower21studios.com/rss">RSS Feed</a></li>
           </ul>
         </li>
       </ul>

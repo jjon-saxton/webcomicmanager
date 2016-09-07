@@ -75,12 +75,6 @@ HTML;
   }
  }
 }
+
+echo $body;
 ?>
-<html>
-<head>
-<title>Placeholder theme: <?php echo $title ?></title>
-</head>
-<body>
-<?php echo $body ?>
-</body>
-</html>

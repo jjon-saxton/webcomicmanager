@@ -28,38 +28,123 @@ else
  $GLOBALS['CONF']=$conf->get();
 }
 
-if ($action != 'install')
-{
- require dirname(__FILE__)."/appmodules/ucp.mod.php";
- echo ucp_module($session,'box');
-} ?>
+?>
 <!doctype html>
 <html>
+<head>
+ <title>Tower21 WebComiX: <?php echo($path) ?></title>
+ <!-- Load Bootstrap and dependencies -->
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <script src="//www.tower21studios.com/assets/js/bootstrap.js"></script>
+ <script src="//<?php echo($conf->baseuir) ?>/appcore/scripts/ajaxmodal.js"></script>
+ 
+ <!-- Styles from main domain -->
+ <link rel="stylesheet" href="//www.tower21studios.com/assets/css/bootstrap.css" type="text/css">
+ <link rel="stylesheet" href="//www.tower21studios.com/assets/css/v2.css" type="text/css">
+</head>
+<body>
+<header>
+<div id="messageModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<button type=button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Message</h3>
+</div>
+<div class="modal-body">
+<p>We have a message for you!</p>
+</div>
+</div>
+</div>
+</div>
+<div id="AJAXModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<button type=button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Preparing something awesome...</h3>
+</div>
+<div class="modal-body">
+<p>Becoming 20% more awesome...</p>
+</div>
+</div>
+</div>
+</div>
+<nav class="navbar navbar-default">
+  <div class="container-fluid"> 
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+      <a class="navbar-brand" href="../">#Dare2Dream</a></div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="defaultNavbar1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tower21 Studios Limited<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="studios.html">Our Studios</a></li>
+            <li><a href="start.html">Contact Us</a></li>
+          </ul>
+        </li>
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Services<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="design.html">Web &amp; Graphics Design</a></li>
+            <li><a href="WebComiX.html">WebComiX Publication</a></li>
+            <li><a href="illustration.html">Art &amp; Illustration</a></li>
+            <li><a href="film.html">Film &amp; Video Editing</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="http://blog.tower21studios.com">Blog</a></li>
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Social Media/Feeds<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="https://twitter.com/Tower21Studios">Twitter</a></li>
+            <li><a href="https://www.facebook.com/Tower21Studios">Facebook</a></li>
+            <li class="divider"></li>
+            <li><a href="http://blog.tower21studios.com/rss">RSS Feed</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</header>
+<div class="container">
+<hr>
+<div class="row">
+<div class="text-justify col-lg-4 col-md-5 col-sm-6" id="Updates">
+<?php
+if ($action != 'install')
+{
+ require dirname(__FILE__)."/appmodules/updated.mod.php";
+ //echo recently_updated($session,'box');
+} ?>
+</div>
+<div class="text-justify col-lg-8 col-md-7 col-sm-6" id="Page">
 <?php
 if (!@$_GET['page'])
 {
-  load_index($path);
+  echo load_index($path);
 }
 else
 {
-  load_page($_GET['page'],$page);
+  echo load_page($_GET['page'],$page);
 }
+?>
+</div>
+</div>
+</div>
+</body>
+</html>
 
-function load_index($path)
+<?php function load_index($path)
 {
  if (empty($path) || $path == "/")
  {
   require_once dirname(__FILE__)."/appmodules/series.mod.php";
-  $body=list_projects();
+  return list_projects();
  }
-?>
-<head>
- <title>Tower21 WebComiX: <?php echo($path) ?></title>
-</head>
-<body>
- <?php echo($body); ?>
-</body>
-<?php }
+}
 
 function load_page($page,$path)
 {

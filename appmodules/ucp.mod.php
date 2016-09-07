@@ -6,15 +6,15 @@ function ucp_module($cusr)
  if ($cusr->level < 5)
  {
   $html.=<<<HTML
-<li><a href="./dash.php?section=library">Manage Library</a></li>
+<li><a href="./dash.php?section=library" data-toggle="modal" data-target="AJAXModal">Manage Library</a></li>
 HTML;
   if ($cusr->level ==1)
   {
-   $html.="<li><a href=\"./dash.php?section=admincp\">Manage Site</a></li>\n";
+   $html.="<li><a href=\"./dash.php?section=admincp\" data-toggle=\"modal\" data-target=\"#AJAXModal\">Manage Site</a></li>\n";
   }
   if ($cusr->level <=2)
   {
-   $html.="<li><a href=\"./dash.php?section=projects\">Manage Projects</a></li>\n";
+   $html.="<li><a href=\"./dash.php?section=projects\" data-toggle=\"modal\" data-target=\"#AJAXModal\">Manage Projects</a></li>\n";
   }
   $html.=<<<HTML
 <li><a href="./app.php?action=logout">Logout</a></li>

@@ -36,7 +36,6 @@ else
  <!-- Load Bootstrap and dependencies -->
  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
  <script src="//www.tower21studios.com/assets/js/bootstrap.js"></script>
- <script src="//<?php echo($conf->baseuir) ?>/appcore/scripts/ajaxmodal.js"></script>
  
  <!-- Styles from main domain -->
  <link rel="stylesheet" href="//www.tower21studios.com/assets/css/bootstrap.css" type="text/css">

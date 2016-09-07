@@ -41,7 +41,7 @@ else
   case 'projects':
   default:
   $title="Your Projects";
-  $body="<h1>{$title}</h1>\n";
+  $body=null;
   $data=new DataBaseTable('content',true,DATACONF);
   $q=$data->getData("pid:`= 0` uid:`= {$session->uid}`");
   $c=0;
@@ -55,9 +55,9 @@ else
   <div class="panel-heading">{$row['title']}</div>
   <div class="panel-body">{$row['data']}</div>
   <div class="panel-footer">
-    <a href="?section=update&cid={$row['cid']}" class="btn btn-info">Edit</a>
-    <a href="?section=put&pid={$row['cid']}" class="btn btn-success">Add Child</a>
-    <a href="?section=drop&cid={$row['cid']}" class="btn btn-error">Remove</a>
+    <a href="./dash.php?section=update&cid={$row['cid']}" data-target="#this-modal" class="btn btn-info">Edit</a>
+    <a href="./dash.php?section=put&pid={$row['cid']}" data-target="#this-modal" class="btn btn-success">Add Child</a>
+    <a href="./dash.php?section=drop&cid={$row['cid']}" data-target="#this-modal" class="btn btn-danger">Remove</a>
   </div>
 </div>
 HTML;
@@ -67,14 +67,21 @@ HTML;
   
   if ($c <= 0)
   {
-    $body.="<div class=\"alert alert-warning\">You have no projects! Would you like to <a href=\"./dash.php?section=put&type=project\">add one</a>?</div>\n";
+    $body.="<div class=\"alert alert-warning\">You have no projects! Would you like to <a href=\"./dash.php?section=put&type=project\" data-target=\"#this-modal\">add one</a>?</div>\n";
   }
   else
   {
-    $body.="<div id=\"List\" class=\"panel-group\">\n{$projects}\n</div>\n<span class=\"alert alert-info\">You have {$c} project(s). <a href=\"?section=put&type=project\">Add another</a>?</span>\n";
+    $body.="<div id=\"List\" class=\"panel-group\">\n{$projects}\n</div>\n<span class=\"alert alert-info\">You have {$c} project(s). <a href=\"./dash.php?section=put&type=project\" data-target=\"#this-modal\">Add another</a>?</span>\n";
   }
  }
 }
 
-echo $body;
+echo <<<HTML
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">{$title}</h4></div>
+<div class="modal-body">
+<script src="./appcore/scripts/ajaxlinks.js" type="text/javascript"></script>
+{$body}
+</div>
+HTML;
 ?>

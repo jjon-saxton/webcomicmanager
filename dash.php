@@ -32,9 +32,9 @@ else
   }
   else
   {
-    if (save_asset($_POST))
+    if ($message=save_asset($_POST))
     {
-      header("Location: http://{$conf->base_uri}/dash.php?section=projects");
+      $body="<div class=\"panel panel-default\">Operation complete! {$message}<a href=\"./dash.php?section={$_GET['type']}\" data-target=\"#this-modal\">Return to project manager</a></div>";
     }
   }
   break;

@@ -18,6 +18,7 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
         $cttid=$cttid->fetch(PDO::FETCH_ASSOC);
         $ctype=$cttid['ctype'];
       }
+      $qstr="?section={$action}&cid={$cid}";
     }
     else
     {
@@ -31,9 +32,11 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
      $values['price']=0;
      $values['data']=null;
      $values['file']=null;
+     
+     $qstr="?section={$action}&type={$ctype}";
     }
   
-    $html="<h1>Asset Manager: {$action} {$ctype}</h1>\n";
+    $html="<h4>{$action} {$ctype}</h4>\n";
     
     $ttids=$types->getData("ctype:`{$ctype}`");
     $ttid_opts="<select class=\"form-control\" id=\"ttid\" name=\"ttid\">\n";
@@ -68,7 +71,7 @@ HTML;
     }
     
     $html.=<<<HTML
-<form method="post" enctype="multipart/form-data">
+<form action="./dash.php{$qstr}" method="post" enctype="multipart/form-data">
 <div class="form-group">
 <label for="title">Title</label>
 <input type="hidden" name="uid" value="{$values['uid']}">
@@ -91,10 +94,25 @@ HTML;
 <div id="Preferences">
 {$type_extras}
 </div>
-<div class="form-group">
-<button class="form-control btn btn-primary" type="submit" name="save" value=1>Save</button>
+<div class="form-group center">
+<button class="btn btn-primary" type="submit" name="save" value="1">Save</button>
+<a href="./dash.php?secton=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
 </div>
 </form>
+HTML;
+  }
+  else
+  {
+    $html=<<<HTML
+<form action="./dash.php?section=drop&cid={$cid}" method="post">
+<div class="panel panel-danger">
+<div class="panel-heading">Are you sure?</div>
+<div class="panel-body">Are you really sure you want to drop this item? This action cannot be undone no matter how much you complain or wine</div>
+<div class="panel-footer">
+<button type="submit" class="btn btn-danger">Yes</button>
+<a href="./dash.php?section=projects" class="btn btn-info" data-target="#this-modal">No</a>
+</div>
+</div>
 HTML;
   }
   
@@ -110,22 +128,22 @@ function save_asset($data)
   {
    if ($cid=$con->updateData($data))
    {
-     return $cid;
+     return $cid." successfully updated.";
    }
    else
    {
-     return false;
+     return $cid." could not be updated.";
    }
   }
   else
   {
     if ($cid=$con->putData($data))
     {
-      return $cid;
+      return $cid." successfully added.";
     }
     else
     {
-      return false;
+      return $cid." could not be added.";
     }
   }
 }

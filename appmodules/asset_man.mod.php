@@ -154,7 +154,8 @@ HTML;
 <div class="panel-heading">Are you sure?</div>
 <div class="panel-body">Are you really sure you want to drop this item? This action cannot be undone no matter how much you complain or wine</div>
 <div class="panel-footer">
-<button type="submit" class="btn btn-danger">Yes</button>
+<input type="hidden" name="cid" value="{$_GET['cid']}">
+<button type="submit" class="btn btn-danger" name="confirm" value="1">Yes</button>
 <a href="./dash.php?section=projects" class="btn btn-info" data-target="#this-modal">No</a>
 </div>
 </div>
@@ -164,12 +165,23 @@ HTML;
   return $html;
 }
 
-function save_asset($data)
+function save_asset($action,$data)
 {
   $con=new DataBaseTable('content',true,DATACONF);
   //TODO process tags to tag associations
   //file uploads should be handled elsewhere...
-  if (!empty($data['modified']))
+  if ($action == 'drop')
+  {
+    if ($cid=$con->deleteData($data))
+    {
+      return $cid." dropped";
+    }
+    else
+    {
+      return $cid. "could not be removed!";
+    }
+  }
+  elseif (!empty($data['modified']))
   {
    if ($cid=$con->updateData($data))
    {

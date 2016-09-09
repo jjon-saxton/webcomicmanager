@@ -140,7 +140,7 @@ HTML;
 {$type_extras}
 </div>
 <div class="form-group center">
-<button class="btn btn-primary" type="submit" name="save" value="1">Save</button>
+<button class="btn btn-primary" type="button" data-target="#messageModal" name="save" value="1">Save</button>
 <a href="./dash.php?secton=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
 </div>
 </form>
@@ -155,7 +155,7 @@ HTML;
 <div class="panel-body">Are you really sure you want to drop this item? This action cannot be undone no matter how much you complain or wine</div>
 <div class="panel-footer">
 <input type="hidden" name="cid" value="{$_GET['cid']}">
-<button type="submit" class="btn btn-danger" name="confirm" value="1">Yes</button>
+<button type="button" class="btn btn-danger" data-target="#messageModal" name="confirm" value="1">Yes</button>
 <a href="./dash.php?section=projects" class="btn btn-info" data-target="#this-modal">No</a>
 </div>
 </div>

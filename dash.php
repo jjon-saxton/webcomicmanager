@@ -26,7 +26,7 @@ else
   case 'drop':
   require_once dirname(__FILE__)."/appmodules/asset_man.mod.php";
   $title="Asset Manager";
-  if (empty($_POST['save']) && empty($_POST['confirm']))
+  if (empty($_POST['title']) && empty($_POST['cid']))
   {
     $body=build_manager_form($session,$_GET['section'],$_GET['type'],$_GET['pid'],$_GET['cid']);
   }
@@ -34,7 +34,7 @@ else
   {
     if ($message=save_asset($_GET['section'],$_POST))
     {
-      $body="<div class=\"panel panel-default\">Operation complete! {$message}<a href=\"./dash.php?section={$_GET['type']}\" data-target=\"#this-modal\">Return to project manager</a></div>";
+      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"./dash.php?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
   break;

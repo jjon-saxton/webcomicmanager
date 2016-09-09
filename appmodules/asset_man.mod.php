@@ -1,14 +1,14 @@
 <?php
 
-function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
+function build_manager_form(MCSession $session,$action,$ctype=null,$pid=null,$cid=null)
 {
+  $con=new DataBaseTable('content',true,DATACONF);
   if ($action != 'drop')
   {
     $types=new DataBaseTable('types',true,DATACONF);
     
     if ($action == 'update' && $cid != NULL)
     {
-      $con=new DataBaseTable('content',true,DATACONF);
       $q=$con->getData("cid:`{$cid}`");
       $values=$q->fetch(PDO::FETCH_ASSOC);
       $values['modified']=date("Y-m-d H:i:s");
@@ -23,6 +23,14 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
     else
     {
      $ttid_opts.="</select>\n";
+     if (empty($pid))
+     {
+       $values['pid']=0;
+     }
+     else
+     {
+       $values['pid']=$pid;
+     }
      $values['created']=date("Y-m-d H:i:s");
      $values['modified']=null;
      $values['title']="New ".ucwords($ctype);
@@ -38,7 +46,21 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
   
     $html="<h4>{$action} {$ctype}</h4>\n";
     
+    if (empty($ctype) && !empty($pid))
+    {
+      $parent=$con->getData("cid:`= {$pid}`",array('ttid'));
+      $parent=$parent->fetch(PDO::FETCH_ASSOC);
+      $ptype=$types->getData("ttid:`= {$parent['ttid']}");
+      $ptype=$ptype->fetch(PDO::FETCH_ASSOC);
+      $ctype=$ptype['child_types'];
+    }
+    
+    if (empty($ctype))
+    {
+      $ctype="project";
+    }
     $ttids=$types->getData("ctype:`{$ctype}`");
+      
     $ttid_opts="<select class=\"form-control\" id=\"ttid\" name=\"ttid\">\n";
     while ($type=$ttids->fetch(PDO::FETCH_ASSOC))
     {
@@ -56,14 +78,36 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$cid=null)
     
     switch ($ctype)
     {
-      //TODO other ctypes
+      case 'note':
+      $type_extras=<<<HTML
+<div class="form-group">
+<label for="note">Note</label>
+<textarea id="note" name="data" class="notes jqte">
+{$values['data']}
+</textarea>
+</div>
+HTML;
+      break;
+      case 'art':
+      break;
+      case 'page':
+      $type_extras=<<<HTML
+<div class="form-group">
+<label for="script">Script</label>
+<textarea id="script" name="data" class="script">
+{$values['data']}
+</textarea>
+</div>
+HTML;
+      break;
+      case 'section':
+      case 'chapter':
       case 'project':
       default:
       $type_extras=<<<HTML
 <div class="form-group">
 <label for="description">Description</label>
-<input type="hidden" name="pid" value="0">
-<textarea id="description" name="data" rows="5" cols="15">
+<textarea id="description" name="data" class="jqte">
 {$values['data']}
 </textarea>
 </div>
@@ -74,6 +118,7 @@ HTML;
 <form action="./dash.php{$qstr}" method="post" enctype="multipart/form-data">
 <div class="form-group">
 <label for="title">Title</label>
+<input type="hidden" name="pid" value="{$values['pid']}">
 <input type="hidden" name="uid" value="{$values['uid']}">
 <input type="hidden" name="created" value="{$values['created']}">
 <input type="hidden" name="modified" value="{$values['modified']}">

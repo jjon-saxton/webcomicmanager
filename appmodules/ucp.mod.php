@@ -6,7 +6,7 @@ function ucp_module($cusr)
  if ($cusr->level < 5)
  {
   $html.=<<<HTML
-<li><a href="./dash.php?section=library" data-toggle="modal" data-target="AJAXModal">Manage Library</a></li>
+<li><a href="./dash.php?section=library" data-toggle="modal" data-target="#AJAXModal">Manage Library</a></li>
 HTML;
   if ($cusr->level ==1)
   {

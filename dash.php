@@ -28,7 +28,7 @@ else
   $title="Asset Manager";
   if (empty($_POST['save']))
   {
-    $body=build_manager_form($session,$_GET['section'],$_GET['type'],$_GET['cid']);
+    $body=build_manager_form($session,$_GET['section'],$_GET['type'],$_GET['pid'],$_GET['cid']);
   }
   else
   {
@@ -37,6 +37,10 @@ else
       $body="<div class=\"panel panel-default\">Operation complete! {$message}<a href=\"./dash.php?section={$_GET['type']}\" data-target=\"#this-modal\">Return to project manager</a></div>";
     }
   }
+  break;
+  case 'admincp':
+  break;
+  case 'library':
   break;
   case 'projects':
   default:

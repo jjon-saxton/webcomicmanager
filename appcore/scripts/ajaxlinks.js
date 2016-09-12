@@ -21,6 +21,20 @@ $(function(){
         }
     });
     
+    // Initialize textarea's with required class as JQTE boxes
+    $("textarea.editor.full").jqte();
+    $("textarea.editor.limited").jqte({
+        formats:false,
+        link:false,
+        unlink:false,
+        ul:false,
+        ol:false,
+        strike:false,
+        outdent:false,
+        indent:false,
+        rule:false,
+    });
+    
     // Uninitialize modal on close
     $('body').on('hidden.bs.modal','.modal',function(){
         $(this).removeData('bs.modal');

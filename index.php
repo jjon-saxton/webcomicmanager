@@ -36,6 +36,7 @@ else
  <!-- Load Bootstrap and dependencies -->
  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
  <script src="//www.tower21studios.com/assets/js/bootstrap.js"></script>
+ <script src="./appcore/scripts/editor.js"></script>
  <?php if (!empty($_GET['modal'])){ ?>
  <script language="javascript">
  $(function(){
@@ -49,6 +50,7 @@ else
  </script>
  <?php } ?>
  
+ <link rel="stylesheet" href="./appcore/styles/editor.css" type="text/css">
  <!-- Styles from main domain -->
  <link rel="stylesheet" href="//www.tower21studios.com/assets/css/bootstrap.css" type="text/css">
  <link rel="stylesheet" href="//www.tower21studios.com/assets/css/v2.css" type="text/css">

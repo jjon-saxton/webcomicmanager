@@ -38,7 +38,7 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$pid=null,$ci
      $values['tags']=null;
      $values['ttid']=null;
      $values['price']=0;
-     $values['data']=null;
+     $values['data']="<p>Your description here...</p>";
      $values['file']=null;
      
      $qstr="?section={$action}&type={$ctype}";
@@ -82,7 +82,7 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$pid=null,$ci
       $type_extras=<<<HTML
 <div class="form-group">
 <label for="note">Note</label>
-<textarea id="note" name="data" class="notes jqte">
+<textarea id="note" name="data" class="full editor">
 {$values['data']}
 </textarea>
 </div>
@@ -94,7 +94,7 @@ HTML;
       $type_extras=<<<HTML
 <div class="form-group">
 <label for="script">Script</label>
-<textarea id="script" name="data" class="script">
+<textarea id="script" name="data" class="script editor form-control">
 {$values['data']}
 </textarea>
 </div>
@@ -107,7 +107,7 @@ HTML;
       $type_extras=<<<HTML
 <div class="form-group">
 <label for="description">Description</label>
-<textarea id="description" name="data" class="jqte">
+<textarea id="description" name="data" class="limited editor form-control">
 {$values['data']}
 </textarea>
 </div>

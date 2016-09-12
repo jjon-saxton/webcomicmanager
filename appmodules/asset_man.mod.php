@@ -181,8 +181,9 @@ function save_asset($action,$data)
       return $cid. "could not be removed!";
     }
   }
-  elseif (!empty($data['modified']))
+  elseif (!empty($_GET['cid']))
   {
+   $data['cid']=$_GET['cid'];
    if ($cid=$con->updateData($data))
    {
      return $cid." successfully updated.";

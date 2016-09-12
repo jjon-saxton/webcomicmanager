@@ -36,6 +36,18 @@ else
  <!-- Load Bootstrap and dependencies -->
  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
  <script src="//www.tower21studios.com/assets/js/bootstrap.js"></script>
+ <?php if (!empty($_GET['modal'])){ ?>
+ <script language="javascript">
+ $(function(){
+    $("#messageModal .modal-title").html("<?php echo ucwords($_GET['modal']) ?>");
+    $("#messageModal .modal-body").html("<?php switch($_GET['modal']){
+      case 'login':
+      echo "<div class='alert alert-info'>Please provide login credentials</div><form action='./app.php?action=login' method='post'><div class='form-group'><label for='user'>Username</label><input type='text' class='form-control' name='name' id='user'></div><div class='form-group'><label for='pass'>Password</label><input type='password' class='form-control' name='password' id='pass'></div><button type='submit' class='btn btn-primary'>Login</button> <button data-dismiss='modal' class='btn btn-danger'>Cancel</button></form>";
+    } ?>");
+    $("#messageModal").modal('show');
+ });
+ </script>
+ <?php } ?>
  
  <!-- Styles from main domain -->
  <link rel="stylesheet" href="//www.tower21studios.com/assets/css/bootstrap.css" type="text/css">

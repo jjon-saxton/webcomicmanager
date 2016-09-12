@@ -1,5 +1,5 @@
  <?php
- function list_projects($filter=null)
+ function list_projects($filter=null,$curusr=null)
  {
   $table=new DataBaseTable('content',true,DATACONF);
   $q="pid:`= 0`";
@@ -42,10 +42,16 @@
    $list.="</div>\n";
   }
   
-  $html="<h1 class=\"title\">Series</h1>\n";
   if ($c <= 0)
   {
-   $html.="<div class=\"alert alter-warning\">No Content Posted! Check above to login and post some stuff!!</div>";
+   if (empty($curusr) || $curusr->level >= 3)
+   {
+    $html="<div class=\"alert alert-warning\">No Content Posted! Please <a href=\"./?modal=login\">login</a> and post some stuff!!</div>";
+   }
+   else
+   {
+     $html="<div class=\"alert alert-warning\">No Content Posted! Please open the <a href=\"./dash.php?section=projects\" data-toggle=\"modal\" data-target=\"#AJAXModal\">project manager</a> to add new content!</div>";
+   }
   }
   else
   {

@@ -129,11 +129,11 @@ if ($action != 'install')
 <?php
 if (!@$_GET['page'])
 {
-  echo load_index($path);
+  echo load_index($path,$session);
 }
 else
 {
-  echo load_page($_GET['page'],$page);
+  echo load_page($_GET['page'],$page,$session);
 }
 ?>
 </div>
@@ -142,16 +142,16 @@ else
 </body>
 </html>
 
-<?php function load_index($path)
+<?php function load_index($path,MCSession $curusr)
 {
  if (empty($path) || $path == "/")
  {
   require_once dirname(__FILE__)."/appmodules/series.mod.php";
-  return list_projects();
+  return list_projects($_GET['q'],$curusr);
  }
 }
 
-function load_page($page,$path)
+function load_page($page,$path,MCSession $curusr)
 {
  var_dump($page);
 }

@@ -39,8 +39,10 @@ else
   }
   break;
   case 'admincp':
+  $title="Your Site";
   break;
   case 'library':
+  $title="Your Library";
   break;
   case 'projects':
   default:

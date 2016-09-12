@@ -77,7 +77,7 @@ HTML;
   }
   else
   {
-    $body.="<div id=\"List\" class=\"panel-group\">\n{$projects}\n</div>\n<span class=\"alert alert-info\">You have {$c} project(s). <a href=\"./dash.php?section=put&type=project\" data-target=\"#this-modal\">Add another</a>?</span>\n";
+    $body.="<div id=\"List\" class=\"panel-group\">\n{$projects}\n</div>\n<span class=\"alert alert-info\">You have {$c} project(s). <a href=\"./dash.php?section=put&type=project\" data-target=\"#this-modal\">Add another</a>?</span> <a href=\"javascript:location.reload()\" class=\"right btn btn-info\">Reload Index</a>\n";
   }
  }
 }

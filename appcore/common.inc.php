@@ -87,3 +87,28 @@ class MCSettings
   return $status;
  }
 }
+
+function con_to_html(array $row,$view=null)
+{
+  switch ($view)
+  {
+   case 'dropdown':
+   return <<<HTML
+<li><a href="./dash.php?section=update&cid={$row['cid']}" data-target="#this-modal">{$row['title']}</a></li>
+HTML;
+   break;
+   case 'panel':
+   default:
+   return <<<HTML
+<div id="{$crow->cid}" class="panel panel-default">
+<div class="panel-heading">{$row['title']}</div>
+<div class="panel-body">{$row['data']}</div>
+<div class="panel-footer"><a href="./dash.php?section=update&cid={$row['cid']}" class="btn btn-info" data-target="#this-modal">Edit</a>
+<a href="./dash.php?section=put&pid={$row['cid']}" class="btn btn-success" data-target="#this-modal">Add Child</a>
+<a href="./dash.php?section=put&type=note&pid={$row['cid']}" class="btn btn-warning" data-target="#this-modal">Add Note</a>
+<a href="./dash.php?section=drop&cid={$row['cid']}" class="btn btn-danger" data-target="#this-modal">Delete</a>
+</div>
+</div>
+HTML;
+  }
+}

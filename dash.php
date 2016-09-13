@@ -56,17 +56,7 @@ else
    $projects=null;
    while ($row=$q->fetch(PDO::FETCH_ASSOC))
    {
-    $projects.=<<<HTML
-<div class="panel panel-default">
-  <div class="panel-heading">{$row['title']}</div>
-  <div class="panel-body">{$row['data']}</div>
-  <div class="panel-footer">
-    <a href="./dash.php?section=update&cid={$row['cid']}" data-target="#this-modal" class="btn btn-info">Edit</a>
-    <a href="./dash.php?section=put&pid={$row['cid']}" data-target="#this-modal" class="btn btn-success">Add Child</a>
-    <a href="./dash.php?section=drop&cid={$row['cid']}" data-target="#this-modal" class="btn btn-danger">Remove</a>
-  </div>
-</div>
-HTML;
+    $projects.=con_to_html($row);
     $c++;
    }
   }

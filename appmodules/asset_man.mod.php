@@ -12,6 +12,9 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$pid=null,$ci
       $q=$con->getData("cid:`{$cid}`");
       $values=$q->fetch(PDO::FETCH_ASSOC);
       $values['modified']=date("Y-m-d H:i:s");
+      $child_btn=<<<HTML
+<a href="./dash.php?section=put&pid={$values['cid']}" class="btn btn-success" data-target="#this-modal">Add Child</a>
+HTML;
       if (empty($ctype))
       {
         $cttid=$types->getData("ttid:`= {$values['ttid']}`");
@@ -31,6 +34,7 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$pid=null,$ci
      {
        $values['pid']=$pid;
      }
+     $child_btn=null;
      $values['created']=date("Y-m-d H:i:s");
      $values['modified']=null;
      $values['title']="New ".ucwords($ctype);
@@ -38,27 +42,27 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$pid=null,$ci
      $values['tags']=null;
      $values['ttid']=null;
      $values['price']=0;
-     $values['data']="<p>Your description here...</p>";
+     $values['data']="<p>Your text here...</p>";
      $values['file']=null;
      
      $qstr="?section={$action}&type={$ctype}";
     }
   
-    $html="<h4>{$action} {$ctype}</h4>\n";
     
     if (empty($ctype) && !empty($pid))
     {
       $parent=$con->getData("cid:`= {$pid}`",array('ttid'));
       $parent=$parent->fetch(PDO::FETCH_ASSOC);
-      $ptype=$types->getData("ttid:`= {$parent['ttid']}");
+      $ptype=$types->getData("ttid:`= {$parent['ttid']}`");
       $ptype=$ptype->fetch(PDO::FETCH_ASSOC);
       $ctype=$ptype['child_types'];
     }
-    
     if (empty($ctype))
     {
       $ctype="project";
     }
+    
+    $html="<h4>{$action} {$ctype}</h4>\n";
     $ttids=$types->getData("ctype:`{$ctype}`");
       
     $ttid_opts="<select class=\"form-control\" id=\"ttid\" name=\"ttid\">\n";
@@ -141,10 +145,32 @@ HTML;
 </div>
 <div class="form-group center">
 <button class="btn btn-primary" type="button" data-target="#messageModal" name="save" value="1">Save</button>
+{$child_btn}
 <a href="./dash.php?secton=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
 </div>
 </form>
 HTML;
+
+   if ($action == 'update')
+   {
+    $children=$con->getData("pid:`= {$values['cid']}`");
+    $cc=0;
+    $cdiv=null;
+    while ($crow=$children->fetch(PDO::FETCH_ASSOC))
+    {
+     $cdiv.=con_to_html($crow);
+     $cc++;
+    }
+    
+    if ($cc > 1)
+    {
+     $html.="<div class=\"panel-group\">\n{$cdiv}\n</div>\n";
+    }
+    elseif ($cc == 1)
+    {
+     $html.=$cdiv;
+    }
+   }
   }
   else
   {

@@ -99,16 +99,94 @@ HTML;
    break;
    case 'panel':
    default:
+   $con=new DataBaseTable('content',true,DATACONF);
+   $cq=$con->getData("pid:`= {$row['cid']}`");
+   $cli=null;
+   while ($child=$cq->fetch(PDO::FETCH_ASSOC))
+   {
+    $cli.=con_to_html($child,'dropdown');
+   }
+   if (!empty($cli))
+   {
+    $cli="<li class=\"divider\"></li>\n".$cli;
+   }
+   $note=new DataBaseTable('notes',true,DATACONF);
+   $nq=$note->getData("cid:`= {$row['cid']}`");
+   $nli=null;
+   while ($note=$nq->fetch(PDO::FETCH_ASSOC))
+   {
+    $nli.=note_to_html($note,'dropdown');
+   }
+   if (!empty($nli))
+   {
+    $nli="<li class=\"divider\"></li>\n".$nli;
+   }
+   $art=new DataBaseTable('art',true,DATACONF);
+   $aq=$art->getData("cid:`= {$row['cid']}`");
+   $ali=null;
+   while ($art=$aq->fetch(PDO::FETCH_ASSOC))
+   {
+    $ali.=art_to_html($art,'dropdown');
+   }
+   if (!empty($ali))
+   {
+    $ali="<li class=\"divider\"></li>\n".$ali;
+   }
    return <<<HTML
-<div id="{$crow->cid}" class="panel panel-default">
+<div id="{$row['cid']}" class="panel panel-default">
 <div class="panel-heading">{$row['title']}</div>
 <div class="panel-body">{$row['data']}</div>
 <div class="panel-footer"><a href="./dash.php?section=update&cid={$row['cid']}" class="btn btn-info" data-target="#this-modal">Edit</a>
-<a href="./dash.php?section=put&pid={$row['cid']}" class="btn btn-success" data-target="#this-modal">Add Child</a>
-<a href="./dash.php?section=put&type=note&pid={$row['cid']}" class="btn btn-warning" data-target="#this-modal">Add Note</a>
+<div id="{$row['cid']}-Art" class="dropdown no-box">
+<button class="btn btn-info" type="button" data-toggle="dropdown">Artwork <span class="caret"></span></button>
+<ul class="dropdown-menu">
+<li><a href="./dash.php?section=upload&cid={$row['cid']}" data-target="#this-modal">Add Artwork</a></li>
+{$ali}
+</ul>
+</div>
+<div id="{$row['cid']}-Children" class="dropdown no-box">
+<button class="btn btn-success" type="button" data-toggle="dropdown">Children <span class="caret"></span></button>
+<ul class="dropdown-menu">
+<li><a href="./dash.php?section=put&pid={$row['cid']}" data-target="#this-modal">Add Child</a></li>
+{$cli}
+</ul>
+</div>
+<div id="{$row['cid']}-Notes" class="dropdown no-box">
+<button class="btn btn-warning" type="button" data-toggle="dropdown">Notes <span class="caret"></span></button>
+<ul class="dropdown-menu">
+<li><a href="./dash.php?section=write&cid={$row['cid']}" data-target="#this-modal">Add Note</a></li>
+{$nid}
+</ul>
+</div>
 <a href="./dash.php?section=drop&cid={$row['cid']}" class="btn btn-danger" data-target="#this-modal">Delete</a>
 </div>
 </div>
 HTML;
   }
+}
+
+function art_to_html($row,$view=null)
+{
+  switch ($view)
+  {
+   case 'dropdown':
+   return <<<HTML
+<li><a href="./dash.php?section=view&type=art&cid={$row['cid']}" data-target="#this-modal">{$row['title']}</a></li>
+HTML;
+   break;
+   //TODO default single view
+ }
+}
+
+function note_to_html($row,$view=null)
+{
+  switch ($view)
+  {
+   case 'dropdown':
+   return <<<HTML
+<li><a href="./dash.php?section=edit&cid={$row['cid']}" data-target="#this-modal">{$row['title']}</a></li>
+HTML;
+   break;
+   //TODO default single view
+ }
 }

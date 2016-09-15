@@ -121,6 +121,7 @@ HTML;
    {
     $nli="<li class=\"divider\"></li>\n".$nli;
    }
+   
    $art=new DataBaseTable('art',true,DATACONF);
    $aq=$art->getData("cid:`= {$row['cid']}`");
    $ali=null;
@@ -155,7 +156,7 @@ HTML;
 <button class="btn btn-warning" type="button" data-toggle="dropdown">Notes <span class="caret"></span></button>
 <ul class="dropdown-menu">
 <li><a href="./dash.php?section=write&cid={$row['cid']}" data-target="#this-modal">Add Note</a></li>
-{$nid}
+{$nli}
 </ul>
 </div>
 <a href="./dash.php?section=drop&cid={$row['cid']}" class="btn btn-danger" data-target="#this-modal">Delete</a>
@@ -171,7 +172,7 @@ function art_to_html($row,$view=null)
   {
    case 'dropdown':
    return <<<HTML
-<li><a href="./dash.php?section=view&type=art&cid={$row['cid']}" data-target="#this-modal">{$row['title']}</a></li>
+<li><a href="./dash.php?section=view&type=art&aid={$row['aid']}" data-target="#this-modal">{$row['title']}</a></li>
 HTML;
    break;
    //TODO default single view
@@ -184,7 +185,7 @@ function note_to_html($row,$view=null)
   {
    case 'dropdown':
    return <<<HTML
-<li><a href="./dash.php?section=edit&cid={$row['cid']}" data-target="#this-modal">{$row['title']}</a></li>
+<li><a href="./dash.php?section=edit&nid={$row['nid']}" data-target="#this-modal">{$row['title']}</a></li>
 HTML;
    break;
    //TODO default single view

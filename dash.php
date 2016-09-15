@@ -21,6 +21,38 @@ else
 {
  switch ($_GET['section'])
  {
+  case 'write':
+  case 'edit':
+  case 'delete':
+  require_once dirname(__FILE__)."/appmodules/note_man.mod.php";
+  $title="Note Manager";
+  if (empty($_POST['cid']))
+  {
+    $body=build_manager_form($session,$_GET['section']);
+  }
+  else
+  {
+    if ($message=save_note($_GET['section'],$_POST))
+    {
+      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"./dash.php?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
+    }
+  }
+  break;
+  case 'view':
+  case 'upload':
+  case 'remove':
+  if (empty($_POST['cid']))
+  {
+    $body=build_manager_form($session,$_GET['section']);
+  }
+  else
+  {
+    if ($message=upload_art($_GET['section'],$_POST,$_FILES))
+    {
+      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"./dash.php?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
+    }
+  }
+  break;
   case 'put':
   case 'update':
   case 'drop':

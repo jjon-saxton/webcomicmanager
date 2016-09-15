@@ -119,15 +119,22 @@ else
 <div class="container">
 <hr>
 <div class="row">
-<div class="text-justify col-lg-4 col-md-5 col-sm-6" id="Updates">
+<div class="text-center as col-sm-12" id="AS-1">
 <?php
-if ($action != 'install')
-{
- require dirname(__FILE__)."/appmodules/updated.mod.php";
- //echo recently_updated($session,'box');
-} ?>
+require_once dirname(__FILE__)."/appmodules/adspace.mod.php";
+//echo inner_add('random','h');
+?>
 </div>
-<div class="text-justify col-lg-8 col-md-7 col-sm-6" id="Page">
+</div>
+<hr>
+<div class="row">
+<div class="text-justify as col-lg-2 col-md-4 col-sm-5" id="AS-2">
+<?php
+ require dirname(__FILE__)."/appmodules/adspace.mod.php";
+ //echo inner_add('random','v');
+?>
+</div>
+<div class="text-justify col-lg-10 col-md-8 col-sm-7" id="Page">
 <?php
 if (!@$_GET['page'])
 {

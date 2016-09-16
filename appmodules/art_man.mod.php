@@ -73,12 +73,28 @@ function add_art($action,$data)
 {
 }
 
-function upload_file($file)
+function upload_file($file,$site_settings)
 {
-  $upload_script=<<<TXT
-$("#art .progress-bar",pDoc).addClass('progress-bar-danger');
-$("#art .progress-bar span",pDoc).removeClass('sr-only').text("67% (file upload not yet supported!)");
+  if ($file['error'] == UPLOAD_ERR_OK)
+  {
+    $temp=$site_settings->project_dir."/temp/".md5(time());
+    if(move_uploaded_file($file['tmp_name'],$temp))
+    {
+      $upload_script=<<<TXT
+$("#art .progress-bar span",pDoc).removeClass('sr-only').text("Complete!");
+$("#art .progress-bar",pDoc).addClass("progress-bar-success").attr("aria-valuenow","100").css("width","100%");
+$("input#uriTarget",pDoc).value("{$temp}");
+$("button[name=save]",pDoc).removeAttr('disabled');
 TXT;
+    }
+    else
+    {
+      $upload_script=<<<TXT
+$("#art .progress-bar span",pDoc).removeClass('sr-only').text("Could not stage file");
+$("#art .progress-bar",pDoc).addClass("progress-bar-danger").attr("aria-valuenow","100").css("width","100%");
+TXT;
+    }
+  }
   return <<<HTML
 <!doctype html>
 <html>

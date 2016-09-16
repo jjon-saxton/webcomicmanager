@@ -59,16 +59,17 @@ function iUpload(field){
     var filename=field.value;
     
     if (filename.search(ext) == -1){
-        $("#messageModal modal-title").html("Upload Error");
-        $("#messageModal modal-body").html("You must uploaded a supported image file!");
+        $("#AJAXModal").modal('hide');
+        $("div#messageModal .modal-title").html("Upload Error");
+        $("div#messageModal .modal-body").html("You must uploaded a supported image file! (.png, .jpg, .jpeg, or .svg)");
         $("#messageModal").modal('show');
         
         field.form.reset();
         return false;
     }
     
-    field.form.submit();
-    $("div#art .progress-bar span").text("25%");
-    $("div#art .progress-bar").attr('aria-valuenow','25');
+    $("div#art .progress-bar span").text("33%");
+    $("div#art .progress-bar").attr('aria-valuenow','33').css('width','33%');
     $("div#art").removeClass('no-show');
+    field.form.submit();
 }

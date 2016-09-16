@@ -50,7 +50,7 @@ else
       $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"./dash.php?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
-  elseif (!empty($_FILES['art']['tmp-name']))
+  elseif (!empty($_FILES['art']['name']))
   {
     echo upload_file($_FILES['art']);
     exit();

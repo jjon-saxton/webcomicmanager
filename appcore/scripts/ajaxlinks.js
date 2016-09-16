@@ -8,6 +8,8 @@ $(function(){
         } else {
             if ( log) alert(log);
         }
+        
+        iUpload(this);
     });
     
     $("[data-target='#this-modal']").click(function(e){
@@ -51,3 +53,22 @@ $(function(){
         $(this).removeData('bs.modal');
     });
 });
+
+function iUpload(field){
+    var ext=/\.png|\.jpg|\.jpeg|\.svg/i;
+    var filename=field.value;
+    
+    if (filename.search(ext) == -1){
+        $("#messageModal modal-title").html("Upload Error");
+        $("#messageModal modal-body").html("You must uploaded a supported image file!");
+        $("#messageModal").modal('show');
+        
+        field.form.reset();
+        return false;
+    }
+    
+    field.form.submit();
+    $("div#art .progress-bar span").text("25%");
+    $("div#art .progress-bar").attr('aria-valuenow','25');
+    $("div#art").removeClass('no-show');
+}

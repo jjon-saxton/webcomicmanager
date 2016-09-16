@@ -29,17 +29,23 @@ function build_manager_form($curusr,$action)
 <div class="input-group">
 <label class="input-group-btn">
 <span class="btn btn-primary">
-Browse... <input id="file" type="file" style="display:none" name="art">
+Choose File <input id="file" type="file" style="display:none" name="art">
 </span>
 </label>
 <input type="text" class="form-control" disabled="disabled">
 </div>
 </div>
 <div class="form-group center">
-<button class="btn btn-primary" type="submit" name="save" value="1">Save</button>
+<button class="btn btn-primary" type="button" data-target="#messageModal" name="save" value="1">Save</button>
 <a href="./dash.php?section=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
 </div>
 </form>
+<div id="art" class="progress no-show">
+<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin=0 aria-valuemax="100">
+<span class="sr-only">0%</span>
+</div>
+<input type="hidden" id="uriTarget" name="temp_uri">
+</div>
 <iframe name="file-target" class="no-show"></iframe>
 HTML;
    break;
@@ -50,7 +56,11 @@ HTML;
   }
 }
 
-function upload_art($action,$data,$files)
+function add_art($action,$data)
 {
-  var_dump($files);
+}
+
+function upload_file($file)
+{
+  var_dump($file);
 }

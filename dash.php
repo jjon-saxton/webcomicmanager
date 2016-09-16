@@ -41,6 +41,8 @@ else
   case 'view':
   case 'upload':
   case 'remove':
+  require_once dirname(__FILE__)."/appmodules/art_man.mod.php";
+  $title="Upload/View Art";
   if (empty($_POST['cid']))
   {
     $body=build_manager_form($session,$_GET['section']);

@@ -19,7 +19,7 @@ class MCSettings
  
  public function __get($set)
  {
-  $q=$this->table->getData("key: `{$set}`",array('value'),null,1);
+  $q=$this->table->getData("key:`{$set}`",array('value'),null,1);
   $set=$q->fetch(PDO::FETCH_ASSOC);
   if (array_key_exists($key,$this->temp))
   {
@@ -190,4 +190,9 @@ HTML;
    break;
    //TODO default single view
  }
+}
+
+function storagename($str)
+{
+  return rawurlencode(preg_replace("/ /","_",strtolower($str)));
 }

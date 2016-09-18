@@ -51,7 +51,7 @@ Choose File <input id="file" type="file" style="display:none" name="art">
 <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin=0 aria-valuemax="100">
 <span class="sr-only">0%</span>
 </div>
-<input type="hidden" id="uriTarget" name="temp_uri">
+<input type="hidden" id="uriTarget" name="temp_name">
 </div>
 </div>
 <div class="form-group center">
@@ -69,8 +69,42 @@ HTML;
   }
 }
 
-function add_art($action,$data)
+function add_art($action,$data,$site_settings)
 {
+  $raw=file_get_contents($site_settings->project_dir."/".$data['temp_name']);
+  unlink($site_settings->project_dir."/".$data['temp_name']);
+  $image=imagecreatefromstring($raw);
+  //TODO crop and/or resize image base on ttid?
+  
+  $user=new DataBaseTable("users",true,DATACONF);
+  $user=$user->getData("uid:`= {$data['uid']}`");
+  $user=$user->fetch(PDO::FETCH_ASSOC);
+  
+  if (!is_dir($site_settings->project_dir."/".storagename($user['name'])))
+  {
+    mkdir($site_settings->project_dir."/".storagename($user['name']));
+  }
+  $file=storagename($user['name'])."/".storagename($data['title']).".png";
+  
+  $art=new DataBaseTable("art",true,DATACONF);
+  
+  if (imagepng($image,$site_settings->project_dir."/".$file,9))
+  {
+    $data['uri']=$file;
+    
+    if ($aid=$art->putData($data))
+    {
+      return $aid." added successfully!"; 
+    }
+    else
+    {
+      return $aid." could not be added!";
+    }
+  }
+  else
+  {
+    return $data['temp_name']." could not be opened for processing!";
+  }
 }
 
 function upload_file($file,$site_settings)
@@ -80,17 +114,18 @@ function upload_file($file,$site_settings)
     $temp=$site_settings->project_dir."/temp/".md5(time());
     if(move_uploaded_file($file['tmp_name'],$temp))
     {
+      $temp_name="temp/".basename($temp);
       $upload_script=<<<TXT
 $("#art .progress-bar span",pDoc).removeClass('sr-only').text("Complete!");
 $("#art .progress-bar",pDoc).addClass("progress-bar-success").attr("aria-valuenow","100").css("width","100%");
-$("input#uriTarget",pDoc).value("{$temp}");
-$("button[name=save]",pDoc).removeAttr('disabled');
+$("input#uriTarget",pDoc).val("{$temp_name}");
+$("button[name='save']",pDoc).removeAttr('disabled');
 TXT;
     }
     else
     {
       $upload_script=<<<TXT
-$("#art .progress-bar span",pDoc).removeClass('sr-only').text("Could not stage file");
+$("#art .progress-bar span",pDoc).removeClass('sr-only').text("Could not stage file as {$temp}!");
 $("#art .progress-bar",pDoc).addClass("progress-bar-danger").attr("aria-valuenow","100").css("width","100%");
 TXT;
     }

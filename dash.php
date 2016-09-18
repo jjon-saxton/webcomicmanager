@@ -43,16 +43,16 @@ else
   case 'remove':
   require_once dirname(__FILE__)."/appmodules/art_man.mod.php";
   $title="Upload/View Art";
-  if (!empty($_POST['temp_uri']))
+  if (!empty($_POST['temp_name']))
   {
-    if ($message=add_art($_GET['section'],$_POST))
+    if ($message=add_art($_GET['section'],$_POST,$conf))
     {
       $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"./dash.php?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
   elseif (!empty($_FILES['art']['name']))
   {
-    echo upload_file($_FILES['art']);
+    echo upload_file($_FILES['art'],$conf);
     exit();
   }
   else

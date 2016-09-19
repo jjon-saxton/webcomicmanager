@@ -2,6 +2,7 @@
  function list_projects($filter=null,$curusr=null)
  {
   $table=new DataBaseTable('content',true,DATACONF);
+  $art=new DataBaseTable('art',true,DATACONF);
   $q="pid:`= 0`";
   if (!empty($filter))
   {
@@ -14,23 +15,23 @@
    $list="<div id=\"ConList\" class=\"grid\">\n";
    while ($row=$q->fetch(PDO::FETCH_ASSOC))
    {
-    $cq=$table->getData("pid:`= {$row['cid']}`",array('ttid','file'));
+    $aq=$art->getData("cid:`= {$row['cid']}`",array('ttid','uri'));
     $arts=array();
-    while ($cover=$cq->fetch(PDO::FETCH_ASSOC))
+    while ($cover=$aq->fetch(PDO::FETCH_ASSOC))
     {
      $types=new DataBaseTable('types',true,DATACONF);
      $tq=$types->getData("ttid:`= {$cover['ttid']}`");
      $tinfo=$tq->fetch(PDO::FETCH_ASSOC);
      if ($tinfo['ctype'] == 'art')
      {
-       $arts[]=array('file'=>$cover['file'],'type'=>$tinfo['name']);
+       $arts[]=array('file'=>$cover['uri'],'type'=>$tinfo['name']);
      }
     }
     
     $list.="<div id=\"{$row['cid']}\" class=\"proj grid-item\">\n";
     if ($arts[0]['type'] == "Front Cover")
     {
-     $list.="<img src=\"{$arts[0]['file']}\" class=\"proj-cover\"><caption class=\"proj-title\">{$row['title']}</caption>\n";
+     $list.="<figure class=\"figure\">\n<img src=\"./download.php?file={$arts[0]['file']}&type=image/png&w=350\" width=\"350\" class=\"proj-cover figure-img img-fluid img-round\" alt=\"[cover]\">\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}</figcaption>\n</figure>\n";
     }
     else
     {

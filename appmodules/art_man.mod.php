@@ -2,10 +2,10 @@
 
 function build_manager_form($curusr,$action)
 {
+  $type=new DataBaseTable('types',true,DATACONF);
   switch ($action)
   {
    case 'upload':
-   $type=new DataBaseTable('types',true,DATACONF);
    $tq=$type->getData("ctype:`art`");
    $type_opts=null;
    while ($tr=$tq->fetch(PDO::FETCH_ASSOC))
@@ -66,6 +66,44 @@ HTML;
    break;
    case 'view':
    default:
+   /*Art Info*/
+   $art=new DataBaseTable('art',true,DATACONF);
+   $art=$art->getData("aid:`= {$_GET['aid']}`");
+   $art=$art->fetch(PDO::FETCH_OBJ);
+   
+   /*Author Info*/
+   $users=new DataBaseTable('users',true,DATACONF);
+   $author=$users->getData("uid:`= {$art->uid}`");
+   $author=$author->fetch(PDO::FETCH_ASSOC);
+   $author=$author['name'];
+   
+   /*Parent Info*/
+   $content=new DataBaseTable('content',true,DATACONF);
+   $parent=$content->getData("cid:`= {$art->cid}`");
+   $parent=$parent->fetch(PDO::FETCH_ASSOC);
+   $parent=$parent['title'];
+   
+   /*Type Info*/
+   $tq=$type->getData("ttid:`= {$art->ttid}`");
+   $tinfo=$tq->fetch(PDO::FETCH_ASSOC);
+   $tname=$tinfo['name'];
+   return <<<HTML
+   <div id="View-{$art->aid}">
+   <a href="./download.php?file={$art->uri}" target="_new" title="open '{$art->title}' in new tab"><img src="./download.php?file={$art->uri}&type=image/png&w=300" width="300" align="left" alt="{$art->title}">
+   <h4>{$art->title}</h4></a>
+   <ul class="nobullet noindent">
+   <li><strong>Created: </strong>{$art->created}</li>
+   <li><strong>Modified: </strong>{$art->modified}</li>
+   <li><strong>Created by: </strong>{$author}</li>
+   <li><strong>Type: </strong>{$tname}</li>
+   <li><strong>Linked to: </strong>{$parent}</li>
+   </ul>
+   </div>
+   <div class="center">
+   <a href="./dash.php?section=projects" class="btn btn-primary" data-target="#this-modal">Back</a>
+   <button data-dismiss="modal" class="btn btn-info">Close Dialog</button>
+   </div>
+HTML;
   }
 }
 

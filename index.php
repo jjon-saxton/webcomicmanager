@@ -139,13 +139,13 @@ require_once dirname(__FILE__)."/appmodules/adspace.mod.php";
 </div>
 <div class="text-justify col-lg-10 col-md-8 col-sm-7" id="Page">
 <?php
-if (!@$_GET['page'])
+if (!@$page)
 {
   echo load_index($path,$session);
 }
 else
 {
-  echo load_page($_GET['page'],$page,$session);
+  echo load_page($page,$path,$session);
 }
 ?>
 </div>
@@ -159,7 +159,12 @@ else
  if (empty($path) || $path == "/")
  {
   require_once dirname(__FILE__)."/appmodules/series.mod.php";
-  return list_projects($_GET['q'],$curusr);
+  return list_projects($curusr,$_GET['q']);
+ }
+ else
+ {
+  require_once dirname(__FILE__)."/appmodules/children.mod.php";
+  return list_children($path,$curusr,$_GET['q']);
  }
 }
 

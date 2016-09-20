@@ -1,5 +1,5 @@
  <?php
- function list_projects($filter=null,$curusr=null)
+ function list_projects(MCSession $curusr,$filter=null)
  {
   $table=new DataBaseTable('content',true,DATACONF);
   $art=new DataBaseTable('art',true,DATACONF);
@@ -8,11 +8,12 @@
   {
    $q.=" ".$filter;
   }
-  $q=$table->getData($q);
+  $q=$table->getData($q,null,null,$curusr->items_per_page,$_GET['offset']);
+  $cols=$curusr->items_per_page/$curusr->rows_per_page;
   if ($q instanceof PDOStatement)
   {
    $c=0;
-   $list="<div id=\"ConList\" class=\"grid\">\n";
+   $list="<div id=\"ConList\" class=\"grid grid-col-{$cols}\">\n";
    while ($row=$q->fetch(PDO::FETCH_ASSOC))
    {
     $aq=$art->getData("cid:`= {$row['cid']}`",array('ttid','uri'));
@@ -28,7 +29,9 @@
      }
     }
     
-    $list.="<div id=\"{$row['cid']}\" class=\"proj grid-item\">\n";
+    $path=build_con_path($row['cid']);
+    
+    $list.="<a href=\"./index.php/{$path}\"><div id=\"{$row['cid']}\" class=\"proj grid-item\">\n";
     if ($arts[0]['type'] == "Front Cover")
     {
      $list.="<figure class=\"figure\">\n<img src=\"./download.php?file={$arts[0]['file']}&type=image/png&w=350\" width=\"350\" class=\"proj-cover figure-img img-fluid img-round\" alt=\"[cover]\">\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}</figcaption>\n</figure>\n";
@@ -37,7 +40,7 @@
     {
      $list.="<h3 class=\"proj-title\">{$row['title']}</h3>\n<p class=\"proj-description\">{$row['data']}</p>\n";
     }
-    $list.="</div>\n";
+    $list.="</div></a>\n";
     $c++;
    }
    $list.="</div>\n";

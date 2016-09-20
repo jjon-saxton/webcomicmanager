@@ -192,7 +192,28 @@ HTML;
  }
 }
 
+function build_con_path($start_id)
+{
+  $con=new DataBaseTable('content',true,DATACONF);
+  $cq=$con->getData("cid:`= {$start_id}`",array('cid','pid','title'));
+  $ci=$cq->fetch(PDO::FETCH_OBJ);
+  
+  if ($ci->pid == 0)
+  {
+   return storagename($ci->title);
+  }
+  else
+  {
+   return build_con_path($ci->pid)."/".storagename($ci->title);
+  }
+}
+
 function storagename($str)
 {
   return rawurlencode(preg_replace("/ /","_",strtolower($str)));
+}
+
+function storagenamedecode($str)
+{
+  return rawurldecode(ucwords(preg_replace("/_/"," ",$str)));
 }

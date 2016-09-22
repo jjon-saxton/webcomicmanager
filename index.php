@@ -1,8 +1,7 @@
 <?php
-if (!empty($_SERVER['PATH_INFO'])) //Are we forwarding from 'pretty' urls?
+if (!empty($_SERVER['ORIG_PATH_INFO'])) //Are we forwarding from 'pretty' urls?
 {
- @list($section,$item,$action)=explode("/",ltrim($_SERVER['PATH_INFO'],"/")); //q holds a path, we need to split it!
- $path="/".ltrim($_SERVER['PATH_INFO'],"/");
+ $path=$_SERVER['ORIG_PATH_INFO'];
 }
 else //we are going direct from the query string!
 {
@@ -10,7 +9,6 @@ else //we are going direct from the query string!
  {
   ${$var}=$val;
  }
- $path="/".ltrim(@$_GET['path'],"/");
 }
 
 if (@$action == "install")

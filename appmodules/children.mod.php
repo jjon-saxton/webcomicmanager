@@ -37,10 +37,10 @@ function list_children($from,MCSession $curusr,$filter=null)
     $path=build_con_path($row['cid']);
     
     //TODO replace hard root with root uri from database
-    $list.="<a href=\"//dev.tower21studios.com/wcm/index.php/{$path}\"><div id=\"{$row['cid']}\" class=\"proj grid-item\">\n";
+    $list.="<a href=\"".SITEROOT."{$path}\"><div id=\"{$row['cid']}\" class=\"proj grid-item\">\n";
     if ($arts[0]['type'] == "Front Cover")
     {
-     $list.="<figure class=\"figure\">\n<img src=\"./download.php?file={$arts[0]['file']}&type=image/png&w=350\" width=\"350\" class=\"proj-cover figure-img img-fluid img-round\" alt=\"[cover]\">\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}</figcaption>\n</figure>\n";
+     $list.="<figure class=\"figure\">\n<img src=\"".SITEROOT."/{$arts[0]['file']}?type=image/png&w=350\" width=\"350\" class=\"proj-cover figure-img img-fluid img-round\" alt=\"[cover]\">\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}</figcaption>\n</figure>\n";
     }
     else
     {

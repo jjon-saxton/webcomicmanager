@@ -23,7 +23,7 @@ else
 {
  require_once dirname(__FILE__)."/appcore/common.inc.php";
  $conf=new MCSettings();
- $GLOBALS['CONF']=$conf->get();
+ define ("SITEROOT", "//".$conf->base_uri."/");
 }
 
 ?>
@@ -34,7 +34,7 @@ else
  <!-- Load Bootstrap and dependencies -->
  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
  <script src="//www.tower21studios.com/assets/js/bootstrap.js"></script>
- <script src="./appcore/scripts/editor.js"></script>
+ <script src="//<?php echo $conf->base_uri ?>/appcore/scripts/editor.js"></script>
  <?php if (!empty($_GET['modal'])){ ?>
  <script language="javascript">
  $(function(){
@@ -48,7 +48,7 @@ else
  </script>
  <?php } ?>
  
- <link rel="stylesheet" href="./appcore/styles/editor.css" type="text/css">
+ <link rel="stylesheet" href="//<?php echo $conf->base_uri ?>/appcore/styles/editor.css" type="text/css">
  <!-- Styles from main domain -->
  <link rel="stylesheet" href="//www.tower21studios.com/assets/css/bootstrap.css" type="text/css">
  <link rel="stylesheet" href="//www.tower21studios.com/assets/css/v2.css" type="text/css">
@@ -89,7 +89,7 @@ else
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-      <a class="navbar-brand" href="../">#Dare2Dream</a></div>
+      <a class="navbar-brand" href="//<?php echo $conf->base_uri ?>/">#Dare2Dream</a></div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="defaultNavbar1">
       <ul class="nav navbar-nav">
@@ -97,10 +97,10 @@ else
         else { print "Login"; } ?><span class="caret"></span></a>
           <?php
           require_once dirname(__FILE__)."/appmodules/ucp.mod.php";
-          echo ucp_module($session);
+          echo ucp_module($session,$conf->base_uri,$conf->open_registration);
           ?>
         </li>
-        <li class="dropdown"><a href="./app.php?section=randomizer" role="button" aria-expanded="false">Discover</a>
+        <li class="dropdown"><a href="//<?php echo $conf->base_uri ?>/app/?section=randomizer" role="button" aria-expanded="false">Discover</a>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

@@ -31,10 +31,10 @@
     
     $path=build_con_path($row['cid']);
     
-    $list.="<a href=\"./index.php/{$path}\"><div id=\"{$row['cid']}\" class=\"proj grid-item\">\n";
+    $list.="<a href=\"".SITEROOT."{$path}\"><div id=\"{$row['cid']}\" class=\"proj grid-item\">\n";
     if ($arts[0]['type'] == "Front Cover")
     {
-     $list.="<figure class=\"figure\">\n<img src=\"./download.php?file={$arts[0]['file']}&type=image/png&w=350\" width=\"350\" class=\"proj-cover figure-img img-fluid img-round\" alt=\"[cover]\">\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}</figcaption>\n</figure>\n";
+     $list.="<figure class=\"figure\">\n<img src=\"".SITEROOT."{$arts[0]['file']}?type=image/png&w=350\" width=\"350\" class=\"proj-cover figure-img img-fluid img-round\" alt=\"[cover]\">\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}</figcaption>\n</figure>\n";
     }
     else
     {
@@ -50,11 +50,11 @@
   {
    if (empty($curusr) || $curusr->level >= 3)
    {
-    $html="<div class=\"alert alert-warning\">No Content Posted! Please <a href=\"./?modal=login\">login</a> and post some stuff!!</div>";
+    $html="<div class=\"alert alert-warning\">No Content Posted! Please <a href=\"".SITEROOT."/?modal=login\">login</a> and post some stuff!!</div>";
    }
    else
    {
-     $html="<div class=\"alert alert-warning\">No Content Posted! Please open the <a href=\"./dash.php?section=projects\" data-toggle=\"modal\" data-target=\"#AJAXModal\">project manager</a> to add new content!</div>";
+     $html="<div class=\"alert alert-warning\">No Content Posted! Please open the <a href=\"".SITEROOT."dash/?section=projects\" data-toggle=\"modal\" data-target=\"#AJAXModal\">project manager</a> to add new content!</div>";
    }
   }
   else

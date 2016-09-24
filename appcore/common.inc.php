@@ -90,11 +90,13 @@ class MCSettings
 
 function con_to_html(array $row,$view=null)
 {
+  $cfg=new MCSettings();
+  $siteroot="//".$cfg->base_uri."/";
   switch ($view)
   {
    case 'dropdown':
    return <<<HTML
-<li><a href="./dash.php?section=update&cid={$row['cid']}" data-target="#this-modal">{$row['title']}</a></li>
+<li><a href="{$siteroot}dash/?section=update&cid={$row['cid']}" data-target="#this-modal">{$row['title']}</a></li>
 HTML;
    break;
    case 'panel':
@@ -137,29 +139,29 @@ HTML;
 <div id="{$row['cid']}" class="panel panel-default">
 <div class="panel-heading">{$row['title']}</div>
 <div class="panel-body">{$row['data']}</div>
-<div class="panel-footer"><a href="./dash.php?section=update&cid={$row['cid']}" class="btn btn-info" data-target="#this-modal">Edit</a>
+<div class="panel-footer"><a href="{$siteroot}dash/?section=update&cid={$row['cid']}" class="btn btn-info" data-target="#this-modal">Edit</a>
 <div id="{$row['cid']}-Art" class="dropdown no-box">
 <button class="btn btn-info" type="button" data-toggle="dropdown">Artwork <span class="caret"></span></button>
 <ul class="dropdown-menu">
-<li><a href="./dash.php?section=upload&cid={$row['cid']}" data-target="#this-modal">Add Artwork</a></li>
+<li><a href="{$siteroot}dash/?section=upload&cid={$row['cid']}" data-target="#this-modal">Add Artwork</a></li>
 {$ali}
 </ul>
 </div>
 <div id="{$row['cid']}-Children" class="dropdown no-box">
 <button class="btn btn-success" type="button" data-toggle="dropdown">Children <span class="caret"></span></button>
 <ul class="dropdown-menu">
-<li><a href="./dash.php?section=put&pid={$row['cid']}" data-target="#this-modal">Add Child</a></li>
+<li><a href="{$siteroot}dash/?section=put&pid={$row['cid']}" data-target="#this-modal">Add Child</a></li>
 {$cli}
 </ul>
 </div>
 <div id="{$row['cid']}-Notes" class="dropdown no-box">
 <button class="btn btn-warning" type="button" data-toggle="dropdown">Notes <span class="caret"></span></button>
 <ul class="dropdown-menu">
-<li><a href="./dash.php?section=write&cid={$row['cid']}" data-target="#this-modal">Add Note</a></li>
+<li><a href="{$siteroot}dash/?section=write&cid={$row['cid']}" data-target="#this-modal">Add Note</a></li>
 {$nli}
 </ul>
 </div>
-<a href="./dash.php?section=drop&cid={$row['cid']}" class="btn btn-danger" data-target="#this-modal">Delete</a>
+<a href="{$siteroot}dash/?section=drop&cid={$row['cid']}" class="btn btn-danger" data-target="#this-modal">Delete</a>
 </div>
 </div>
 HTML;
@@ -168,11 +170,13 @@ HTML;
 
 function art_to_html($row,$view=null)
 {
+  $cfg=new MCSettings();
+  $siteroot="//".$cfg->base_uri."/";
   switch ($view)
   {
    case 'dropdown':
    return <<<HTML
-<li><a href="./dash.php?section=view&type=art&aid={$row['aid']}" data-target="#this-modal">{$row['title']}</a></li>
+<li><a href="{$siteroot}dash/?section=view&type=art&aid={$row['aid']}" data-target="#this-modal">{$row['title']}</a></li>
 HTML;
    break;
    //TODO default single view
@@ -181,11 +185,13 @@ HTML;
 
 function note_to_html($row,$view=null)
 {
+  $cfg=new MCSettings();
+  $siteroot="//".$cfg->base_uri."/";
   switch ($view)
   {
    case 'dropdown':
    return <<<HTML
-<li><a href="./dash.php?section=edit&nid={$row['nid']}" data-target="#this-modal">{$row['title']}</a></li>
+<li><a href="{$siteroot}dash/?section=edit&nid={$row['nid']}" data-target="#this-modal">{$row['title']}</a></li>
 HTML;
    break;
    //TODO default single view

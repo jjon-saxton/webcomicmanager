@@ -3,6 +3,7 @@
 function build_manager_form(MCSession $session,$action,$ctype=null,$pid=null,$cid=null)
 {
   $con=new DataBaseTable('content',true,DATACONF);
+  $siteroot=SITEROOT;
   if ($action != 'drop')
   {
     $types=new DataBaseTable('types',true,DATACONF);
@@ -13,7 +14,7 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$pid=null,$ci
       $values=$q->fetch(PDO::FETCH_ASSOC);
       $values['modified']=date("Y-m-d H:i:s");
       $child_btn=<<<HTML
-<a href="./dash.php?section=put&pid={$values['cid']}" class="btn btn-success" data-target="#this-modal">Add Child</a>
+<a href="{$siteroot}dash/?section=put&pid={$values['cid']}" class="btn btn-success" data-target="#this-modal">Add Child</a>
 HTML;
       if (empty($ctype))
       {
@@ -119,7 +120,7 @@ HTML;
     }
     
     $html.=<<<HTML
-<form action="./dash.php{$qstr}" method="post" enctype="multipart/form-data">
+<form action="{$siteroot}dash/{$qstr}" method="post" enctype="multipart/form-data">
 <div class="form-group">
 <label for="title">Title</label>
 <input type="hidden" name="pid" value="{$values['pid']}">
@@ -146,7 +147,7 @@ HTML;
 <div class="form-group center">
 <button class="btn btn-primary" type="button" data-target="#messageModal" name="save" value="1">Save</button>
 {$child_btn}
-<a href="./dash.php?secton=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
+<a href="{$siteroot}dash/?secton=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
 </div>
 </form>
 HTML;
@@ -175,14 +176,14 @@ HTML;
   else
   {
     $html=<<<HTML
-<form action="./dash.php?section=drop&cid={$cid}" method="post">
+<form action="{$siteroot}dash/?section=drop&cid={$cid}" method="post">
 <div class="panel panel-danger">
 <div class="panel-heading">Are you sure?</div>
 <div class="panel-body">Are you really sure you want to drop this item? This action cannot be undone no matter how much you complain or wine</div>
 <div class="panel-footer">
 <input type="hidden" name="cid" value="{$_GET['cid']}">
 <button type="button" class="btn btn-danger" data-target="#messageModal" name="confirm" value="1">Yes</button>
-<a href="./dash.php?section=projects" class="btn btn-info" data-target="#this-modal">No</a>
+<a href="{$siteroot}dash/?section=projects" class="btn btn-info" data-target="#this-modal">No</a>
 </div>
 </div>
 HTML;

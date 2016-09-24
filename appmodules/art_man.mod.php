@@ -3,6 +3,7 @@
 function build_manager_form($curusr,$action)
 {
   $type=new DataBaseTable('types',true,DATACONF);
+  $siteroot=SITEROOT;
   switch ($action)
   {
    case 'upload':
@@ -23,7 +24,7 @@ function build_manager_form($curusr,$action)
    }
    $values['created']=date("Y-m-d H:i:s");
    return <<<HTML
-<form action="./dash.php?section=upload" method="post" target="file-target" enctype="multipart/form-data">
+<form action="{$siteroot}dash/?section=upload" method="post" target="file-target" enctype="multipart/form-data">
 <div class="form-group">
 <label for="title">Title</label>
 <input type="hidden" name="uid" value="{$values['uid']}">
@@ -56,7 +57,7 @@ Choose File <input id="file" type="file" style="display:none" name="art">
 </div>
 <div class="form-group center">
 <button class="btn btn-primary" disabled=disabled type="button" data-target="#messageModal" name="save" value="1">Save</button>
-<a href="./dash.php?section=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
+<a href="{$siteroot}dash/?section=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
 </div>
 </form>
 <iframe name="file-target" class="no-show"></iframe>
@@ -89,7 +90,7 @@ HTML;
    $tname=$tinfo['name'];
    return <<<HTML
    <div id="View-{$art->aid}">
-   <a href="./download.php?file={$art->uri}" target="_new" title="open '{$art->title}' in new tab"><img src="./download.php?file={$art->uri}&type=image/png&w=300" width="300" align="left" alt="{$art->title}">
+   <a href="{$siteroot}{$art->uri}" target="_new" title="open '{$art->title}' in new tab"><img src="{$siteroot}{$art->uri}?type=image/png&w=300" width="300" align="left" alt="{$art->title}">
    <h4>{$art->title}</h4></a>
    <ul class="nobullet noindent">
    <li><strong>Created: </strong>{$art->created}</li>
@@ -100,7 +101,7 @@ HTML;
    </ul>
    </div>
    <div class="center">
-   <a href="./dash.php?section=projects" class="btn btn-primary" data-target="#this-modal">Back</a>
+   <a href="{$siteroot}dash/?section=projects" class="btn btn-primary" data-target="#this-modal">Back</a>
    <button data-dismiss="modal" class="btn btn-info">Close Dialog</button>
    </div>
 HTML;

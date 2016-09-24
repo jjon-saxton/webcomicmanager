@@ -7,6 +7,7 @@ else
 {
  require_once dirname(__FILE__)."/appcore/common.inc.php";
  $conf=new MCSettings();
+ define ("SITEROOT","//".$conf->base_uri."/");
 }
 
 if ($session->level > 4)
@@ -14,7 +15,7 @@ if ($session->level > 4)
  $title="403 Forbidden";
  $body=<<<HTML
 <h1>Forbidden!</h1>
-<p>You must be <a href="./app.php?action=login">logged in</a> to view this section!</p>
+<p>You must be <a href="//{$conf->base_uri}/app.php?action=login">logged in</a> to view this section!</p>
 HTML;
 }
 else
@@ -34,7 +35,7 @@ else
   {
     if ($message=save_note($_GET['section'],$_POST))
     {
-      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"./dash.php?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
+      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
   break;
@@ -47,7 +48,7 @@ else
   {
     if ($message=add_art($_GET['section'],$_POST,$conf))
     {
-      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"./dash.php?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
+      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
   elseif (!empty($_FILES['art']['name']))
@@ -73,7 +74,7 @@ else
   {
     if ($message=save_asset($_GET['section'],$_POST))
     {
-      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"./dash.php?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
+      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
   break;
@@ -102,7 +103,7 @@ else
   
   if ($c <= 0)
   {
-    $body.="<div class=\"alert alert-warning\">You have no projects! Would you like to <a href=\"./dash.php?section=put&type=project\" data-target=\"#this-modal\">add one</a>?</div>\n";
+    $body.="<div class=\"alert alert-warning\">You have no projects! Would you like to <a href=\"//{$conf->base_uri}dash/?section=put&type=project\" data-target=\"#this-modal\">add one</a>?</div>\n";
   }
   else
   {
@@ -115,7 +116,7 @@ echo <<<HTML
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">{$title}</h4></div>
 <div class="modal-body">
-<script src="./appcore/scripts/ajaxlinks.js" type="text/javascript"></script>
+<script src="//{$conf->base_uri}/appcore/scripts/ajaxlinks.js" type="text/javascript"></script>
 {$body}
 </div>
 HTML;

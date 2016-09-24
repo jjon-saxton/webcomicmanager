@@ -5,6 +5,7 @@ function build_manager_form($curusr,$action)
   $types=new DataBaseTable('types',true,DATACONF);
   $tq=$types->getData("ctype:`note`");
   $type_opts=null;
+  $siteroot=SITEROOT;
   if ($action == 'edit' && !empty($_GET['nid']))
   {
     $nt=new DataBaseTable('notes',true,DATACONF);
@@ -32,7 +33,7 @@ function build_manager_form($curusr,$action)
   }
   
   return <<<HTML
-<form action="./dash.php?section={$action}" method="post">
+<form action="{$siteroot}dash/?section={$action}" method="post">
 <div class="form-group">
 <label for="title">Note Title</label>
 <input type="hidden" name="uid" value="{$values['uid']}">
@@ -55,7 +56,7 @@ function build_manager_form($curusr,$action)
 </div>
 <div class="form-group center">
 <button class="btn btn-primary" type="button" data-target="#messageModal" name="save" value="1">Save</button>
-<a href="./dash.php?section=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
+<a href="{$siteroot}dash/?section=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
 </div>
 HTML;
 }

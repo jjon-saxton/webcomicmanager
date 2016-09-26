@@ -1,3 +1,21 @@
+.comix.canvas {
+    width:100%;
+    min-height:40em;
+    border-radius:5px;
+    background-color:#fff;
+    color:#000;
+    cursor:not-allowed;
+}
+
+.comix.canvas .canvas-item {
+    display:inline-block;
+    font-size:0.75em;
+    color: #fff;
+    background: #5cb85c;
+    border-color:#4cae4c;
+    border-radius:4px;
+}
+
 /*!
  *
  * jQuery TE 1.4.0 , http://jqueryte.com/

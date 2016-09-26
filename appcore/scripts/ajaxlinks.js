@@ -47,6 +47,8 @@ $(function(){
         indent:false,
         rule:false,
     });
+    // Initialize textareas with required class as Comix Editors
+    $("textarea.editor.script").comixeditor();
     
     // Uninitialize modal on close
     $('body').on('hidden.bs.modal','.modal',function(){

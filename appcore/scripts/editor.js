@@ -5,6 +5,20 @@ $(document).on('change',':file',function(){
     input.trigger('fileselect',[numFiles,label]);
 });
 
+(function($){
+    $.fn.comixeditor = function()
+    {
+        return this.each(function(){
+            var val=$(this).val();
+            $(this).parent().append("<div id=\"ComiXEditor\" class=\"comix canvas\">"+ val + "</div>");
+            $(this).parent().append("<div class=\"hide\"></div>");
+            $(this).parent().find("div.hide").append($(this).clone());
+            $(this).parent().find("div#ComiXEditor").children().addClass('canvas-item');
+            $(this).remove();
+        });
+    }
+}( jQuery ));
+
 
 /*!
  *

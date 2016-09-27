@@ -1,13 +1,35 @@
-.comix.canvas {
+.comix.container {
     width:100%;
-    min-height:40em;
+    min-height:600px;
+    background-color:#ccc;
     border-radius:5px;
-    background-color:#fff;
-    color:#000;
+    color:#555;
     cursor:not-allowed;
 }
 
-.comix.canvas .canvas-item {
+.comix .canvas{
+    margin:auto;
+    clear:both;
+    background-color:#fff;
+    color:#000;
+}
+
+.comix .phone{
+    width:400px;
+    height:600px;
+}
+
+.comix .tablet{
+    width:700px;
+    height:1024px;
+}
+
+.comix .desktop{
+    width:1024px;
+    height:1280px;
+}
+
+.comix .canvas .canvas-item {
     display:inline-block;
     font-size:0.75em;
     color: #fff;

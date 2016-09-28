@@ -146,7 +146,7 @@ function add_art($action,$data,$site_settings)
   }
 }
 
-function upload_file($file,$site_settings)
+function upload_file($file,$site_settings,$curusr=null,$type=null)
 {
   if ($file['error'] == UPLOAD_ERR_OK)
   {
@@ -168,6 +168,25 @@ $("#art .progress-bar span",pDoc).removeClass('sr-only').text("Could not stage f
 $("#art .progress-bar",pDoc).addClass("progress-bar-danger").attr("aria-valuenow","100").css("width","100%");
 TXT;
     }
+    
+    if ($type == "panel")
+    {
+     if (!empty($curusr))
+     {
+       $panel=uniquename($site_settings->project_dir."/".storagename($curusr->name)."/",5);
+       rename($temp,$panel);
+       $file=storagename($curusr->name)."/".basename($panel);
+     }
+     else
+     {
+       $file=$temp_name;
+     }
+    }
+    
+    $upload_script.=<<<TXT
+$(".canvas-asset:not(:has(img))",pDoc).empty();
+$(".canvas-asset",pDoc).append('<img src="{$file}?w=300" style="width:100%" alt=\"New Asset\">');
+TXT;
   }
   return <<<HTML
 <!doctype html>

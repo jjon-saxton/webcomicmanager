@@ -53,7 +53,7 @@ else
   }
   elseif (!empty($_FILES['art']['name']))
   {
-    echo upload_file($_FILES['art'],$conf);
+    echo upload_file($_FILES['art'],$conf,$session,$_GET['type']);
     exit();
   }
   else

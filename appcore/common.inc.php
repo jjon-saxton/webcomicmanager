@@ -214,6 +214,26 @@ function build_con_path($start_id)
   }
 }
 
+function uniquename($folder,$int_lvl=1,$ext=".png")
+{
+  $c=1;
+  if ($int_lvl > 1)
+  {
+    $c=sprintf("%0{$int_lvl}d",$c);
+  }
+  
+  foreach(scandir($folder,SCANDIR_SORT_ASCENDING) as $file)
+  {
+   $next=$c+1;
+   if ($file == $folder.$next.$ext)
+   {
+    $c++;
+   }
+  }
+  
+  return $folder.$c.$ext;
+}
+
 function storagename($str)
 {
   return rawurlencode(preg_replace("/ /","_",strtolower($str)));

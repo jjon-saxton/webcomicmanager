@@ -35,6 +35,8 @@ else
  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
  <script src="//www.tower21studios.com/assets/js/bootstrap.js"></script>
  <script src="//<?php echo $conf->base_uri ?>/appcore/scripts/editor.js"></script>
+ <!-- jQuery UI draggable and resizable required for editor -->
+ <script src="//<?php echo $conf->base_uri ?>/appcore/scripts/jquery-ui.min.js"></script>
  <?php if (!empty($_GET['modal'])){ ?>
  <script language="javascript">
  $(function(){

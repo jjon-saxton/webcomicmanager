@@ -1,10 +1,11 @@
+@import url('./jquery-ui.min.css');
+
 .comix.container {
     width:100%;
     min-height:600px;
     background-color:#ccc;
     border-radius:5px;
     color:#555;
-    cursor:not-allowed;
 }
 
 .comix .canvas{

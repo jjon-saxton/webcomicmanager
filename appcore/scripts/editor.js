@@ -14,9 +14,9 @@ $(document).on('change',':file',function(){
             $(this).parent().append("<div id=\"ComiXEditor\" class=\"comix container\"></div>");
             $(this).parent().append("<div class=\"hide\"><div id=\"cell\"></div></div>");
             $(this).parent().find("div.hide").append($(this).clone());
-            $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\"><div class=\"btn-group\"><button type=\"button\" onclick=\"addAsset()\" class=\"btn btn-primary\">Add Asset</button></div> <div class=\"btn-group\"><button type=\"button\" id=\"desktop\" onclick=\"changeCanvas('desktop')\" class=\"btn btn-canvas btn-info\">Desktop</button><button id=\"tablet\" type=\"button\" onclick=\"changeCanvas('tablet')\" class=\"btn btn-canvas btn-info\">Tablet</button><button id=\"phone\" type=\"button\" onclick=\"changeCanvas('phone')\" class=\"btn btn-canvas btn-info active\">Phone</button></div> <div class=\"btn-group\"><div class=\"btn-group\"><button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">Add Transition <span class=\"caret\"></span></button><ul class=\"dropdown-menu\"><li>Transitions go here</li></ul></div><button class=\"btn btn-info\">Add Time Delay</button></div></div>");
+            $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\"><div class=\"btn-group\"><button type=\"button\" onclick=\"addAsset()\" class=\"btn btn-primary\">Add Asset</button></div> <div class=\"btn-group\"><button type=\"button\" id=\"desktop\" onclick=\"changeCanvas('desktop')\" class=\"btn btn-canvas btn-info active\">Desktop</button><button id=\"tablet\" type=\"button\" onclick=\"changeCanvas('tablet')\" class=\"btn btn-canvas btn-info\">Tablet</button><button id=\"phone\" type=\"button\" onclick=\"changeCanvas('phone')\" class=\"btn btn-canvas btn-info\">Phone</button></div> <div class=\"btn-group\"><div class=\"btn-group\"><button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">Add Transition <span class=\"caret\"></span></button><ul class=\"dropdown-menu\"><li>Transitions go here</li></ul></div><button class=\"btn btn-info\">Add Time Delay</button></div></div>");
             $(this).parent().find(".canvas-asset").draggable({ containment:'parent'}).resizable();
-            $(this).parent().find("div#ComiXEditor").append("<div class=\"canvas phone\">"+ val +"</div>");
+            $(this).parent().find("div#ComiXEditor").append("<div class=\"canvas desktop\">"+ val +"</div>");
             $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\">Preview buttons?</div>");
             $(this).parent().find("div#ComiXEditor .canvas p").remove();
             $(this).remove();
@@ -27,29 +27,29 @@ $(document).on('change',':file',function(){
 
 function addAsset(){
       $("div#ComiXEditor .canvas").append("<div class=\"canvas-asset\"><form action=\"/wcm/dash/?section=upload&type=panel\" target=\"filetarget\" method=\"post\" enctype=\"multipart/form-data\"><label for=\"file\" class=\"btn btn-primary\"><span class=\"glyphicon glyphicon-upload\"></span></label><input id=\"file\" onchange=\"iUpload(this)\" type=\"file\" name=\"art\" class=\"hide\"></form><div id=\"art\" class=\"progress no-show\"><div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\"><span class=\"sr-only\">0%</span></div></div><iframe class=\"hide\" name=\"filetarget\"></div>");
-      $("div#ComiXEditor .canvas .canvas-asset").draggable({containment:'parent'}).resizable();
+      $(".canvas-asset").draggable({containment:'parent'}).resizable({minHeight:50,minWidth:50,containment:'parent'});
       
-      updateScriptData($("div#ComiXEditor .canvas").html());
+      updateScriptData($("div#ComiXEditor .canvas"));
 }
 
 function changeCanvas(type){
-    /*if ($("div#cell").has("div."+type).length){
-        $("div#ComiXEditor .canvas").html($("div#cell div."+type).html());
-    }*/ //restore canvas to previous state if saved
+    if ($("div#cell").has("div."+type).length){
+        $("div.canvas").replaceWith($("div#cell div."+type).clone());
+    } //restore canvas to previous state if saved
     
     //Save old canvas
-    updateScriptData($("div#ComiXEditor .canvas").html());
+    updateScriptData($("div#ComiXEditor .canvas"));
     $("div #ComiXEditor .btn-toolbar").find(".active").removeClass('active');
     $("div #ComiXEditor .canvas").removeClass("phone").removeClass("tablet").removeClass("desktop");
     $("div #ComiXEditor .canvas").addClass(type);
     $("button#"+type).addClass('active');
     
     //add new canvas
-    updateScriptData($("div#ComiXEditor .canvas").html());
+    updateScriptData($("div#ComiXEditor .canvas"));
 }
 
-function updateScriptData(newText){
-    var type='dekstop';
+function updateScriptData(data){
+    var type='desktop';
     
     if ($("div#ComiXEditor .canvas").hasClass('phone')){
         type='phone';
@@ -58,11 +58,11 @@ function updateScriptData(newText){
         type='tablet';
     }
     
-    if ($("div#cell").has("div."+type).length){
-        $("div#cell ."+type).html(newText);
+    if (!$("div#cell").has("div."+type).length){
+        data.clone().appendTo("div#cell");
     }
     else{
-        $("div#cell").append("<div class=\""+type+"\">"+newText+"</div>");
+        $("div#cell div."+type).replaceWith(data.clone());
     }
     
     $("textarea#script").html($("div#cell").html());

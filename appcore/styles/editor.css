@@ -1,11 +1,16 @@
 @import url('./jquery-ui.min.css');
 
-.comix.container {
+#ComiXEditor {
     width:100%;
     min-height:600px;
     background-color:#ccc;
     border-radius:5px;
     color:#555;
+    overflow:hidden;
+}
+
+.comix{
+    overflow:auto;
 }
 
 .comix .canvas{
@@ -13,6 +18,11 @@
     clear:both;
     background-color:#fff;
     color:#000;
+    display:none;
+}
+
+.comix .canvas.active{
+    display:block;
 }
 
 .comix .phone{
@@ -26,7 +36,7 @@
 }
 
 .comix .desktop{
-    width:100%;
+    width:1280px;
     height:1024px;
 }
 

@@ -45,7 +45,7 @@
     top:0;
     left:0;
     width:16.667%;
-    height:100px;
+    min-height:100px;
     font-size:0.75em;
     color: #fff;
     background: #5cb85c;
@@ -53,6 +53,12 @@
     border-radius:4px;
 }
 
+.comix .canvas div.canvas-asset img{
+    border:0;
+    clear:both;
+    display:block;
+    padding:5px;
+}
 /*!
  *
  * jQuery TE 1.4.0 , http://jqueryte.com/

@@ -15,17 +15,18 @@ function list_children($from,MCSession $curusr,$filter=null)
   $cid=find_cid($names);
   
   $con=new DataBaseTable('content',true,DATACONF);
+  $types=new DataBaseTable('types',true,DATACONF);
   $cq=$con->getData("pid:`= {$cid}`",null,null,$curusr->items_per_page,$_GET['offset']);
   $cols=$curusr->items_per_page/$curusr->rows_per_page;
   $list="<div id=\"Grid-{$cid}\" class=\"grid grid-col-{$cols}\">\n";
+  $c=0;
   while ($row=$cq->fetch(PDO::FETCH_ASSOC))
-   {
+  {
     $art=new DataBaseTable('art',true,DATACONF);
     $aq=$art->getData("cid:`= {$row['cid']}`",array('ttid','uri'));
     $arts=array();
     while ($cover=$aq->fetch(PDO::FETCH_ASSOC))
     {
-     $types=new DataBaseTable('types',true,DATACONF);
      $tq=$types->getData("ttid:`= {$cover['ttid']}`");
      $tinfo=$tq->fetch(PDO::FETCH_ASSOC);
      if ($tinfo['ctype'] == 'art')
@@ -50,6 +51,22 @@ function list_children($from,MCSession $curusr,$filter=null)
     $c++;
    }
    $list.="</div>\n";
+   if ($c <= 0)
+   {
+     $self=$con->getData("cid:`= {$cid}`");
+     $self=$self->fetch();
+     $type=$types->getData("ttid:`= {$self['ttid']}`");
+     $type=$type->fetch();
+     if ($type['ctype'] == 'page')
+     {
+       require_once dirname(__FILE__)."/page.mod.php";
+       $list=load_page($self,$curusr);
+     }
+     else
+     {
+       $list="<div id=\"Message-{$cid}\" class=\"alert alert-warning\">No Children detected for this content!</div>\n";
+     }
+   }
    
   return $list;
 }

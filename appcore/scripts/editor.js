@@ -47,7 +47,7 @@ $(document).on('change',':file',function(){
 }( jQuery ));
 
 function addAsset(){
-      $("div#ComiXEditor .canvas").append("<div class=\"canvas-asset\"><form action=\"/wcm/dash/?section=upload&type=panel\" target=\"filetarget\" method=\"post\" enctype=\"multipart/form-data\"><label for=\"file\" class=\"btn btn-primary\"><span class=\"glyphicon glyphicon-upload\"></span></label><input id=\"file\" onchange=\"iUpload(this)\" type=\"file\" name=\"art\" class=\"hide\"></form><div id=\"art\" class=\"progress no-show\"><div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\"><span class=\"sr-only\">0%</span></div></div><iframe class=\"hide\" name=\"filetarget\"></div>");
+      $("div#ComiXEditor .canvas").append("<div class=\"canvas-asset\"><form action=\"/wcm/dash/?section=upload&type=panel\" target=\"filetarget\" method=\"post\" enctype=\"multipart/form-data\"><label for=\"file\" class=\"btn btn-primary\"><span class=\"glyphicon glyphicon-upload\"></span></label><input id=\"file\" onchange=\"iUpload(this)\" type=\"file\" name=\"art\" class=\"hide\"><div id=\"art\" class=\"progress no-show\"><div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\"><span class=\"sr-only\">0%</span></div></div><iframe class=\"hide\" name=\"filetarget\"></form></div>");
       $(".canvas-asset").draggable({
           containment:'parent',
           stop:function(e,ui){

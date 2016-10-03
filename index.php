@@ -139,14 +139,7 @@ require_once dirname(__FILE__)."/appmodules/adspace.mod.php";
 </div>
 <div class="text-justify col-lg-10 col-md-8 col-sm-7" id="Page">
 <?php
-if (!@$page)
-{
   echo load_index($path,$session);
-}
-else
-{
-  echo load_page($page,$path,$session);
-}
 ?>
 </div>
 </div>
@@ -166,12 +159,6 @@ else
   require_once dirname(__FILE__)."/appmodules/children.mod.php";
   return list_children($path,$curusr,$_GET['q']);
  }
-}
-
-function load_page($page,$path,MCSession $curusr)
-{
- var_dump($page);
-}
-?>
+} ?>
 </html>
 <?php

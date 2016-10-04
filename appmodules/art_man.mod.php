@@ -175,11 +175,11 @@ TXT;
      {
        $panel=uniquename($site_settings->project_dir."/".storagename($curusr->name)."/",5);
        rename($temp,$panel);
-       $file=storagename($curusr->name)."/".basename($panel);
+       $file=SITEROOT.storagename($curusr->name)."/".basename($panel);
      }
      else
      {
-       $file=$temp_name;
+       $file=SITEROOT.$temp_name;
      }
     }
     

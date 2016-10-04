@@ -57,6 +57,7 @@ function addAsset(){
           minHeight:50,
           minWidth:50,
           containment:'parent',
+          aspectRatio:true,
           stop:function(e,ui){
               updateScriptData();
           }

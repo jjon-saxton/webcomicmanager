@@ -219,19 +219,31 @@ function uniquename($folder,$int_lvl=1,$ext=".png")
   $c=1;
   if ($int_lvl > 1)
   {
-    $c=sprintf("%0{$int_lvl}d",$c);
+   $name=sprintf("%0{$int_lvl}d",$c);
+  }
+  else
+  {
+   $name=0;
   }
   
-  foreach(scandir($folder,SCANDIR_SORT_ASCENDING) as $file)
+  
+  foreach(scandir($folder) as $file)
   {
-   $next=$c+1;
-   if ($file == $folder.$next.$ext)
+   if (file_exists($folder.$name.$ext))
    {
     $c++;
+    if ($int_lvl > 1)
+    {
+     $name=sprintf("%0{$int_lvl}d",$c);
+    }
+    else
+    {
+     $name=$c;
+    }
    }
   }
   
-  return $folder.$c.$ext;
+  return $folder.$name.$ext;
 }
 
 function storagename($str)

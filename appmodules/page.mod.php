@@ -19,6 +19,8 @@ function parse_page_data($src)
 $(function(){
   $("div.page-panel").removeClass("ui-draggable").removeClass("ui-draggable-handle").removeClass("ui-resizable");
   $("div.page-panel .ui-resizable-handle").remove();
+  $("div#AS-2").remove();
+  $("div#Page").attr("class","text-justify col-sm-12");
 });
 TXT;
   $html=str_get_html($src);
@@ -56,13 +58,6 @@ TXT;
      $panel->id=$ids;
      $panel->class="page-panel";
     }
-  }
-  
-  $imgs=$html->find("div.page-panel img");
-  foreach ($imgs as $img)
-  {
-    $src=SITEROOT.$img->src;
-    $img->src=$src;
   }
   
   $script['html']=$html;

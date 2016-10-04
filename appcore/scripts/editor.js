@@ -26,18 +26,23 @@ $(document).on('change',':file',function(){
                 $(this).parent().find("div.canvas.active").removeClass('active');
                 $(this).parent().find("div.canvas.desktop").addClass('active');
             }
+            $(".canvas-asset").removeClass('ui-draggable','ui-draggable-handle','ui-resizable');
+            $(".canvas-asset .ui-resizable-handle").remove();
             $(".canvas-asset").draggable({
                 containment:'parent',
                 stop:function(e,ui){
                     updateScriptData();
                 }
-            }).resizable({
-                minHeight:50,
-                minWidth:50,
-                containment:'parent',
-                stop:function(e,ui){
-                    updateScriptData();
-                }
+            });
+            $(".canvas-asset").each(function(){
+                $(this).resizable({
+                    minHeight:50,
+                    minWidth:50,
+                    aspectRatio:true,
+                    stop:function(e,ui){
+                        updateScriptData();
+                    }
+                });
             });
             $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\">Preview buttons?</div>");
             $(this).remove();

@@ -15,21 +15,25 @@ HTML;
 
 function parse_page_data($src)
 {
-  $script['js']=<<<TXT
+  if (!empty($src))
+  {
+    $script['js']=<<<TXT
 $(function(){
   $("div.page-panel").removeClass("ui-draggable").removeClass("ui-draggable-handle").removeClass("ui-resizable");
   $("div.page-panel .ui-resizable-handle").remove();
   $("div#AS-2").remove();
   $("div#Page").attr("class","text-justify col-sm-12");
-});
 TXT;
-  if (!empty($src))
-  {
     $html=str_get_html($src);
-    if ($html->find("div.canvas .canvas-asset .transition"))
+    if ($html->find("div.canvas .canvas-asset .transition",0))
     {
-    $script['js'].="$('div.canvas .canvas-asset).hide();";
+     $script['js'].="\n$('.page .page-panel').each(function(){ $(this).hide(); });\n";
+     foreach ($html->find(".canvas-asset .transition") as $e)
+     {
+      //TODO
+     }
     }
+    $script['js'].="});\n";
     $e=$html->find("div.active",0);
     $classes=$e->class;
     $classes=explode(" ",$classes);

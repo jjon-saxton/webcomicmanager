@@ -23,45 +23,51 @@ $(function(){
   $("div#Page").attr("class","text-justify col-sm-12");
 });
 TXT;
-  $html=str_get_html($src);
-  if ($html->find("div.canvas .canvas-asset .transition"))
+  if (!empty($src))
   {
-   $script['js'].="$('div.canvas .canvas-asset).hide();";
-  }
-  $e=$html->find("div.active",0);
-  $classes=$e->class;
-  $classes=explode(" ",$classes);
-  if ($key=array_search("active",$classes))
-  {
-    unset($classes[$key]);
-  }
-  $classes=implode(" ",$classes);
-  $e->class=$classes;
-  //TODO find away to add the above as a removeClass method
-  $e=$html->find("div.desktop",0);
-  $e->class="canvas visible-lg hidden-md hidden-sm hidden-xs";
-  $e->id="DesktopPage";
-  $e=$html->find("div.tablet",0);
-  $e->class="canvas hidden-lg visible-md visible-sm hidden-xs";
-  $e->id="TabletPage";
-  $e=$html->find("div.phone",0);
-  $e->class="canvas hidden-lg hidden-md hidden-sm visible-xs";
-  $e->id="PhonePage";
-  
-  $canvases=$html->find(".canvas");
-  foreach ($canvases as $canvas)
-  {
-    $ids=1;
-    $panels=$canvas->find(".canvas-asset");
-    foreach ($panels as $panel)
+    $html=str_get_html($src);
+    if ($html->find("div.canvas .canvas-asset .transition"))
     {
-     $panel->id=$ids;
-     $panel->class="page-panel";
+    $script['js'].="$('div.canvas .canvas-asset).hide();";
     }
+    $e=$html->find("div.active",0);
+    $classes=$e->class;
+    $classes=explode(" ",$classes);
+    if ($key=array_search("active",$classes))
+    {
+        unset($classes[$key]);
+    }
+    $classes=implode(" ",$classes);
+    $e->class=$classes;
+    //TODO find away to add the above as a removeClass method
+    $e=$html->find("div.desktop",0);
+    $e->class="canvas visible-lg hidden-md hidden-sm hidden-xs";
+    $e->id="DesktopPage";
+    $e=$html->find("div.tablet",0);
+    $e->class="canvas hidden-lg visible-md visible-sm hidden-xs";
+    $e->id="TabletPage";
+    $e=$html->find("div.phone",0);
+    $e->class="canvas hidden-lg hidden-md hidden-sm visible-xs";
+    $e->id="PhonePage";
+  
+    $canvases=$html->find(".canvas");
+    foreach ($canvases as $canvas)
+    {
+        $ids=1;
+        $panels=$canvas->find(".canvas-asset");
+        foreach ($panels as $panel)
+        {
+            $panel->id=$ids;
+            $panel->class="page-panel";
+        }
+    }
+  
+    $script['html']=$html;
   }
-  
-  $script['html']=$html;
-  
+  else
+  {
+    $script['html']="<div class=\"alert alert-warning\">Page is empty!</div>";
+  }
   return $script;
 }
 

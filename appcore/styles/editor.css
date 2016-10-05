@@ -53,6 +53,31 @@
     border-radius:4px;
 }
 
+.comix .canvas .canvas-asset .transition{
+    position:relative;
+    top:auto;
+    left:auto;
+    bottom:100px;
+    float:left;
+    font-size:1.2em
+}
+
+.transition{
+    position:absolute;
+    top:414px;
+    left:31px;
+    height:100px;
+    width:150px;
+    overflow:auto;
+    float:left;
+    font-size:0.90em;
+    color:#fff;
+    background:#5bc0de;
+    border-radius:4px;
+    border-color:#46b8da;
+    z-index:90
+}
+
 .comix .canvas div.canvas-asset img{
     border:0;
     clear:both;

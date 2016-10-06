@@ -53,6 +53,10 @@
     border-radius:4px;
 }
 
+.comix .canvas .canvas-asset.active img{
+    opacity:0.7;
+}
+
 .comix .canvas .canvas-asset .transition{
     position:relative;
     top:auto;

@@ -14,7 +14,7 @@ $(document).on('change',':file',function(){
             $(this).parent().append("<div id=\"ComiXEditor\" class=\"container\"></div>");
             $(this).parent().append("<div id=\"ComiXSavior\" class=\"hide\">");
             $(this).parent().find("div#ComiXSavior").append($(this).clone());
-            $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\"><div class=\"btn-group\"><button type=\"button\" onclick=\"addAsset()\" class=\"btn btn-primary\">Add Panel</button></div> <div class=\"btn-group\"><button type=\"button\" id=\"desktop\" onclick=\"changeCanvas('desktop')\" class=\"btn btn-canvas btn-info active\">Desktop</button><button id=\"tablet\" type=\"button\" onclick=\"changeCanvas('tablet')\" class=\"btn btn-canvas btn-info\">Tablet</button><button id=\"phone\" type=\"button\" onclick=\"changeCanvas('phone')\" class=\"btn btn-canvas btn-info\">Phone</button></div> <div class=\"btn-group\"><div class=\"btn-group\"><button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">Add Transition <span class=\"caret\"></span></button><ul class=\"dropdown-menu\"><li><a href=\"javascript:void\" onclick=\"addTransition('fadeIn')\">Fade From White</a></li><li><a href=\"javascript:void\" onclick=\"addTransition('slideDown')\">Verticle Blind</a></li><li><a href=\"javascript:void\" onclick=\"addTransition('show')\">Enlarge From Corner</a></li></ul></div><button onclick=\"addTransition('delay')\" type=\"button\" class=\"btn btn-info\">Add Time Delay</button></div></div>");
+            $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\"><div class=\"btn-group\"><button type=\"button\" onclick=\"addAsset()\" class=\"btn btn-primary\">Add Panel</button></div> <div class=\"btn-group\"><button type=\"button\" id=\"desktop\" onclick=\"changeCanvas('desktop')\" class=\"btn btn-canvas btn-info active\">Desktop</button><button id=\"tablet\" type=\"button\" onclick=\"changeCanvas('tablet')\" class=\"btn btn-canvas btn-info\">Tablet</button><button id=\"phone\" type=\"button\" onclick=\"changeCanvas('phone')\" class=\"btn btn-canvas btn-info\">Phone</button></div> <div class=\"btn-group\"><div class=\"btn-group\"><button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">Add Transition <span class=\"caret\"></span></button><ul class=\"dropdown-menu\"><li><a href=\"javascript:void(0)\" onclick=\"addTransition('fadeIn')\">Fade From White</a></li><li><a href=\"javascript:void(0)\" onclick=\"addTransition('slideDown')\">Verticle Blind</a></li><li><a href=\"javascript:void(0)\" onclick=\"addTransition('show')\">Enlarge From Corner</a></li></ul></div><button onclick=\"addTransition('delay')\" type=\"button\" class=\"btn btn-info\">Add Time Delay</button></div></div>");
             $(this).parent().find("div#ComiXEditor").append("<div class=\"comix\"></div>");
             $(this).parent().find("div#ComiXEditor .comix").append(val);
             if ($(this).parent().has("div#ComiXEditor .comix p").length){
@@ -26,18 +26,19 @@ $(document).on('change',':file',function(){
                 $(this).parent().find("div.canvas.active").removeClass('active');
                 $(this).parent().find("div.canvas.desktop").addClass('active');
             }
-            $(this).parent().find("div#ComiXEditor").droppable({
-                accept: ".canvas-asset .transition",
-                drop:function(e,ui){
-                    deleteTransition(ui.draggable);
-                }
-            });
             $(".canvas-asset").removeClass('ui-draggable','ui-draggable-handle','ui-resizable');
             $(".canvas-asset .ui-resizable-handle").remove();
             $(".canvas-asset").draggable({
                 containment:'parent',
                 stop:function(e,ui){
                     updateScriptData();
+                }
+            }).click(function(){
+                if (!$(this).hasClass("active")){
+                    $(this).addClass('active').siblings().removeClass('active');
+                }
+                else{
+                    $(this).removeClass('active');
                 }
             });
             $(".canvas-asset").each(function(){
@@ -47,12 +48,6 @@ $(document).on('change',':file',function(){
                     aspectRatio:true,
                     stop:function(e,ui){
                         updateScriptData();
-                    }
-                });
-                $(this).droppable({
-                    accept: ".transition",
-                    drop:function(e,ui){
-                        placeTransition(ui.draggable,e.target);
                     }
                 });
             });
@@ -84,10 +79,10 @@ function addAsset(){
 }
 
 function addTransition(type){
-    $("div#ComiXEditor .canvas").append("<div id=\""+type+"\" class=\"transition\"></div>");
+    $("div#ComiXEditor .canvas .active").append("<div id=\""+type+"\" class=\"transition\"></div>");
     switch (type){
         case 'delay':
-            $("div#"+type).html("<label for=\"tvalue\">Time Delay (in seconds):</label><input type=\"number\" id=\"tvalue\">");
+            $("div#"+type).html("<label for=\"tvalue\">Time Delay (in seconds):</label><input size=\"3\" onkeyup=\"$(this).attr('value',$(this).val());updateScriptData()\" type=\"number\" id=\"tvalue\" value=\"0\">");
             break;
         case 'slideDown':
             $("div#"+type).html("Verticle Blind From Top");
@@ -99,7 +94,10 @@ function addTransition(type){
         default:
             $("div#"+type).html("Enlarge From Corner");
     }
-    $("div#"+type).draggable();
+    if (type != 'delay'){
+        $("div#"+type).append("<label for=\"tvalue\" title=\"keywords slow, or fast; or time in seconds\">Transition Duration</label><input type=\"text\" size=\"5\" onkeyup=\"$(this).attr('value',$(this).val());updateScriptData()\" id=\"tvalue\" value=\"slow\">");
+    }
+    updateScriptData();
 }
 
 function placeTransition($item,$target){

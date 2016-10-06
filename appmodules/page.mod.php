@@ -38,10 +38,33 @@ TXT;
           $tvalue=$p->find("#delay input",0);
           if ($tvalue=$tvalue->value)
           {
-            $wait=$tvalue*100;
-            $animation='show'; //TODO this should be set based on other transitions found.
-            $duration=250; //TODO ditto
-            $script['js'].="$(\"div#{$pid}.page-pane\").delay({$wait}).{$animation}($duration);\n";
+            $wait=$tvalue*1000;
+            foreach ($p->find(".transition") as $a)
+            {
+             if($a->id != "delay")
+             {
+               $animation=$a->id;
+               $d=$a->find("input",0);
+               $duration=$d->value;
+               if (is_numeric($duration))
+               {
+                 $duration=$duration*1000;
+               }
+               else
+               {
+                 $duration="'{$duration}'";
+               }
+             }
+            }
+            if (empty($animation))
+            {
+              $animation="fadeIn";
+            }
+            if (empty($duration))
+            {
+              $duration="'slow'";
+            }
+            $script['js'].="$(\"div#{$pid}.page-panel\").delay({$wait}).{$animation}($duration);\n";
           }
           else
           {
@@ -74,7 +97,14 @@ TXT;
              $transition=$t->id;
              $duration=$t->find("input#tvalue",0);
              $duration=$duration->value;
-             $duration=$duration*1000;
+             if (is_numeric($duration))
+             {
+               $duration=$duration*1000;
+             }
+             else
+             {
+               $duration="'{$duration}'";
+             }
              if (!empty($delay))
              {
                $delay=".delay($delay)";

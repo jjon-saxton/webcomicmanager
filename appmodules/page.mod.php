@@ -28,12 +28,74 @@ TXT;
     if ($html->find("div.canvas .canvas-asset .transition",0))
     {
      $script['js'].="\n$('.page .page-panel').each(function(){ $(this).hide(); });\n";
-     foreach ($html->find(".canvas-asset .transition") as $e)
+     $pid=1;
+     foreach ($html->find(".canvas-asset") as $p)
      {
-      //TODO
+       if ($pid == 1)
+       {
+         if ($p->find("#delay"))
+         {
+          $tvalue=$p->find("#delay input",0);
+          if ($tvalue=$tvalue->value)
+          {
+            $wait=$tvalue*100;
+            $animation='show'; //TODO this should be set based on other transitions found.
+            $duration=250; //TODO ditto
+            $script['js'].="$(\"div#{$pid}.page-pane\").delay({$wait}).{$animation}($duration);\n";
+          }
+          else
+          {
+            $script['js'].="$(\"div#{$pid}.page-panel\").show();\n";
+          }
+         }
+         else
+         {
+           $script['js'].="$(\"div#{$pid}.page-panel\").show();\n";
+         }
+       }
+       else
+       {
+         if ($p->find("#delay.transition"))
+         {
+           if ($tvalue=$p->find("#delay input"))
+           {
+             $delay=$tvalue->value;
+             $delay=$delay*1000;
+           }
+           else
+           {
+             $delay=0;
+           }
+         }
+         foreach ($p->find("div.transition") as $t)
+         {
+           if ($t->id != "delay")
+           {
+             $transition=$t->id;
+             $duration=$t->find("input#tvalue",0);
+             $duration=$duration->value;
+             $duration=$duration*1000;
+             if (!empty($delay))
+             {
+               $delay=".delay($delay)";
+             }
+             else
+             {
+               $delay=null;
+             }
+             $script['js'].="$(\"div#{$pid}.page-panel\"){$delay}.{$transition}({$duration});\n";
+           }
+         }
+       }
+       $pid++;
      }
     }
     $script['js'].="});\n";
+    foreach($html->find("div.transition") as $remove)
+    {
+      $remove->outertext='';
+    }
+    $html->save();
     $e=$html->find("div.active",0);
     $classes=$e->class;
     $classes=explode(" ",$classes);
@@ -65,6 +127,7 @@ TXT;
             $panel->class="page-panel";
         }
     }
+    $html->save();
   
     $script['html']=$html;
   }

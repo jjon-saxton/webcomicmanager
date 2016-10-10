@@ -7,7 +7,17 @@ function load_page(array $data,MCSession $cursur)
 <script language="javascript" type="text/javascript">
 {$script['js']}
 </script>
-<div id="pageAssets" class="page container">
+<div id="loading" class="panel panel-info">
+<div class="panel-heading">Your Page is loading...</div>
+<div class="panel-body">We're getting a few things ready please standby.
+<div class="progress">
+<div class="progress-bar" role="progressbar" style="width:25%">
+<span>Processing page scripts</span>
+</div>
+</div>
+</div>
+</div>
+<div id="pageAssets" class="page container" style="display:none">
 {$script['html']}
 </div>
 HTML;
@@ -20,14 +30,22 @@ function parse_page_data($src)
     $script['js']=<<<TXT
 $(function(){
   $("div.page-panel").removeClass("ui-draggable").removeClass("ui-draggable-handle").removeClass("ui-resizable");
-  $("div.page-panel .ui-resizable-handle").remove();
   $("div#AS-2").remove();
   $("div#Page").attr("class","text-justify col-sm-12");
+  $('.page .page-panel').each(function(){
+    $(this).hide();
+  });
+  $("#loading .progress .progress-bar").css('width','65%').find('span').text('Loading Panels');
+});
+$(window).on('load',function(){
+  $("#loading .progress .progress-bar").css('width','90%').find('span').text('Finalizing a few things').delay('500').css('width','100%').find('span').text('Complete!');
+  $('#loading').delay(1000).fadeOut('slow');
+  $('#pageAssets').delay(1500).fadeIn('slow');
+
 TXT;
     $html=str_get_html($src);
     if ($html->find("div.canvas .canvas-asset .transition",0))
     {
-     $script['js'].="\n$('.page .page-panel').each(function(){ $(this).hide(); });\n";
      $pid=1;
      foreach ($html->find(".canvas-asset") as $p)
      {
@@ -64,16 +82,16 @@ TXT;
             {
               $duration="'slow'";
             }
-            $script['js'].="$(\"div#{$pid}.page-panel\").delay({$wait}).{$animation}($duration);\n";
+            $script['js'].="$(\"div#{$pid}.page-panel\").delay({$wait}).{$animation}($duration)";
           }
           else
           {
-            $script['js'].="$(\"div#{$pid}.page-panel\").show();\n";
+            $script['js'].="$(\"div#{$pid}.page-panel\").show()";
           }
          }
          else
          {
-           $script['js'].="$(\"div#{$pid}.page-panel\").show();\n";
+           $script['js'].="$(\"div#{$pid}.page-panel\").show()";
          }
        }
        else
@@ -107,21 +125,33 @@ TXT;
              }
              if (!empty($delay))
              {
-               $delay=".delay($delay)";
+               $script['js'].=";\n$(\"div#{$pid}.page-panel\").delay({$delay}).{$transition}({$duration})";
              }
-             else
+             elseif (!empty($p))
              {
-               $delay=null;
+               if (empty($transition))
+               {
+                 $transition="fadeIn";
+               }
+               $script['js'].=".click(function(){\n\t$(this).next('.page-panel').{$transition}({$duration})\n})";
              }
-             $script['js'].="$(\"div#{$pid}.page-panel\"){$delay}.{$transition}({$duration});\n";
            }
          }
        }
        $pid++;
      }
     }
+    else
+    {     
+      $script['js'].="\n$('.page .page-panel').each(function(){\n\t$(this).show();\n});\n";
+    }
     $script['js'].="});\n";
     foreach($html->find("div.transition") as $remove)
+    {
+      $remove->outertext='';
+    }
+    unset($remove);
+    foreach ($html->find(".ui-resizable-handle") as $remove)
     {
       $remove->outertext='';
     }
@@ -155,6 +185,7 @@ TXT;
         {
             $panel->id=$ids;
             $panel->class="page-panel";
+            $ids++;
         }
     }
     $html->save();

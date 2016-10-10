@@ -185,7 +185,7 @@ TXT;
     
     $upload_script.=<<<TXT
 $(".canvas-asset form",pDoc).remove();
-$(".canvas-asset:not(:has(img))",pDoc).append('<img src="{$file}?w=300" style="width:100%" alt=\"New Asset\">');
+$(".canvas-asset:not(:has(img))",pDoc).append('<img src="{$file}?w=1280" style="width:100%" alt=\"New Asset\">');
 TXT;
   }
   return <<<HTML

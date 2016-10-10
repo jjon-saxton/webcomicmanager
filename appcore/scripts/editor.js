@@ -45,7 +45,11 @@ $(document).on('change',':file',function(){
                 $(this).resizable({
                     minHeight:50,
                     minWidth:50,
-                    aspectRatio:true,
+                    resize: function(e,ui){
+                        $img=$(this).find("img");
+                        src=$img.attr('src').split(/[?#]/)[0];
+                        $img.attr('src',src+"?w="+ui.size.width);
+                    },
                     stop:function(e,ui){
                         updateScriptData();
                     }
@@ -69,7 +73,11 @@ function addAsset(){
           minHeight:50,
           minWidth:50,
           containment:'parent',
-          aspectRatio:true,
+          resize: function(e,ui){
+                  $img=$(this).find("img");
+                  src=$img.attr('src').split(/[?#]/)[0];
+                  $img.attr('src',src+"?w="+ui.size.width);
+          },
           stop:function(e,ui){
               updateScriptData();
           }

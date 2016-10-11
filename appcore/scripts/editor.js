@@ -45,12 +45,10 @@ $(document).on('change',':file',function(){
                 $(this).resizable({
                     minHeight:50,
                     minWidth:50,
-                    resize: function(e,ui){
+                    stop:function(e,ui){
                         $img=$(this).find("img");
                         src=$img.attr('src').split(/[?#]/)[0];
                         $img.attr('src',src+"?w="+ui.size.width);
-                    },
-                    stop:function(e,ui){
                         updateScriptData();
                     }
                 });
@@ -73,12 +71,10 @@ function addAsset(){
           minHeight:50,
           minWidth:50,
           containment:'parent',
-          resize: function(e,ui){
-                  $img=$(this).find("img");
-                  src=$img.attr('src').split(/[?#]/)[0];
-                  $img.attr('src',src+"?w="+ui.size.width);
-          },
           stop:function(e,ui){
+              $img=$(this).find("img");
+              src=$img.attr('src').split(/[?#]/)[0];
+              $img.attr('src',src+"?w="+ui.size.width);
               updateScriptData();
           }
       });
@@ -87,7 +83,7 @@ function addAsset(){
 }
 
 function addTransition(type){
-    $("div#ComiXEditor .canvas .active").append("<div id=\""+type+"\" class=\"transition\"></div>");
+    $("div#ComiXEditor .canvas .active").prepend("<div id=\""+type+"\" class=\"transition\"></div>");
     switch (type){
         case 'delay':
             $("div#"+type).html("<label for=\"tvalue\">Time Delay (in seconds):</label><input size=\"3\" onkeyup=\"$(this).attr('value',$(this).val());updateScriptData()\" type=\"number\" id=\"tvalue\" value=\"0\">");
@@ -102,6 +98,7 @@ function addTransition(type){
         default:
             $("div#"+type).html("Enlarge From Corner");
     }
+    $("div#"+type).append("<span class=\"right glyphicon glyphicon-trash\" onclick=\"$(this).remove()\" title=\"Remove Transition\"></span>");
     if (type != 'delay'){
         $("div#"+type).append("<label for=\"tvalue\" title=\"keywords slow, or fast; or time in seconds\">Transition Duration</label><input type=\"text\" size=\"5\" onkeyup=\"$(this).attr('value',$(this).val());updateScriptData()\" id=\"tvalue\" value=\"slow\">");
     }

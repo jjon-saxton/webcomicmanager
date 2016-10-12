@@ -45,7 +45,21 @@ function list_children($from,MCSession $curusr,$filter=null)
     }
     else
     {
-     $list.="<h3 class=\"proj-title\">{$row['title']}</h3>\n<p class=\"proj-description\">{$row['data']}</p>\n";
+     $description=str_get_html($row['data']);
+     $preview=($description->find("div.canvas img",0)->outertext);
+     if (!empty($preview))
+     {
+      $list.="<figure class=\"figure\">{$preview}\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}\n</figure>\n";
+     }
+     else
+     {
+      foreach ($description->find("div.canvas") as $canvas)
+      {
+        $canvas->remove();
+      }
+      $description->save();
+      $list.="<h3 class=\"proj-title\">{$row['title']}</h3>\n<p class=\"proj-description\">{$description}</p>\n";
+     }
     }
     $list.="</div></a>\n";
     $c++;

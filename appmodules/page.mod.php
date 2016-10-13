@@ -25,9 +25,22 @@ HTML;
 
 function parse_page_data($src)
 {
+  $origin=basename($_SERVER['PHP_SELF']);
   if (!empty($src))
   {
-    $script['js']=<<<TXT
+    if ($origin == 'preview.php')
+    {
+      $script['js']=<<<TXT
+$(function(){
+$("#loading .progress .progress-bar").delay(800).css('width','90%').find('span').text("Finalizing your preview");
+$("#loading").delay(1400).remove();
+$("#pageAssets").delay(1500).show();
+
+TXT;
+    }
+    else
+    {
+     $script['js']=<<<TXT
 $(function(){
   $("div#AS-2").remove();
   $("div#Page").attr("class","text-justify col-sm-12");
@@ -42,6 +55,7 @@ $(window).on('load',function(){
   $('#pageAssets').delay(1500).fadeIn('slow');
 
 TXT;
+    }
     $html=str_get_html($src);
     if ($html->find("div.canvas .canvas-asset .transition",0))
     {

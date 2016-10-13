@@ -53,12 +53,29 @@ $(document).on('change',':file',function(){
                     }
                 });
             });
-            $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\">Preview buttons?</div>");
+            $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\"><div class=\"btn-group\"><button id=\"startPreview\" type=\"button\" onclick=\"updateScriptData();previewPage('start')\" class=\"btn btn-success\"><span class=\"glyphicon glyphicon-play\"></span>Run</button><button id=\"stopPreview\" type=\"button\" onclick=\"previewPage('stop')\" disabled=\"disabled\" class=\"btn btn-danger\"><span class=\"glyphicon glyphicon-stop\"></span>Stop</button></div></div>");
             $(this).remove();
             
         });
     }
 }( jQuery ));
+
+function previewPage(action){
+    var raw=$("#ComiXSavior textarea").val();
+    
+    switch(action){
+        case 'start':
+            $("#startPreview").attr('disabled','disabled');
+            $("#ComiXEditor .comix").load("./preview/?action=process",{data:raw});
+            $("#stopPreview").removeAttr('disabled');
+            break;
+        case 'stop':
+            $("#stopPreview").attr('disabled','disabled');
+            $("#ComiXEditor .comix").load("./preview/?action=restore",{data:raw});
+            $("#startPreview").removeAttr('disabled');
+            break;
+    }
+}
 
 function addAsset(){
       $("div#ComiXEditor .canvas").append("<div class=\"canvas-asset\"><form action=\"/wcm/dash/?section=upload&type=panel\" target=\"filetarget\" method=\"post\" enctype=\"multipart/form-data\"><label for=\"file\" class=\"btn btn-primary\"><span class=\"glyphicon glyphicon-upload\"></span></label><input id=\"file\" onchange=\"iUpload(this)\" type=\"file\" name=\"art\" class=\"hide\"><div id=\"art\" class=\"progress no-show\"><div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\"><span class=\"sr-only\">0%</span></div></div><iframe class=\"hide\" name=\"filetarget\"></form></div>");
@@ -98,7 +115,7 @@ function addTransition(type){
         default:
             $("div#"+type).html("Enlarge From Corner");
     }
-    $("div#"+type).append("<span class=\"right glyphicon glyphicon-trash\" onclick=\"$(this).remove()\" title=\"Remove Transition\"></span>");
+    $("div#"+type).append("<span class=\"right glyphicon glyphicon-trash\" onclick=\"$(this).parent().remove()\" title=\"Remove Transition\"></span>");
     if (type != 'delay'){
         $("div#"+type).append("<label for=\"tvalue\" title=\"keywords slow, or fast; or time in seconds\">Transition Duration</label><input type=\"text\" size=\"5\" onkeyup=\"$(this).attr('value',$(this).val());updateScriptData()\" id=\"tvalue\" value=\"slow\">");
     }

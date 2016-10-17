@@ -48,7 +48,7 @@ else
   {
     if ($message=add_art($_GET['section'],$_POST,$conf))
     {
-      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
+      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
   elseif (!empty($_FILES['art']['name']))
@@ -103,7 +103,7 @@ else
   
   if ($c <= 0)
   {
-    $body.="<div class=\"alert alert-warning\">You have no projects! Would you like to <a href=\"//{$conf->base_uri}dash/?section=put&type=project\" data-target=\"#this-modal\">add one</a>?</div>\n";
+    $body.="<div class=\"alert alert-warning\">You have no projects! Would you like to <a href=\"//{$conf->base_uri}/dash/?section=put&type=project\" data-target=\"#this-modal\">add one</a>?</div>\n";
   }
   else
   {

@@ -53,9 +53,9 @@ $(document).on('change',':file',function(){
                     }
                 });
             });
-            $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\"><div class=\"btn-group\"><button id=\"startPreview\" type=\"button\" onclick=\"updateScriptData();previewPage('start')\" class=\"btn btn-success\"><span class=\"glyphicon glyphicon-play\"></span>Run</button><button id=\"stopPreview\" type=\"button\" onclick=\"previewPage('stop')\" disabled=\"disabled\" class=\"btn btn-danger\"><span class=\"glyphicon glyphicon-stop\"></span>Stop</button></div></div>");
+            $(this).parent().find("div#ComiXEditor").append("<div class=\"btn-toolbar\"><div class=\"btn-group\"><button id=\"startPreview\" type=\"button\" onclick=\"previewPage('start')\" class=\"btn btn-success\"><span class=\"glyphicon glyphicon-play\"></span>Run</button><button id=\"stopPreview\" type=\"button\" onclick=\"previewPage('stop')\" disabled=\"disabled\" class=\"btn btn-danger\"><span class=\"glyphicon glyphicon-stop\"></span>Stop</button></div></div>");
             $(this).remove();
-            
+            updateScriptData();
         });
     }
 }( jQuery ));
@@ -103,21 +103,21 @@ function addTransition(type){
     $("div#ComiXEditor .canvas .active").prepend("<div id=\""+type+"\" class=\"transition\"></div>");
     switch (type){
         case 'delay':
-            $("div#"+type).html("<label for=\"tvalue\">Time Delay (in seconds):</label><input size=\"3\" onkeyup=\"$(this).attr('value',$(this).val());updateScriptData()\" type=\"number\" id=\"tvalue\" value=\"0\">");
+            $("div#"+type).html("<h5 class=\"transition-title\">Time Delay</h4><label for=\"tvalue\">Delay, in seconds:</label><input size=\"3\" onkeyup=\"$(this).attr('value',$(this).val());updateScriptData()\" type=\"number\" id=\"tvalue\" value=\"0\">");
             break;
         case 'slideDown':
-            $("div#"+type).html("Verticle Blind From Top");
+            $("div#"+type).html("<h5 class=\"transition-title\">Verticle Blind From Top</h5>");
             break;
         case 'fadeIn':
-            $("div#"+type).html("Fade From White");
+            $("div#"+type).html("<h5 class=\"transition-title\">From White</h5>");
             break;
         case 'show':
         default:
-            $("div#"+type).html("Enlarge From Corner");
+            $("div#"+type).html("<h5 class=\"transition-title\">Enlarge From Corner</h5>");
     }
-    $("div#"+type).append("<span class=\"right glyphicon glyphicon-trash\" onclick=\"$(this).parent().remove()\" title=\"Remove Transition\"></span>");
+    $("div#"+type).append("<span class=\"right glyphicon glyphicon-trash\" onclick=\"deleteTransition($(this).parent())\" title=\"Remove Transition\"></span>");
     if (type != 'delay'){
-        $("div#"+type).append("<label for=\"tvalue\" title=\"keywords slow, or fast; or time in seconds\">Transition Duration</label><input type=\"text\" size=\"5\" onkeyup=\"$(this).attr('value',$(this).val());updateScriptData()\" id=\"tvalue\" value=\"slow\">");
+        $("div#"+type).append("<label for=\"tvalue\" title=\"keywords slow, or fast; or time in seconds\">Duration</label><input type=\"text\" size=\"5\" onkeyup=\"$(this).attr('value',$(this).val());updateScriptData()\" id=\"tvalue\" value=\"slow\">");
     }
     updateScriptData();
 }
@@ -131,8 +131,9 @@ function placeTransition($item,$target){
 }
 
 function deleteTransition($item){
-    console.log("delete!?");
-    $item.remove();
+    if (confirm("Delete selected transition?")){
+        $item.remove();
+    }
 }
 
 function changeCanvas(type){
@@ -373,7 +374,7 @@ function updateScriptData(data){
 			var toolbar			= jQTE.find('.'+vars.css+"_toolbar"); // the toolbar variable
 			var linkform		= jQTE.find('.'+vars.css+"_linkform"); // the link-form-area in the toolbar variable
 			var editor			= jQTE.find('.'+vars.css+"_editor"); // the text-field of jqte editor
-			var emphasize		= vars.css+"_tool_depressed"; // highlight style of the toolbar buttons
+			var emphasize		= "active";
 			
 			// add to some tools in link form area
 			linkform.append('<div class="'+vars.css+'_linktypeselect" unselectable></div><input class="'+vars.css+'_linkinput" type="text/css" value=""><div class="'+vars.css+'_linkbrowse" unselectable>'+vars.browse+'</div> <div class="'+vars.css+'_linkbutton" unselectable>'+vars.button+'</div> <div style="height:1px;float:none;clear:both"></div>');
@@ -381,7 +382,6 @@ function updateScriptData(data){
 			var linktypeselect	= linkform.find("."+vars.css+"_linktypeselect"); // the tool of link-type-selector
 			var linkinput		= linkform.find("."+vars.css+"_linkinput"); // the input of insertion link
 			var linkbutton		= linkform.find("."+vars.css+"_linkbutton"); // the button of insertion link
-			var linkbrowse	= linkform.find("."+vars.css+"_linkbrowse"); // the button for browsing for a uri
 			
 			// add to the link-type-selector sub tool parts
 			linktypeselect.append('<div class="'+vars.css+'_linktypeview" unselectable></div><div class="'+vars.css+'_linktypes" role="menu" unselectable></div>');

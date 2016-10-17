@@ -35,7 +35,7 @@ $(function(){
     });
     
     // Initialize textarea's with required class as JQTE boxes
-    $("textarea.editor.full").jqte();
+    $("textarea.editor.full").jqte({css:'te'});
     $("textarea.editor.limited").jqte({
         formats:false,
         link:false,
@@ -49,6 +49,11 @@ $(function(){
     });
     // Initialize textareas with required class as Comix Editors
     $("textarea.editor.script").comixeditor();
+    
+    $(".jqte_toolbar").addClass("btn-toolbar");
+    $(".jqte_toolbar .jqte_tool").each(function(){
+        $(this).addClass("btn btn-info").css('padding','1px');
+    });
     
     // Uninitialize modal on close
     $('body').on('hidden.bs.modal','.modal',function(){

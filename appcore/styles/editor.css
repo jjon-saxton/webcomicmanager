@@ -131,14 +131,13 @@
 .jqte_tool.jqte_tool_1 .jqte_tool_label {
 	position:relative;
 	display:block;
-	padding:3px;
 	width:70px;
 	height:16px;
 	overflow:hidden;
 }
 .jqte_tool.jqte_tool_1 .jqte_tool_text {
 	font:bold 13px Arial,sans-serif;
-	color:#222;
+	color:#fff;
 }
 .jqte_tool.jqte_tool_1 .jqte_tool_icon {
 	position:absolute;

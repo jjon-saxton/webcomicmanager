@@ -35,7 +35,7 @@ $(function(){
     });
     
     // Initialize textarea's with required class as JQTE boxes
-    $("textarea.editor.full").jqte({css:'te'});
+    $("textarea.editor.full").jqte();
     $("textarea.editor.limited").jqte({
         formats:false,
         link:false,

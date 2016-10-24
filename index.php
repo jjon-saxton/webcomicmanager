@@ -22,8 +22,6 @@ elseif (!file_exists(dirname(__FILE__)."/appcore/dataconnect/connect.ini"))
 else
 {
  require_once dirname(__FILE__)."/appcore/common.inc.php";
- $conf=new MCSettings();
- define ("SITEROOT", "//".$conf->base_uri."/");
 }
 
 ?>

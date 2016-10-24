@@ -3,6 +3,19 @@ define("DATACONF",dirname(__FILE__)."/dataconnect/connect.ini");
 require_once dirname(__FILE__)."/dataconnect/database.inc.php";
 require dirname(__FILE__)."/user.inc.php";
 
+$conf=new MCSettings();
+define("SITEROOT","//".$conf->base_uri."/");
+
+$com_tdb=new DataBaseTable("tags",true,DATACONF);
+$com_tq=$com_tdb->getData();
+while ($tag=$com_tq->fetch(PDO::FETCH_ASSOC))
+{
+  if ($tag['name'] == 'private' || $tag['name'] == 'draft')
+  {
+   define("TAG_".strtoupper($tag['name']),$tag['tid']);
+  }
+}
+
 class MCSettings
 {
  private $temp=array();

@@ -7,13 +7,10 @@ $conf=new MCSettings();
 define("SITEROOT","//".$conf->base_uri."/");
 
 $com_tdb=new DataBaseTable("tags",true,DATACONF);
-$com_tq=$com_tdb->getData();
+$com_tq=$com_tdb->getData("type:`status`");
 while ($tag=$com_tq->fetch(PDO::FETCH_ASSOC))
 {
-  if ($tag['name'] == 'private' || $tag['name'] == 'draft')
-  {
-   define("TAG_".strtoupper($tag['name']),$tag['tid']);
-  }
+ define("TAG_".strtoupper($tag['name']),$tag['tid']);
 }
 
 class MCSettings

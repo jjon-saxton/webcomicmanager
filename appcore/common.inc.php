@@ -98,6 +98,116 @@ class MCSettings
  }
 }
 
+class MCTags
+{
+  protected $tags;
+  protected $assoc;
+  protected $con;
+  
+  public function __construct()
+  {
+   $this->tags=new DataBaseTable('tags',true,DATACONF);
+   $this->assoc=new DataBaseTable('tassoc',true,DATACONF);
+   $this->con=new DataBaseTable('content',true,DATACONF);
+  }
+  
+  public function getTags($as='array')
+  {
+    $tags=array();
+    $q=$this->tags->getData(null,array('name'));
+    while ($info->$q->fetch(PDO::FETCH_ASSOC))
+    {
+      $tags[]=$info['name'];
+    }
+    
+    switch ($as)
+    {
+      case 'array':
+      default:
+      return $tags;
+    }
+  }
+  
+  public function addNew(array $tags)
+  {
+    foreach ($tags as $t)
+    {
+      $q=$this->tags->getData("name:`{$t}`");
+      $info=$q->fetch(PDO::FETCH_ASSOC);
+      
+      if (empty($info['tid']))
+      {
+        $data['name']=$t;
+        $new[]=$this->tags->putData($data);
+      }
+    }
+    
+    if (is_array($new))
+    {
+      return $new;
+    }
+    else
+    {
+      return null;
+    }
+  }
+  
+  public function delAllByCon($cid)
+  {
+    $data['cid']=$cid;
+    return $this->assoc->deleteData($data);
+  }
+  
+  public function delAllByTag($tid)
+  {
+    $data['tid']=$tid;
+    return $this->assoc->detetData($data);
+  }
+  
+  public function changeAssoc($pid,array $tags)
+  {
+    $this->addNew($tags);
+    $tids=array();
+    foreach ($tags as $t)
+    {
+      $q=$this->tags->getData("name:`{$t}`");
+      $info=$q->fetch(PDO::FETCH_OBJ);
+      
+      $tids[]=$info->tid;
+    }
+    
+    if (!empty($tids))
+    {
+      $list=array();
+      $q=$this->assoc->getData("cid:`= {$pid}`");
+      while ($assoc=$q->fetch(PDO::FETCH_OBJ))
+      {
+        $list[]=$assoc->tid;
+      }
+      
+      $new_tags=array_diff($tids,$list); //Finds tids to put in tassoc
+      foreach ($new_tags as $tid)
+      {
+        $data['tid']=$tid;
+        $data['cid']=$pid;
+        $this->assoc->putData($data);
+      }
+      
+      $old_tags=array_diff($list,$tids); //Finds old tids to remove from tassoc
+      foreach ($old_tags as $tid)
+      {
+        $q=$this->assoc->getData("cid:`= {$pid}` tid:`= {$tid}`");
+        $info=$q->fetch(PDO::FETCH_ASSOC);
+        $this->assoc->deleteData($info);
+      }
+    }
+  }
+  
+  public function filterConByTags(array $tags,$type=null,$sort=null,$limit=null,$offset=null)
+  {
+  }
+}
+
 function con_to_html(array $row,$view=null)
 {
   $cfg=new MCSettings();
@@ -2039,4 +2149,19 @@ function storagename($str)
 function storagenamedecode($str)
 {
   return rawurldecode(ucwords(preg_replace("/_/"," ",$str)));
+}
+
+function con_is_public($cid)
+{
+  $assoc=new DataBaseTable('tassoc',true,DATACONF);
+  $get_tags=$assoc->getData("cid:`= {$cid}`",array('cid','tid'));
+  while ($tag=$get_tags->fetch(PDO::FETCH_ASSOC))
+  {
+    if ($tag['tid'] == TAG_PRIVATE || $tag['tid'] == TAG_DRAFT)
+    {
+      return false;
+    }
+  }
+  
+  return true;
 }

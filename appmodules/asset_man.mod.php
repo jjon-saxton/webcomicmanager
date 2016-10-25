@@ -195,10 +195,23 @@ HTML;
 function save_asset($action,$data)
 {
   $con=new DataBaseTable('content',true,DATACONF);
-  //TODO process tags to tag associations
+  $tags=new MCTags();
+  if (!empty($_GET['cid']))
+  {
+   if (empty($data['tags']))
+   {
+     $tags->delAllByCon($_GET['cid']);
+   }
+   else
+   {
+     $tarr=explode(",",$data['tags']);
+     $tags->changeAssoc($_GET['cid'],$tarr);
+   }
+  }
   //file uploads should be handled elsewhere...
   if ($action == 'drop')
   {
+    $tags->delAllByCon($cid);
     if ($cid=$con->deleteData($data))
     {
       return $cid." dropped";

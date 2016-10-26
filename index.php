@@ -137,7 +137,14 @@ require_once dirname(__FILE__)."/appmodules/adspace.mod.php";
 </div>
 <div class="text-justify col-lg-10 col-md-8 col-sm-7" id="Page">
 <?php
-  echo load_index($path,$session);
+  if (!preg_match("/view/",$path))
+  {
+   echo load_index($path,$session);
+  }
+  else
+  {
+   echo view_doc($_GET['type'],$_GET['id']);
+  }
 ?>
 </div>
 </div>
@@ -157,6 +164,18 @@ require_once dirname(__FILE__)."/appmodules/adspace.mod.php";
   require_once dirname(__FILE__)."/appmodules/children.mod.php";
   return list_children($path,$curusr,$_GET['q']);
  }
-} ?>
-</html>
-<?php
+}
+
+function view_doc($type,$id)
+{
+  $table=new DataBaseTable($type."s",true,DATACONF);
+  $col=substr($type,0,1)."id";
+  $q=$table->getData($col.":`= ".$id);
+  $doc=$q->fetch(PDO::FETCH_ASSOC);
+  return <<<HTML
+<h2>{$doc['title']}</h2>
+<div id="DocViewer" class="page">
+{$doc['note']}
+</div>
+HTML;
+}

@@ -42,7 +42,7 @@ HTML;
      $values['uid']=$session->uid;
      $values['tags']=null;
      $values['ttid']=null;
-     $values['price']=0;
+     $values['price']="0.00";
      $values['data']="<p>Your text here...</p>";
      $values['file']=null;
      
@@ -131,7 +131,9 @@ HTML;
 </div>
 <div class="form-group">
 <label for="price">Price</label>
-<input type="number" size="3" maxlength="5" class="form-control" id="price" name="price" value="{$values['price']}">
+<div class="form-control">
+$<input type="number" style="width:6em;border:0" maxlength="7" id="price" name="price" value="{$values['price']}">USD
+</div>
 </div>
 <div class="form-group">
 <label for="tags">Tags</label>

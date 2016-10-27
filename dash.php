@@ -33,11 +33,17 @@ else
   }
   else
   {
-    if ($message=save_note($_GET['section'],$_POST))
+    if (($id=save_note($_GET['section'],$_POST)))
     {
+      $message="Note {$id} successfully saved!";
       $success=true;
-      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
+    else
+    {
+      $message="Note could not be saved due to a script or server error!";
+      $success=false;
+    }
+    $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"{$siteroot}/dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
   }
   break;
   case 'view':
@@ -50,7 +56,7 @@ else
     if ($message=add_art($_GET['section'],$_POST,$conf))
     {
       $success=true;
-      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
+      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"{$siteroot}/dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
   elseif (!empty($_FILES['art']['name']))
@@ -74,11 +80,17 @@ else
   }
   else
   {
-    if ($message=save_asset($_GET['section'],$_POST))
+    if (($id=save_asset($_GET['section'],$_POST)))
     {
       $success=true;
-      $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
+      $message="Asset {$id} saved!";
     }
+    else
+    {
+      $success=false;
+      $message="Asset could not be saved due to a script or server error!";
+    }
+    $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
   }
   break;
   case 'admincp':

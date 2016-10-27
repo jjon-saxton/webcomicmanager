@@ -4,6 +4,7 @@ function build_manager_form($curusr,$action)
 {
   $types=new DataBaseTable('types',true,DATACONF);
   $tq=$types->getData("ctype:`note`");
+  $qstr="section={$action}";
   $type_opts=null;
   $siteroot=SITEROOT;
   if ($action == 'edit' && !empty($_GET['nid']))
@@ -12,6 +13,7 @@ function build_manager_form($curusr,$action)
     $nq=$nt->getData("nid:`= {$_GET['nid']}`");
     $values=$nq->fetch(PDO::FETCH_ASSOC);
     $values['modified']=date("Y-m-d H:i:s");
+    $qstr=$qstr."&nid={$values['nid']}";
   }
   else
   {
@@ -33,7 +35,7 @@ function build_manager_form($curusr,$action)
   }
   
   return <<<HTML
-<form action="{$siteroot}dash/?section={$action}" method="post">
+<form action="{$siteroot}dash/?{$qstr}" method="post">
 <div class="form-group">
 <label for="title">Note Title</label>
 <input type="hidden" name="uid" value="{$values['uid']}">
@@ -65,37 +67,38 @@ HTML;
 function save_note($action,$data)
 {
   $nt=new DataBaseTable('notes',true,DATACONF);
-  if ($action == 'edit' && !empty($data['cid']))
+  if ($action == 'edit' && !empty($_GET['nid']))
   {
+    $data['nid']=$_GET['nid'];
     if ($nid=$nt->updateData($data))
     {
-      return $nid." updated!";
+      return $nid;
     }
     else
     {
-      return $nid." could not be updated!";
+      return false;
     }
   }
   elseif ($action != "remove")
   {
     if ($nid=$nt->putData($data))
     {
-      return $nid." added!";
+      return $nid;
     }
     else
     {
-      return $nid." could not be added!";
+      return false;
     }
   }
   else
   {
     if ($nid=$nt->deleteData($data))
     {
-      return $nid." deleted!";
+      return $nid;
     }
     else
     {
-      return $nid." could not be deleted!";
+      return false;
     }
   }
 }

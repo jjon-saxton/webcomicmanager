@@ -213,7 +213,7 @@ function save_asset($action,$data)
   //file uploads should be handled elsewhere...
   if ($action == 'drop')
   {
-    $tags->delAllByCon($cid);
+    $tags->delAllByCon($_GET['cid']);
     if ($cid=$con->deleteData($data))
     {
       return $cid." dropped";
@@ -228,22 +228,22 @@ function save_asset($action,$data)
    $data['cid']=$_GET['cid'];
    if ($cid=$con->updateData($data))
    {
-     return $cid." successfully updated.";
+     return $cid;
    }
    else
    {
-     return $cid." could not be updated.";
+     return false;
    }
   }
   else
   {
     if ($cid=$con->putData($data))
     {
-      return $cid." successfully added.";
+      return $cid;
     }
     else
     {
-      return $cid." could not be added.";
+      return false;
     }
   }
 }

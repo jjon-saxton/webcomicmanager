@@ -71,7 +71,20 @@ $(function(){
         timeoutID=setTimeout(function(){
             $.post(url,data,function(json){
                 if (json.okay){
+                    console.log(json.message);
+                    if ($("#autoSaveError").length){
+                        $("#autoSaveError").remove();
+                    }
                     $(".btn-primary").text("Saved!").delay(150).removeAttr('disabled').text('Save');
+                }
+                else{
+                    if ($("#autoSaveError").length){
+                        $("#autoSaveError").text(json.message);
+                    }
+                    else{
+                        $(".btn-primary").parent().prepend("<div id=\"autoSaveError\" class=\"alert alert-warning\">"+json.message+"</div>");
+                    }
+                    $(".btn-primary").removeAttr('disabled').text('Save');
                 }
             },'json');
         },3000);

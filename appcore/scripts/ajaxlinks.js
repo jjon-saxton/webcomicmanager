@@ -35,7 +35,7 @@ $(function(){
     });
     
     // Initialize textarea's with required class as JQTE boxes
-    $("textarea.editor.full").jqte();
+    $("textarea.editor.full").jqte({change:function(){ autoSave(); }});
     $("textarea.editor.limited").jqte({
         formats:false,
         link:false,
@@ -46,9 +46,36 @@ $(function(){
         outdent:false,
         indent:false,
         rule:false,
+        change:function(){
+            autoSave();
+        },
     });
     // Initialize textareas with required class as Comix Editors
     $("textarea.editor.script").comixeditor();
+    
+    $("textarea, input[type=text], input[type=number]").keyup(function(){
+        autoSave();
+    });
+     
+    function autoSave(){
+        var data=$('form').serialize();
+        var url=$('form').attr('action')+"&json=1";
+        var timeoutID;
+        
+        $(".btn-primary").attr('disabled','disabled').text('Saving...');
+        
+        if (timeoutID){
+            clearTimeout(timeoutID);
+        }
+        
+        timeoutID=setTimeout(function(){
+            $.post(url,data,function(json){
+                if (json.okay){
+                    $(".btn-primary").text("Saved!").delay(150).removeAttr('disabled').text('Save');
+                }
+            },'json');
+        },3000);
+    };
     
     $(".jqte_toolbar").addClass("btn-toolbar");
     $(".jqte_toolbar .jqte_tool").each(function(){

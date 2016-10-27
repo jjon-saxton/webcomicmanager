@@ -35,6 +35,7 @@ else
   {
     if ($message=save_note($_GET['section'],$_POST))
     {
+      $success=true;
       $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
@@ -48,6 +49,7 @@ else
   {
     if ($message=add_art($_GET['section'],$_POST,$conf))
     {
+      $success=true;
       $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash/?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
@@ -74,6 +76,7 @@ else
   {
     if ($message=save_asset($_GET['section'],$_POST))
     {
+      $success=true;
       $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
     }
   }
@@ -112,7 +115,16 @@ else
  }
 }
 
-echo <<<HTML
+if (!empty($_GET['json']))
+{
+  header("Content-type:'text/json'");
+  $return_arr['okay']=$success;
+  $return_arr['message']=$message;
+  echo json_encode($return_arr);
+}
+else
+{
+  echo <<<HTML
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">{$title}</h4></div>
 <div class="modal-body">
@@ -120,4 +132,5 @@ echo <<<HTML
 {$body}
 </div>
 HTML;
+}
 ?>

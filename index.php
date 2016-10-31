@@ -35,19 +35,22 @@ else
  <script src="//<?php echo $conf->base_uri ?>/appcore/scripts/editor.js"></script>
  <!-- jQuery UI draggable and resizable required for editor -->
  <script src="//<?php echo $conf->base_uri ?>/appcore/scripts/jquery-ui.min.js"></script>
- <?php if (!empty($_GET['modal'])){ ?>
  <script language="javascript">
  $(function(){
+    if ($("#Page .page").length > 0 || $("#Page .alert").length > 0){
+        $("#AS-2").remove();
+        $("#Page").attr("class","text-justify col-sm-12");
+    }
+ <?php if (!empty($_GET['modal'])){ ?>
     $("#messageModal .modal-title").html("<?php echo ucwords($_GET['modal']) ?>");
     $("#messageModal .modal-body").html("<?php switch($_GET['modal']){
       case 'login':
       echo "<div class='alert alert-info'>Please provide login credentials</div><form action='./app.php?action=login' method='post'><div class='form-group'><label for='user'>Username</label><input type='text' class='form-control' name='name' id='user'></div><div class='form-group'><label for='pass'>Password</label><input type='password' class='form-control' name='password' id='pass'></div><button type='submit' class='btn btn-primary'>Login</button> <button data-dismiss='modal' class='btn btn-danger'>Cancel</button></form>";
     } ?>");
     $("#messageModal").modal('show');
+ <?php } ?>
  });
  </script>
- <?php } ?>
- 
  <link rel="stylesheet" href="//<?php echo $conf->base_uri ?>/appcore/styles/editor.css" type="text/css">
  <!-- Styles from main domain -->
  <link rel="stylesheet" href="//www.tower21studios.com/assets/css/bootstrap.css" type="text/css">
@@ -153,7 +156,7 @@ require_once dirname(__FILE__)."/appmodules/adspace.mod.php";
     case "search":
     case "advanced-search":
     require_once dirname(__FILE__)."/appmodules/search.mod.php";
-    echo search($path_parts[0],$_GET);
+    echo start_search($path_parts[0],$_GET);
     break;
     case "view":
     echo view_doc($path_parts[1],$path_parts[2]);

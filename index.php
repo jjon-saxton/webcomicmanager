@@ -100,8 +100,17 @@ else
           echo ucp_module($session,$conf->base_uri,$conf->open_registration);
           ?>
         </li>
-        <li class="dropdown"><a href="//<?php echo $conf->base_uri ?>/app/?section=randomizer" role="button" aria-expanded="false">Discover</a>
+        <li><a href="//<?php echo $conf->base_uri ?>/random/" role="button" aria-expanded="false">Discover</a>
         </li>
+        <li><form class="navbar-form navbar-left" role="search" action="//<?php echo $conf->base_uri ?>/search/" method="get">
+        <div class="input-group">
+         <input type="text" class="form-control" name="q" placeholder="Search">
+         <div class="input-group-btn">
+          <button type="submit" class="btn btn-primary" title="Search"><span class="glyphicon glyphicon-search"></span></button>
+          <button type="button" onclick="window.location='//<?php echo $conf->base_uri ?>/advanced-search/'" class="btn btn-primary" title="Advanced"><span class="glyphicon glyphicon-cog"></span></button>
+         </div>
+        </div>
+        </form></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tower21 Studios Limited<span class="caret"></span></a>
@@ -137,13 +146,20 @@ require_once dirname(__FILE__)."/appmodules/adspace.mod.php";
 </div>
 <div class="text-justify col-lg-10 col-md-8 col-sm-7" id="Page">
 <?php
-  if (!preg_match("/view/",$path))
+  $path_parts=(explode("/",trim($path,"/")));
+  switch($path_parts[0])
   {
-   echo load_index($path,$session);
-  }
-  else
-  {
-   echo view_doc($_GET['type'],$_GET['id']);
+    case "random":
+    case "search":
+    case "advanced-search":
+    require_once dirname(__FILE__)."/appmodules/search.mod.php";
+    echo search($path_parts[0],$_GET);
+    break;
+    case "view":
+    echo view_doc($path_parts[1],$path_parts[2]);
+    break;
+    default:
+    echo load_index($path,$session);
   }
 ?>
 </div>

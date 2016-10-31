@@ -134,6 +134,12 @@ if (!empty($_GET['json']))
   $return_arr['message']=$message;
   echo json_encode($return_arr);
 }
+elseif (!empty($_GET['section'] == "author-search"))
+{
+  $udb=new DataBaseTable('users',true,DATACONF);
+  $uq=$udb->getData("name:`%{$_GET['q']}%`");
+  echo json_encode($uq->fetchALL(PDO::FETCH_ASSOC));
+}
 else
 {
   echo <<<HTML

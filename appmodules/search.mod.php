@@ -31,9 +31,10 @@ function start_search($scope,array $q_items=null)
 
 function run_query(array $filters)
 {
+ $con=new DataBaseTable("content",true,DATACONF);
  if (!empty($filters['date-created']['max']))
  {
-  $filters['created']=$filters['date-created']['min']."<>".$filters['date-created']['max'];
+  $filters['created']="<> ".date("Y-m-d H:i",strtotime($filters['date-created']['min']))." ".date("Y-m-d H:i",strtotime($filters['date-created']['max']));
  }
  else
  {
@@ -42,7 +43,7 @@ function run_query(array $filters)
  
  if (!empty($filters['date-modified']['max']))
  {
-  $filters['modified']=$filters['date-modified']['min']."<>".$filters['date-modified']['max'];
+  $filters['modified']="<> ".$filters['date-modified']['min']." ".$filters['date-modified']['max'];
  }
  else
  {
@@ -52,18 +53,42 @@ function run_query(array $filters)
  
  if (!empty($filters['price']['max']))
  {
-  $filters['price']=$filters['price']['min']."<>".$filters['price']['max'];
+  $filters['price']="<> ".$filters['price']['min']." ".$filters['price']['max'];
  }
  else
  {
   $filters['price']=$filters['price']['min'];
  }
  
+ if (!empty($filters['author']))
+ {
+   $adb=new DataBaseTable('users',true,DATACONF);
+   $aq=$adb->getData("name:`{$filters['author']}`",array('uid'));
+   $author=$aq->fetch();
+   $filters['uid']=$author['uid'];
+ }
+ unset($filters['author']);
+ 
  if (is_array($filters['tags']))
  {
   $filters['tags']=implode(",",$filters['tags']);
  }
- var_dump($filters);
+ 
+ $q=null;
+ foreach ($filters as $col=>$val)
+ {
+  if (!empty($val))
+  {
+   if (is_numeric($val))
+   {
+    $val="= ".$val;
+   }
+   $q.="{$col}:`{$val}` ";
+  }
+ }
+ $q=trim($q);
+ $q=$con->getData($q);
+ var_dump($q); //TODO <<shows that query is constructed now we just need to do something with the data.
 }
 
 function random_search()
@@ -72,6 +97,7 @@ function random_search()
 
 function search_form($full=false)
 {
+  $siteroot=SITEROOT;
   $form="<form action=\"".SITEROOT."search/\" method=\"get\">\n<div class=\"form-group\"><label for=\"query\">Text (in title or description)</label><input type=\"search\" class=\"form-control\" name=\"q\">\n</div>\n";
   if ($full == TRUE)
   {
@@ -83,8 +109,22 @@ function search_form($full=false)
       $filters.="<div class=\"grid-item\"><input id=\"t-{$tag['tid']}\" type=\"checkbox\" name=\"tags[]\" value=\"{$tag['tid']}\"> <label for=\"t-{$tag['tid']}\" class=\"tag tag-{$tag['type']}\">{$tag['name']}</label></div>\n";
     }
     $form.=<<<HTML
+<script language="javascript">
+$(function(){
+ $("input#author").keyup(function(){
+  $.get('{$siteroot}dash/?section=author-search&q='+$("input#author").val(),function(data){
+   $("#authors").html('');
+   for(var i=0;i<data.length;i++){
+    $("#authors").append('<option value="'+data[i].name+'"></option>');
+   }
+  },'json');
+ });
+});
+</script>
 <div class="form-group">
-<label for="author">Author:</label><input type="text" class="form-control" name="author" id="author">
+<label for="author">Author:</label><input type="text" list="authors" class="form-control" name="author" id="author">
+<datalist id="authors">
+</datalist>
 </div>
 <div class="form-group">
 <label for="tags">Tags:</label>

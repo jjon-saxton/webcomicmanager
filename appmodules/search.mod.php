@@ -18,7 +18,7 @@ function search($scope,array $q_items=null)
    break;
    case 'search':
    default:
-   if (empty($q_item))
+   if (empty($q_items))
    {
      return search_form(false);
    }

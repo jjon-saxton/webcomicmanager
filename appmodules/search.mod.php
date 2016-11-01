@@ -13,18 +13,18 @@ function start_search($scope,array $q_items=null)
    }
    else
    {
-     run_query($q_items);
+     return run_query($q_items);
    }
    break;
    case 'search':
    default:
-   if (empty($q_items))
+   if (!empty($q_items))
    {
-     return search_form(false);
+     return run_query($q_items);
    }
    else
    {
-    run_query($q_items);
+     return search_form(false);
    }
   }
 }
@@ -74,7 +74,16 @@ function run_query(array $filters)
   $filters['tags']=implode(",",$filters['tags']);
  }
  
- $q=null;
+ if (!empty($filters['q']))
+ {
+  $q=$filters['q']." ";
+ }
+ else
+ {
+  $q=null;
+ }
+ unset($filters['q']);
+ 
  foreach ($filters as $col=>$val)
  {
   if (!empty($val))
@@ -87,8 +96,31 @@ function run_query(array $filters)
   }
  }
  $q=trim($q);
- $q=$con->getData($q);
- var_dump($q); //TODO <<shows that query is constructed now we just need to do something with the data.
+ if (!empty($q))
+ {
+  $q=$con->getData($q,null,"created",40,$_GET['offset'],array('title','data'));
+  if ($q)
+  {
+   $grid=con_list_to_grid($q,true);
+   if (!empty($grid))
+   {
+    $html="<div class=\"grid grid-col-4\">\n{$grid}</div>\n";
+   }
+   else
+   {
+    $html="<div class=\"alert alert-info\">No results found!</div>\n";
+   }
+  }
+  else
+  {
+   $hml="<div class=\"alert alert-warning\">SQL Error, check out query string!</div>\n";
+  }
+  return $html;
+ }
+ else
+ {
+  return search_form(false);
+ }
 }
 
 function random_search()
@@ -103,7 +135,7 @@ function search_form($full=false)
   {
     $tdb=new DataBaseTable('tags',true,DATACONF);
     $tq=$tdb->getData();
-    $filters=null;
+    var_dump($tq);
     while ($tag=$tq->fetch())
     {
       $filters.="<div class=\"grid-item\"><input id=\"t-{$tag['tid']}\" type=\"checkbox\" name=\"tags[]\" value=\"{$tag['tid']}\"> <label for=\"t-{$tag['tid']}\" class=\"tag tag-{$tag['type']}\">{$tag['name']}</label></div>\n";

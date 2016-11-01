@@ -107,7 +107,11 @@ else
         </li>
         <li><form class="navbar-form navbar-left" role="search" action="//<?php echo $conf->base_uri ?>/search/" method="get">
         <div class="input-group">
-         <input type="text" class="form-control" name="q" placeholder="Search">
+         <input type="text" class="form-control" name="q" placeholder="Search"<?php
+         if (!empty($_GET['q']))
+         {
+          echo " value=\"{$_GET['q']}\"";
+         }?>>
          <div class="input-group-btn">
           <button type="submit" class="btn btn-primary" title="Search"><span class="glyphicon glyphicon-search"></span></button>
           <button type="button" onclick="window.location='//<?php echo $conf->base_uri ?>/advanced-search/'" class="btn btn-primary" title="Advanced"><span class="glyphicon glyphicon-cog"></span></button>

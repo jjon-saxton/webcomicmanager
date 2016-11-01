@@ -18,54 +18,9 @@ function list_children($from,MCSession $curusr,$filter=null)
   $types=new DataBaseTable('types',true,DATACONF);
   $cq=$con->getData("pid:`= {$cid}`",null,null,$curusr->items_per_page,$_GET['offset']);
   $cols=$curusr->items_per_page/$curusr->rows_per_page;
-  $list="<div id=\"Grid-{$cid}\" class=\"grid grid-col-{$cols}\">\n";
-  $c=0;
-  while ($row=$cq->fetch(PDO::FETCH_ASSOC))
-  {
-    $art=new DataBaseTable('art',true,DATACONF);
-    $aq=$art->getData("cid:`= {$row['cid']}`",array('ttid','uri'));
-    $arts=array();
-    while ($cover=$aq->fetch(PDO::FETCH_ASSOC))
-    {
-     $tq=$types->getData("ttid:`= {$cover['ttid']}`");
-     $tinfo=$tq->fetch(PDO::FETCH_ASSOC);
-     if ($tinfo['ctype'] == 'art')
-     {
-       $arts[]=array('file'=>$cover['uri'],'type'=>$tinfo['name']);
-     }
-    }
-    
-    $path=build_con_path($row['cid']);
-    
-    //TODO replace hard root with root uri from database
-    $list.="<a href=\"".SITEROOT."{$path}\"><div id=\"{$row['cid']}\" class=\"proj grid-item\">\n";
-    if ($arts[0]['type'] == "Front Cover")
-    {
-     $list.="<figure class=\"figure\">\n<img src=\"".SITEROOT."/{$arts[0]['file']}?type=image/png&w=350\" width=\"350\" class=\"proj-cover figure-img img-fluid img-round\" alt=\"[cover]\">\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}</figcaption>\n</figure>\n";
-    }
-    else
-    {
-     $description=str_get_html($row['data']);
-     $preview=($description->find("div.canvas img",0)->outertext);
-     if (!empty($preview))
-     {
-      $list.="<figure class=\"figure\">{$preview}\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}\n</figure>\n";
-     }
-     else
-     {
-      foreach ($description->find("div.canvas") as $canvas)
-      {
-        $canvas->remove();
-      }
-      $description->save();
-      $list.="<h3 class=\"proj-title\">{$row['title']}</h3>\n<p class=\"proj-description\">{$description}</p>\n";
-     }
-    }
-    $list.="</div></a>\n";
-    $c++;
-   }
-   $list.="</div>\n";
-   if ($c <= 0)
+  $grid=con_list_to_grid($cq);
+  $list="<div id=\"Grid-{$cid}\" class=\"grid grid-col-{$cols}\">".$grid."</div>\n";
+   if (empty($grid))
    {
      $self=$con->getData("cid:`= {$cid}`");
      $self=$self->fetch();

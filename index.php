@@ -37,7 +37,7 @@ else
  <script src="//<?php echo $conf->base_uri ?>/appcore/scripts/jquery-ui.min.js"></script>
  <script language="javascript">
  $(function(){
-    if ($("#Page .page").length > 0 || $("#Page .alert").length > 0){
+    if ($("#Page .page").length > 0){
         $("#AS-2").remove();
         $("#Page").attr("class","text-justify col-sm-12");
     }

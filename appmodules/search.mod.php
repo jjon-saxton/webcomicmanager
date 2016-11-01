@@ -135,7 +135,6 @@ function search_form($full=false)
   {
     $tdb=new DataBaseTable('tags',true,DATACONF);
     $tq=$tdb->getData();
-    var_dump($tq);
     while ($tag=$tq->fetch())
     {
       $filters.="<div class=\"grid-item\"><input id=\"t-{$tag['tid']}\" type=\"checkbox\" name=\"tags[]\" value=\"{$tag['tid']}\"> <label for=\"t-{$tag['tid']}\" class=\"tag tag-{$tag['type']}\">{$tag['name']}</label></div>\n";
@@ -153,6 +152,7 @@ $(function(){
  });
 });
 </script>
+<div class="alert alert-info">Did you know you can perform most advanced searches with just the above textbox? It's true!</div>
 <div class="form-group">
 <label for="author">Author:</label><input type="text" list="authors" class="form-control" name="author" id="author">
 <datalist id="authors">

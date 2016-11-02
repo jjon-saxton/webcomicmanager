@@ -2187,8 +2187,18 @@ function con_list_to_grid($q,$showprivate=false)
       }
     
       $path=build_con_path($row['cid']);
+      if (con_is_public($row['cid']))
+      {
+       $access="public";
+       $href=SITEROOT.$path;
+      }
+      else
+      {
+       $access="private";
+       $href=SITEROOT.$path."/?modal=private";
+      }
     
-      $list.="<a href=\"".SITEROOT."{$path}\"><div id=\"{$row['cid']}\" class=\"proj grid-item\">\n";
+      $list.="<div id=\"{$row['cid']}\" class=\"proj {$access} grid-item\"><a href=\"{$href}\">\n";
       if ($arts[0]['type'] == "Front Cover")
       {
         $list.="<figure class=\"figure\">\n<img src=\"".SITEROOT."{$arts[0]['file']}?type=image/png&w=350\" width=\"350\" class=\"proj-cover figure-img img-fluid img-round\" alt=\"[cover]\">\n<figcaption class=\"proj-title figure-caption text-center\">{$row['title']}</figcaption>\n</figure>\n";
@@ -2197,7 +2207,7 @@ function con_list_to_grid($q,$showprivate=false)
       {
         $list.="<h3 class=\"proj-title\">{$row['title']}</h3>\n<p class=\"proj-description\">{$row['data']}</p>\n";
       }
-      $list.="</div></a>\n";
+      $list.="</a></div>\n";
       $c++;
      }
    }

@@ -44,10 +44,16 @@ else
  <?php if (!empty($_GET['modal'])){ ?>
     $("#messageModal .modal-title").html("<?php echo ucwords($_GET['modal']) ?>");
     $("#messageModal .modal-body").html("<?php switch($_GET['modal']){
+      case 'private':
+      echo "<div class='alert alert-warning'>The author has marked this item as either private or as a draft. It, therefore, cannot be accessed through the index. If you are the author or an editor, please access this through the project manager.</div>";
+      break;
       case 'login':
       echo "<div class='alert alert-info'>Please provide login credentials</div><form action='./app.php?action=login' method='post'><div class='form-group'><label for='user'>Username</label><input type='text' class='form-control' name='name' id='user'></div><div class='form-group'><label for='pass'>Password</label><input type='password' class='form-control' name='password' id='pass'></div><button type='submit' class='btn btn-primary'>Login</button> <button data-dismiss='modal' class='btn btn-danger'>Cancel</button></form>";
     } ?>");
     $("#messageModal").modal('show');
+    $("#messageModal").on('hidden.bs.modal',function(){
+        history.back();
+    });
  <?php } ?>
  });
  </script>

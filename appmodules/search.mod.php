@@ -36,7 +36,7 @@ function run_query(array $filters)
  {
   $filters['created']="<> ".date("Y-m-d H:i",strtotime($filters['date-created']['min']))." ".date("Y-m-d H:i",strtotime($filters['date-created']['max']));
  }
- else
+ elseif (!empty($filters['date-created']))
  {
   $filters['created']="<> ".date("Y-m-d H:i",strtotime($filters['date-created']['min']))." ".date("Y-m-d H:i");
  }
@@ -45,9 +45,9 @@ function run_query(array $filters)
  {
   $filters['modified']="<> ".date("Y-m-d H:i",strtotime($filters['date-modified']['min']))." ".date("Y-m-d H:i",strtotime($filters['date-modified']['max']));
  }
- else
+ elseif (!empty($filters['date-modified']['min']))
  {
-  $filters['modified']="<> ".date("Y-m-d H:I",strtotime($filters['date-modified']['min']))." ".date("Y-m-d H:i");
+  $filters['modified']="<> ".date("Y-m-d H:i",strtotime($filters['date-modified']['min']))." ".date("Y-m-d H:i");
  }
  unset($filters['date-created'],$filters['date-modified']);
  
@@ -55,9 +55,13 @@ function run_query(array $filters)
  {
   $filters['price']="<> ".$filters['price']['min']." ".$filters['price']['max'];
  }
- else
+ elseif ($filters['price']['min'] > 0)
  {
   $filters['price']="> ".$filters['price']['min'];
+ }
+ else
+ {
+  unset($filters['price']);
  }
  
  if (!empty($filters['author']))

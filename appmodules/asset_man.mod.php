@@ -131,8 +131,8 @@ HTML;
 </div>
 <div class="form-group">
 <label for="price">Price</label>
-<div class="form-control">
-$<input type="number" style="width:6em;border:0" maxlength="7" id="price" name="price" value="{$values['price']}">USD
+<div class="input-group">
+<span class="input-group-addon">$</span><input type="number" class="form-control" maxlength="7" id="price" name="price" value="{$values['price']}"><span class="input-group-addon">USD</span>
 </div>
 </div>
 <div class="form-group">

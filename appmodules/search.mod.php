@@ -4,7 +4,7 @@ function start_search($scope,array $q_items=null)
   switch($scope)
   {
    case 'random':
-   random_search();
+   return random_search();
    break;
    case 'advanced-search':
    if (empty($q_items))
@@ -38,16 +38,16 @@ function run_query(array $filters)
  }
  else
  {
-  $filters['created']=$filters['date-created']['min'];
+  $filters['created']="<> ".date("Y-m-d H:i",strtotime($filters['date-created']['min']))." ".date("Y-m-d H:i");
  }
  
  if (!empty($filters['date-modified']['max']))
  {
-  $filters['modified']="<> ".$filters['date-modified']['min']." ".$filters['date-modified']['max'];
+  $filters['modified']="<> ".date("Y-m-d H:i",strtotime($filters['date-modified']['min']))." ".date("Y-m-d H:i",strtotime($filters['date-modified']['max']));
  }
  else
  {
-  $filters['modified']=$filters['date-modified']['min'];
+  $filters['modified']="<> ".date("Y-m-d H:I",strtotime($filters['date-modified']['min']))." ".date("Y-m-d H:i");
  }
  unset($filters['date-created'],$filters['date-modified']);
  
@@ -57,7 +57,7 @@ function run_query(array $filters)
  }
  else
  {
-  $filters['price']=$filters['price']['min'];
+  $filters['price']="> ".$filters['price']['min'];
  }
  
  if (!empty($filters['author']))
@@ -125,6 +125,33 @@ function run_query(array $filters)
 
 function random_search()
 {
+  $cdb=new DataBaseTable('content',true,DATACONF);
+  $aq=$cdb->getData("pid:`= 0`",array('cid'));
+  $ac=$aq->fetch(PDO::FETCH_OBJ,PDO::FETCH_ORI_LAST);
+  if ($ac->cid > 0) // can't be zero
+  {
+   $rid=mt_rand(1,$ac->cid);
+  }
+  else
+  {
+   $rid=1;
+  }
+  if ($rq=$cdb->getData("cid:`= {$rid}`"))
+  {
+   $grid=con_list_to_grid($rq,true);
+   if (!empty($grid))
+   {
+    return "<div class=\"grid grid-col-4\">\n".$grid."\n</div>\n";
+   }
+   else
+   {
+    return random_search(); //result empty try a different random ID
+   }
+  }
+  else
+  {
+   return "<div class=\"alert alert-danger\">Cannot retrieve random series! Unknown server error.</div>\n";
+  }
 }
 
 function search_form($full=false)

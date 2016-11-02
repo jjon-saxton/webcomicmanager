@@ -2169,8 +2169,8 @@ function con_is_public($cid)
 function con_list_to_grid($q,$showprivate=false)
 {
   $art=new DataBaseTable('art',true,DATACONF);
-   while ($row=$q->fetch(PDO::FETCH_ASSOC))
-   {
+  while ($row=$q->fetch(PDO::FETCH_ASSOC))
+  {
     if ($showprivate || con_is_public($row['cid']))
     {
       $aq=$art->getData("cid:`= {$row['cid']}`",array('ttid','uri'));

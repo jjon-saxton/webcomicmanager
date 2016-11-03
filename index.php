@@ -200,9 +200,11 @@ function view_doc($type,$id)
   $table=new DataBaseTable($type."s",true,DATACONF);
   $col=substr($type,0,1)."id";
   $q=$table->getData($col.":`= ".$id);
+  $siteroot=SITEROOT;
   $doc=$q->fetch(PDO::FETCH_ASSOC);
   return <<<HTML
 <h2>{$doc['title']}</h2>
+<div class="text-right"><a href="{$siteroot}save/{$type}/{$id}/html"><span class="glyphicon glyphicon-save"></span></a> <a href="{$siteroot}print/{$type}/{$id}"><span class="glyphicon glyphicon-print"></span></a></div>
 <div id="DocViewer" class="page">
 {$doc['note']}
 </div>

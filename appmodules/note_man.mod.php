@@ -58,7 +58,8 @@ function build_manager_form($curusr,$action)
 </div>
 <div class="form-group center">
 <button class="btn btn-primary" type="button" data-target="#messageModal" name="save" value="1">Save</button>
-<a href="{$siteroot}view/note/{$_GET['nid']}" class="btn btn-success" target="_new">View (in new tab)</a>
+<a href="{$siteroot}view/note/{$_GET['nid']}" class="btn btn-info">View</a>
+<a href="{$siteroot}print/note/{$_GET['nid']}" class="btn btn-info">Print</a>
 <a href="{$siteroot}dash/?section=projects" class="btn btn-danger" data-target="#this-modal">Cancel</a>
 </div>
 HTML;

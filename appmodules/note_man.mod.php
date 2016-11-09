@@ -9,6 +9,7 @@ function build_manager_form($curusr,$action)
   $siteroot=SITEROOT;
   if ($action == 'edit' && !empty($_GET['nid']))
   {
+    $asave=" autoSave";
     $nt=new DataBaseTable('notes',true,DATACONF);
     $nq=$nt->getData("nid:`= {$_GET['nid']}`");
     $values=$nq->fetch(PDO::FETCH_ASSOC);
@@ -17,6 +18,7 @@ function build_manager_form($curusr,$action)
   }
   else
   {
+    $asave=null;
     $values['uid']=$curusr->uid;
     $values['cid']=$_GET['cid'];
     $values['created']=date("Y-m-d H:i:s");
@@ -35,7 +37,7 @@ function build_manager_form($curusr,$action)
   }
   
   return <<<HTML
-<form action="{$siteroot}dash/?{$qstr}" method="post">
+<form action="{$siteroot}dash/?{$qstr}" class="manager{$asave}" method="post">
 <div class="form-group">
 <label for="title">Note Title</label>
 <input type="hidden" name="uid" value="{$values['uid']}">

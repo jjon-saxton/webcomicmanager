@@ -10,6 +10,7 @@ function build_manager_form(MCSession $session,$action,$ctype=null,$pid=null,$ci
     
     if ($action == 'update' && $cid != NULL)
     {
+      $asave=" autoSave";
       $q=$con->getData("cid:`{$cid}`");
       $values=$q->fetch(PDO::FETCH_ASSOC);
       $values['modified']=date("Y-m-d H:i:s");
@@ -27,6 +28,7 @@ HTML;
     else
     {
      $ttid_opts.="</select>\n";
+     $asave=null;
      if (empty($pid))
      {
        $values['pid']=0;
@@ -120,7 +122,7 @@ HTML;
     }
     
     $html.=<<<HTML
-<form action="{$siteroot}dash/{$qstr}" method="post" enctype="multipart/form-data">
+<form action="{$siteroot}dash/{$qstr}" class="manager{$asave}" method="post" enctype="multipart/form-data">
 <div class="form-group">
 <label for="title">Title</label>
 <input type="hidden" name="pid" value="{$values['pid']}">

@@ -34,6 +34,8 @@ $(function(){
         }
     });
     
+    $("form.autoSave textarea").before("<div class=\"form-group\"><input type=\"checkbox\" id=\"saveOn\" checked=\"checked\"><label for=\"saveOn\"> Auto Save?</label></div>");
+    
     // Initialize textarea's with required class as JQTE boxes
     $("textarea.editor.full").jqte({change:function(){ autoSave(); }});
     $("textarea.editor.limited").jqte({
@@ -56,38 +58,48 @@ $(function(){
     $("textarea, input[type=text], input[type=number]").keyup(function(){
         autoSave();
     });
+    
+    $("#saveOn").click(function(){
+        if($(this).is(':checked')){
+            $("form.manager").addClass("autoSave");
+        }
+        else{
+            $("form.manager").removeClass("autoSave");
+        }
+    });
      
     function autoSave(){
-        var data=$('form').serialize();
-        var url=$('form').attr('action')+"&json=1";
+        var data=$('form.autoSave').serialize();
+        var url=$('form.autoSave').attr('action')+"&json=1";
         var timeoutID;
         
-        $(".btn-primary").attr('disabled','disabled').text('Saving...');
-        
-        if (timeoutID){
+        if ($("form.autoSave").length){
+         if (timeoutID){
             clearTimeout(timeoutID);
-        }
+         }
         
-        timeoutID=setTimeout(function(){
+         timeoutID=setTimeout(function(){
+            $("form.autoSave div .btn-primary").attr('disabled','disabled').text('Saving...');
             $.post(url,data,function(json){
                 if (json.okay){
                     console.log(json.message);
                     if ($("#autoSaveError").length){
                         $("#autoSaveError").remove();
                     }
-                    $(".btn-primary").text("Saved!").delay(150).removeAttr('disabled').text('Save');
+                    $("form.autoSave div button.btn-primary").text("Saved!").delay(150).removeAttr('disabled').text('Save');
                 }
                 else{
                     if ($("#autoSaveError").length){
                         $("#autoSaveError").text(json.message);
                     }
                     else{
-                        $(".btn-primary").parent().prepend("<div id=\"autoSaveError\" class=\"alert alert-warning\">"+json.message+"</div>");
+                        $("form.autoSave div button.btn-primary").parent().prepend("<div id=\"autoSaveError\" class=\"alert alert-warning\">"+json.message+"</div>");
                     }
-                    $(".btn-primary").removeAttr('disabled').text('Save');
+                    $("form.autoSave div button.btn-primary").removeAttr('disabled').text('Save');
                 }
             },'json');
-        },3000);
+         },9000);
+        }
     };
     
     $(".jqte_toolbar").addClass("btn-toolbar");

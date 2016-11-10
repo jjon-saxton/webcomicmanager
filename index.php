@@ -31,6 +31,7 @@ else
  <title>Tower21 WebComiX: <?php echo($path) ?></title>
  <!-- Load Bootstrap and dependencies -->
  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <script src="//<?php echo $conf->base_uri ?>/appcore/scripts/summernote.min.js"></script>
  <script src="//www.tower21studios.com/assets/js/bootstrap.js"></script>
  <script src="//<?php echo $conf->base_uri ?>/appcore/scripts/editor.js"></script>
  <!-- jQuery UI draggable and resizable required for editor -->

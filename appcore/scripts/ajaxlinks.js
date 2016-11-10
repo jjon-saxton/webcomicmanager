@@ -15,6 +15,7 @@ $(function(){
     $("[data-target='#this-modal']").click(function(e){
         e.preventDefault();
         var loc=$(this).attr("href");
+        $("div.modal.in").find(".editor").summernote('destroy');
         $("div.modal.in .modal-content").load(loc);
     })
     
@@ -36,21 +37,32 @@ $(function(){
     
     $("form.autoSave textarea").before("<div class=\"form-group\"><input type=\"checkbox\" id=\"saveOn\" checked=\"checked\"><label for=\"saveOn\"> Auto Save?</label></div>");
     
-    // Initialize textarea's with required class as JQTE boxes
-    $("textarea.editor.full").jqte({change:function(){ autoSave(); }});
-    $("textarea.editor.limited").jqte({
-        formats:false,
-        link:false,
-        unlink:false,
-        ul:false,
-        ol:false,
-        strike:false,
-        outdent:false,
-        indent:false,
-        rule:false,
-        change:function(){
-            autoSave();
-        },
+    // Initialize textarea's with required class as RTE boxes
+    $("textarea.editor.full").summernote({
+        maxHeight:450,
+        callbacks:{
+            onChange:function(e){
+                var src=$('textarea.editor').summernote('code');
+                $('textarea.editor').html(src);
+                autoSave();
+            }
+        }
+    });
+    $("textarea.editor.limited").summernote({
+        maxHeight:450,
+        toolbar:[
+            ['style',['bold','italic','underline','clear']],
+            ['fontsize',['fontsize']],
+            ['insert',['link','hr']],
+            ['para',['ul','ol','paragraph']]
+        ],
+        callbacks:{
+            onChange:function(e){
+                var src=$('textarea.editor').summernote('code');
+                $('textarea.editor').html(src);
+                autoSave();
+            }
+        }
     });
     // Initialize textareas with required class as Comix Editors
     $("textarea.editor.script").comixeditor();
@@ -102,13 +114,9 @@ $(function(){
         }
     };
     
-    $(".jqte_toolbar").addClass("btn-toolbar");
-    $(".jqte_toolbar .jqte_tool").each(function(){
-        $(this).addClass("btn btn-info").css('padding','1px');
-    });
-    
     // Uninitialize modal on close
     $('body').on('hidden.bs.modal','.modal',function(){
+        $(this).find(".editor").summernote('destroy');
         $(this).removeData('bs.modal');
     });
 });

@@ -25,7 +25,7 @@ HTML;
  {
   if (!empty($registration))
   {
-   $registration=" or <button name=\"do\" type=submit value=\"register\">Register a New Account</button>";
+   $registration=" or <button name=\"do\" class=\"btn btn-info\" type=submit value=\"register\">Register a New Account</button>";
   }
   else
   {

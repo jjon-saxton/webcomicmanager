@@ -93,8 +93,66 @@ else
     $body="<div class=\"panel panel-default\">Operation complete! {$message} <a href=\"//{$conf->base_uri}/dash?section={$_GET['type']}\" data-dismiss=\"modal\" data-target=\"#AJAXModal\" data-toggle=\"modal\">Return to project manager</a></div>";
   }
   break;
+  case 'saveset':
+  $title="Saving settings...";
+  $table=new DataBaseTable('settings',true,DATACONF);
+  $okay=true;
+  foreach ($_POST as $key=>$value)
+  {
+   $data['key']=$key;
+   $data['value']=$value;
+   if (!$row=$table->updateData($data))
+   {
+     $okay=false;
+   }
+  }
+  if ($okay == true)
+  {
+   $body="<div class=\"alert alert-info\">Site settings saved.</div>";
+  }
+  else
+  {
+   $body="<div class=\"alert alert-danger\">A fetal error occured while attempting to save your settings.</div>";
+  }
+  break;
   case 'admincp':
   $title="Your Site";
+  $body=null;
+  $table=new DataBaseTable('settings',true,DATACONF);
+  $q=$table->getData();
+  if ($q instanceof PDOStatement)
+  {
+    $settings=array();
+    while ($row=$q->fetch(PDO::FETCH_ASSOC))
+    {
+      $settings[$row['key']]=$row['value'];
+    }
+    $body.="<form action=\"".SITEROOT."/dash/?section=saveset\" method=\"post\">\n";
+    foreach ($settings as $key=>$value)
+    {
+      $label=ucwords(str_replace("_"," ",$key));
+      if ($key == 'guest_views' || $key == 'open_registration')
+      {
+       if ($value == 'y')
+       {
+        $body.="<div class=\"form-group\">\n<label for=\"{$key}\">{$label}</label>\n<div id=\"{$key}\ class=\"radio\"><label class=\"radio-inline\"><input type=\"radio\" name=\"{$key}\" checked=\"checked\" value=\"y\">Yes</label> <label class=\"radio-inline\"><input type=\"radio\" name=\"{$key}\" value=\"n\">No</label></div>\n</div>\n";
+       }
+       else
+       {
+        $body.="<div class=\"form-group\">\n<label for=\"{$key}\">{$label}</label>\n<div id=\"{$key}\ class=\"radio\"><label class=\"radio-inline\"><input type=\"radio\" name=\"{$key}\" value=\"y\">Yes</label> <label class=\"radio-inline\"><input type=\"radio\" name=\"{$key}\" checked=\"checked\" value=\"n\">No</label></div>\n</div>\n";
+       }
+      }
+      else
+      {
+        $body.="<div class=\"form-group\">\n<label for=\"{$key}\">{$label}</label><input class=\"form-control\" type=text name=\"{$key}\" id=\"{$key}\" value=\"{$value}\"></div>\n";
+      }
+    }
+    $body.="<div class=\"form-group center\">\n<button class=\"btn btn-primary\" data-target=\"#messageModal\" name=\"save\" value=\"1\">Save</button>\n</div>\n</form>\n";
+  }
+  else
+  {
+    $body="<div class=\"alert alert-danger\">There was a fetal error while attempting to retrieve your current settings</div>\n";
+  }
   break;
   case 'library':
   $title="Your Library";

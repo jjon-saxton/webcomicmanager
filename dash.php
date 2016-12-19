@@ -108,11 +108,11 @@ else
   }
   if ($okay == true)
   {
-   $body="<div class=\"alert alert-info\">Site settings saved.</div>";
+   $body="<div class=\"alert alert-info\">Site settings saved.</div>\n<div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\">Okay</button>\n</div>";
   }
   else
   {
-   $body="<div class=\"alert alert-danger\">A fetal error occured while attempting to save your settings.</div>";
+   $body="<div class=\"alert alert-danger\">A fetal error occured while attempting to save your settings.</div>\n<div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Okay</button>\n</div>";
   }
   break;
   case 'admincp':
